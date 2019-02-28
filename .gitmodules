@@ -1,0 +1,3 @@
+[submodule "cmake/CMutils"]
+	path = cmake/CMutils
+	url = https://github.com/pinam45/CMutils
