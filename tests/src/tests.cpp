@@ -6,6 +6,7 @@
 // https://opensource.org/licenses/MIT
 //
 #include "RandomIntGenerator.hpp"
+#include "RandomDynamicBitsetGenerator.hpp"
 #include "MultiTakeGenerator.hpp"
 
 #include <catch2/catch.hpp>
@@ -98,6 +99,68 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 					        == bit_value(value, bit_i));
 				}
 				++value_i;
+			}
+		}
+	}
+}
+
+TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	dynamic_bitset<TestType> bitset =
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	CAPTURE(bitset);
+
+	SECTION("resizing to 0")
+	{
+		bitset.resize(0);
+		REQUIRE(bitset.empty());
+		REQUIRE(bitset.size() == 0);
+	}
+
+	SECTION("resizing to the same size")
+	{
+		const size_t size_save = bitset.size();
+		bitset.resize(bitset.size());
+		REQUIRE(bitset.size() == size_save);
+	}
+
+	SECTION("changing size")
+	{
+		size_t size_change = GENERATE(take(3, randomInt<size_t>(0, 128, SEED)));
+		const bool new_values = GENERATE(true, false);
+		CAPTURE(size_change, new_values);
+
+		SECTION("incrementing size")
+		{
+			const dynamic_bitset<TestType> bitset_copy = bitset;
+			const size_t new_size = bitset.size() + size_change;
+			bitset.resize(new_size, new_values);
+			REQUIRE(bitset.size() == new_size);
+
+			for(size_t i = 0; i < bitset_copy.size(); ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset[i] == bitset_copy[i]);
+			}
+			for(size_t i = bitset_copy.size(); i < bitset.size(); ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset[i] == new_values);
+			}
+		}
+
+		SECTION("decrementing size")
+		{
+			const dynamic_bitset<TestType> bitset_copy = bitset;
+			const size_t new_size = size_change > bitset.size() ? 0 : size_change;
+			bitset.resize(new_size, new_values);
+			REQUIRE(bitset.size() == new_size);
+
+			for(size_t i = 0; i < bitset.size(); ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset[i] == bitset_copy[i]);
 			}
 		}
 	}
