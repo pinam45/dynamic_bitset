@@ -761,7 +761,7 @@ constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::se
 			set_block_bits(m_blocks[first_block], first_bit_index, block_last_bit_index, value);
 		}
 
-		if(last_bit_index == (block_last_bit_index))
+		if(last_bit_index != block_last_bit_index)
 		{
 			--last_full_block; // last block is not full
 			set_block_bits(m_blocks[last_block], 0, last_bit_index, value);
@@ -854,7 +854,7 @@ constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::fl
 			flip_block_bits(m_blocks[first_block], first_bit_index, block_last_bit_index);
 		}
 
-		if(last_bit_index == (block_last_bit_index))
+		if(last_bit_index != block_last_bit_index)
 		{
 			--last_full_block; // last block is not full
 			flip_block_bits(m_blocks[last_block], 0, last_bit_index);
