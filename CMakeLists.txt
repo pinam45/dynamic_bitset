@@ -82,8 +82,7 @@ if(DYNAMICBITSET_BUILD_TESTS)
 	include(${CATCH2_DIR}/contrib/Catch.cmake)
 
 	# Tests
-	# TODO
-	#add_subdirectory(tests)
+	add_subdirectory(tests)
 endif()
 
 # Generate format target
