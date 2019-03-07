@@ -275,17 +275,79 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 	{
 		const std::tuple<TestType, TestType> init_values = GENERATE(multitake(
 		  RANDOM_VARIATIONS_TO_TEST, randomInt<TestType>(SEED + 1), randomInt<TestType>(SEED + 2)));
-		std::initializer_list<TestType> init_values_list = {std::get<0>(init_values),
-		                                                    std::get<1>(init_values)};
-		CAPTURE(init_values_list);
+		std::initializer_list<TestType> values = {std::get<0>(init_values),
+		                                          std::get<1>(init_values)};
+		CAPTURE(values);
 
-		bitset.append(init_values_list);
-		REQUIRE(bitset.size()
-		        == (bitset_copy.size() + init_values_list.size() * bits_number<TestType>));
+		bitset.append(values);
+		REQUIRE(bitset.size() == (bitset_copy.size() + values.size() * bits_number<TestType>));
 
 		// new bits added
 		size_t value_i = 0;
-		for(const TestType& value: init_values_list)
+		for(const TestType& value: values)
+		{
+			for(size_t bit_i = 0; bit_i < bits_number<TestType>; ++bit_i)
+			{
+				CAPTURE(value_i, bit_i);
+				REQUIRE(bitset[bitset_copy.size() + value_i * bits_number<TestType> + bit_i]
+				        == bit_value(value, bit_i));
+			}
+			++value_i;
+		}
+
+		// initial bits not changed
+		for(size_t i = 0; i < bitset_copy.size(); ++i)
+		{
+			CAPTURE(i);
+			REQUIRE(bitset[i] == bitset_copy[i]);
+		}
+	}
+
+	SECTION("random access iterators")
+	{
+		const std::vector<TestType> values =
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
+		                randomChunk<TestType>(2, 5, randomInt<TestType>(SEED + 1), SEED + 2)));
+		CAPTURE(values);
+
+		bitset.append(std::cbegin(values), std::cend(values));
+		REQUIRE(bitset.size() == (bitset_copy.size() + values.size() * bits_number<TestType>));
+
+		// new bits added
+		size_t value_i = 0;
+		for(const TestType& value: values)
+		{
+			for(size_t bit_i = 0; bit_i < bits_number<TestType>; ++bit_i)
+			{
+				CAPTURE(value_i, bit_i);
+				REQUIRE(bitset[bitset_copy.size() + value_i * bits_number<TestType> + bit_i]
+				        == bit_value(value, bit_i));
+			}
+			++value_i;
+		}
+
+		// initial bits not changed
+		for(size_t i = 0; i < bitset_copy.size(); ++i)
+		{
+			CAPTURE(i);
+			REQUIRE(bitset[i] == bitset_copy[i]);
+		}
+	}
+
+	SECTION("bidirectional iterators")
+	{
+		const std::vector<TestType> values =
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
+		                randomChunk<TestType>(2, 5, randomInt<TestType>(SEED + 1), SEED + 2)));
+		CAPTURE(values);
+
+		const std::list<TestType> values_list(std::cbegin(values), std::cend(values));
+		bitset.append(std::cbegin(values_list), std::cend(values_list));
+		REQUIRE(bitset.size() == (bitset_copy.size() + values.size() * bits_number<TestType>));
+
+		// new bits added
+		size_t value_i = 0;
+		for(const TestType& value: values)
 		{
 			for(size_t bit_i = 0; bit_i < bits_number<TestType>; ++bit_i)
 			{
