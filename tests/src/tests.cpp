@@ -165,3 +165,15 @@ TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 		}
 	}
 }
+
+TEMPLATE_TEST_CASE("clear", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	dynamic_bitset<TestType> bitset =
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	CAPTURE(bitset);
+
+	bitset.clear();
+	REQUIRE(bitset.empty());
+	REQUIRE(bitset.size() == 0);
+}
