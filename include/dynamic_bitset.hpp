@@ -993,7 +993,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 		block_type mask = 1;
 		for(size_type bit_index = 0; bit_index < bits_per_block; ++bit_index)
 		{
-			count += (m_blocks[i] & mask != block_type(0));
+			count += ((m_blocks[i] & mask) != block_type(0));
 			mask <<= 1;
 		}
 	}
@@ -1003,9 +1003,11 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 	if(block != block_type(0))
 	{
 		block_type mask = 1;
-		for(size_type bit_index = 0; bit_index < extra_bits_number(); ++bit_index)
+		const size_t extra_bits = extra_bits_number();
+		const size_t last_block_bits = extra_bits == 0 ? bits_per_block : extra_bits;
+		for(size_type bit_index = 0; bit_index < last_block_bits; ++bit_index)
 		{
-			count += (block & mask != block_type(0));
+			count += ((block & mask) != block_type(0));
 			mask <<= 1;
 		}
 	}
