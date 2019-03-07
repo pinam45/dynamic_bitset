@@ -1229,6 +1229,8 @@ template<typename Block, typename Allocator>
 	using block_type = typename dynamic_bitset<Block, Allocator>::block_type;
 	const size_type lhs_size = lhs.size();
 	const size_type rhs_size = rhs.size();
+	const size_type lhs_blocks_size = lhs.m_blocks.size();
+	const size_type rhs_blocks_size = rhs.m_blocks.size();
 
 	// empty bitset inferior to 0-only bitset
 	if(lhs_size == 0)
@@ -1242,7 +1244,7 @@ template<typename Block, typename Allocator>
 
 	if(lhs_size == rhs_size)
 	{
-		for(size_type i = lhs_size - 1; i > 0; --i)
+		for(size_type i = lhs_blocks_size - 1; i > 0; --i)
 		{
 			if(lhs.m_blocks[i] != rhs.m_blocks[i])
 			{
@@ -1254,9 +1256,9 @@ template<typename Block, typename Allocator>
 
 	const bool rhs_longer = rhs_size > lhs_size;
 	const dynamic_bitset<Block, Allocator>& longest_bitset = rhs_longer ? rhs : lhs;
-	const size_type longest_size = std::max(lhs_size, rhs_size);
-	const size_type shortest_size = std::min(lhs_size, rhs_size);
-	for(size_type i = longest_size - 1; i >= shortest_size; --i)
+	const size_type longest_blocks_size = std::max(lhs_blocks_size, rhs_blocks_size);
+	const size_type shortest_blocks_size = std::min(lhs_blocks_size, rhs_blocks_size);
+	for(size_type i = longest_blocks_size - 1; i >= shortest_blocks_size; --i)
 	{
 		if(longest_bitset.m_blocks[i] != block_type(0))
 		{
@@ -1264,14 +1266,18 @@ template<typename Block, typename Allocator>
 		}
 	}
 
-	for(size_type i = shortest_size - 1; i > 0; --i)
+	for(size_type i = shortest_blocks_size - 1; i > 0; --i)
 	{
 		if(lhs.m_blocks[i] != rhs.m_blocks[i])
 		{
 			return lhs.m_blocks[i] < rhs.m_blocks[i];
 		}
 	}
-	return lhs.m_blocks[0] < rhs.m_blocks[0];
+	if(lhs.m_blocks[0] != rhs.m_blocks[0])
+	{
+		return lhs.m_blocks[0] < rhs.m_blocks[0];
+	}
+	return lhs_size < rhs_size;
 }
 
 //=================================================================================================
