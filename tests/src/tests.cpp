@@ -7,15 +7,19 @@
 //
 #include "RandomIntGenerator.hpp"
 #include "RandomDynamicBitsetGenerator.hpp"
+#include "RandomChunkGenerator.hpp"
 #include "MultiTakeGenerator.hpp"
 
 #include <catch2/catch.hpp>
 #include <dynamic_bitset.hpp>
 
 #include <algorithm>
+#include <vector>
+#include <list>
 #include <cstdint>
 
-constexpr size_t RANDOM_VECTORS_TO_TEST = 24;
+constexpr size_t RANDOM_VECTORS_TO_TEST = 100;
+constexpr size_t RANDOM_VARIATIONS_TO_TEST = 10;
 constexpr std::minstd_rand::result_type SEED = 314159;
 //const std::minstd_rand::result_type SEED = std::random_device{}();
 
@@ -45,21 +49,23 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 	SECTION("nbits and init_val constructor")
 	{
-		const unsigned long long init_value =
-		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomInt<unsigned long long>(SEED)));
-		const size_t bits_to_take =
-		  GENERATE(take(1, randomInt<size_t>(0, bits_number<unsigned long long>, SEED)));
-		CAPTURE(init_value, bits_to_take);
+		CAPTURE(SEED);
+		const std::tuple<unsigned long long, size_t> values =
+		  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+		                     randomInt<unsigned long long>(SEED),
+		                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+		const unsigned long long value = std::get<0>(values);
+		const size_t bits_to_take = std::get<1>(values);
+		CAPTURE(value, bits_to_take);
 
-		// call dynamic_bitset constructor
-		const dynamic_bitset<TestType> bitset(bits_to_take, init_value);
+		dynamic_bitset<TestType> bitset(bits_to_take, value);
 		CAPTURE(bitset);
 
 		// check init value bits
 		for(size_t i = 0; i < bits_to_take; ++i)
 		{
 			CAPTURE(i);
-			REQUIRE(bitset[i] == bit_value(init_value, i));
+			REQUIRE(bitset[i] == bit_value(value, i));
 		}
 	}
 
@@ -70,6 +76,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 			const TestType init_value =
 			  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomInt<TestType>(SEED)));
 			const dynamic_bitset<TestType> bitset = {init_value};
+			CAPTURE(init_value, bitset);
 
 			// check bits
 			for(size_t i = 0; i < bits_number<TestType>; ++i)
@@ -127,7 +134,8 @@ TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 	SECTION("changing size")
 	{
-		size_t size_change = GENERATE(take(3, randomInt<size_t>(0, 128, SEED)));
+		size_t size_change =
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(0, 128, SEED + 1)));
 		const bool new_values = GENERATE(true, false);
 		CAPTURE(size_change, new_values);
 
@@ -184,7 +192,7 @@ TEMPLATE_TEST_CASE("push_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 	std::tuple<dynamic_bitset<TestType>, dynamic_bitset<TestType>> values =
 	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
 	                     randomDynamicBitset<TestType>(SEED),
-	                     randomDynamicBitset<TestType>(1, 2 * bits_number<TestType>, SEED)));
+	                     randomDynamicBitset<TestType>(1, 2 * bits_number<TestType>, SEED + 1)));
 	dynamic_bitset<TestType>& bitset = std::get<0>(values);
 	dynamic_bitset<TestType>& to_push = std::get<1>(values);
 
