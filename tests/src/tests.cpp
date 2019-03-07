@@ -304,3 +304,131 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 		}
 	}
 }
+
+TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	const std::tuple<unsigned long long, unsigned long long, size_t> values =
+	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+	                     randomInt<unsigned long long>(SEED),
+	                     randomInt<unsigned long long>(SEED + 1),
+	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 2)));
+	unsigned long long value1 = std::get<0>(values);
+	const unsigned long long value2 = std::get<1>(values);
+	const size_t bits_to_take = std::get<2>(values);
+	CAPTURE(value1, value2, bits_to_take);
+
+	dynamic_bitset<TestType> bitset1(bits_to_take, value1);
+	const dynamic_bitset<TestType> bitset2(bits_to_take, value2);
+	CAPTURE(bitset1, bitset2);
+
+	SECTION("assignement operators")
+	{
+		SECTION("operator&=")
+		{
+			bitset1 &= bitset2;
+			value1 &= value2;
+
+			// check bits
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset1[i] == bit_value(value1, i));
+			}
+		}
+
+		SECTION("operator|=")
+		{
+			bitset1 |= bitset2;
+			value1 |= value2;
+
+			// check bits
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset1[i] == bit_value(value1, i));
+			}
+		}
+
+		SECTION("operator^=")
+		{
+			bitset1 ^= bitset2;
+			value1 ^= value2;
+
+			// check bits
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset1[i] == bit_value(value1, i));
+			}
+		}
+
+		SECTION("operator-=")
+		{
+			bitset1 -= bitset2;
+			value1 &= ~value2;
+
+			// check bits
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset1[i] == bit_value(value1, i));
+			}
+		}
+	}
+
+	SECTION("binary operators")
+	{
+		SECTION("operator&")
+		{
+			const dynamic_bitset<TestType> bitset = bitset1 & bitset2;
+			const unsigned long long value = value1 & value2;
+
+			// check bits
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset[i] == bit_value(value, i));
+			}
+		}
+
+		SECTION("operator|")
+		{
+			const dynamic_bitset<TestType> bitset = bitset1 | bitset2;
+			const unsigned long long value = value1 | value2;
+
+			// check bits
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset[i] == bit_value(value, i));
+			}
+		}
+
+		SECTION("operator^")
+		{
+			const dynamic_bitset<TestType> bitset = bitset1 ^ bitset2;
+			const unsigned long long value = value1 ^ value2;
+
+			// check bits
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset[i] == bit_value(value, i));
+			}
+		}
+
+		SECTION("operator-")
+		{
+			const dynamic_bitset<TestType> bitset = bitset1 - bitset2;
+			const unsigned long long value = value1 & ~value2;
+
+			// check bits
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset[i] == bit_value(value, i));
+			}
+		}
+	}
+}
