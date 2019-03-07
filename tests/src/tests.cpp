@@ -177,3 +177,34 @@ TEMPLATE_TEST_CASE("clear", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 	REQUIRE(bitset.empty());
 	REQUIRE(bitset.size() == 0);
 }
+
+TEMPLATE_TEST_CASE("push_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	std::tuple<dynamic_bitset<TestType>, dynamic_bitset<TestType>> values =
+	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+	                     randomDynamicBitset<TestType>(SEED),
+	                     randomDynamicBitset<TestType>(1, 2 * bits_number<TestType>, SEED)));
+	dynamic_bitset<TestType>& bitset = std::get<0>(values);
+	dynamic_bitset<TestType>& to_push = std::get<1>(values);
+
+	const dynamic_bitset<TestType> bitset_copy = bitset;
+	size_t size = bitset.size();
+
+	// new bits added
+	for(size_t i = 0; i < to_push.size(); ++i)
+	{
+		CAPTURE(i, size);
+		bitset.push_back(to_push[i]);
+		REQUIRE(bitset[size] == to_push[i]);
+		++size;
+		REQUIRE(bitset.size() == size);
+	}
+
+	// initial bits not changed
+	for(size_t i = 0; i < bitset_copy.size(); ++i)
+	{
+		CAPTURE(i);
+		REQUIRE(bitset[i] == bitset_copy[i]);
+	}
+}
