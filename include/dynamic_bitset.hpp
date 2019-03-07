@@ -38,7 +38,7 @@ public:
 
 		constexpr reference& operator=(bool v);
 		constexpr reference& operator=(const reference& rhs);
-		constexpr reference& operator=(reference&&) noexcept = delete;
+		constexpr reference& operator=(reference&& rhs) noexcept;
 
 		constexpr reference& operator&=(bool v);
 		constexpr reference& operator|=(bool v);
@@ -295,6 +295,14 @@ constexpr typename dynamic_bitset<Block, Allocator>::reference& dynamic_bitset<B
 template<typename Block, typename Allocator>
 constexpr typename dynamic_bitset<Block, Allocator>::reference& dynamic_bitset<Block, Allocator>::
   reference::operator=(const dynamic_bitset<Block, Allocator>::reference& rhs)
+{
+	assign(rhs);
+	return *this;
+}
+
+template<typename Block, typename Allocator>
+constexpr typename dynamic_bitset<Block, Allocator>::reference& dynamic_bitset<Block, Allocator>::reference::operator=(
+  dynamic_bitset::reference&& rhs) noexcept
 {
 	assign(rhs);
 	return *this;
