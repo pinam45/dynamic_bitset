@@ -238,3 +238,69 @@ TEMPLATE_TEST_CASE("pop_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 		REQUIRE(bitset[i] == bitset_copy[i]);
 	}
 }
+
+TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	dynamic_bitset<TestType> bitset =
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	CAPTURE(bitset);
+	const dynamic_bitset<TestType> bitset_copy = bitset;
+
+	SECTION("one value")
+	{
+		const TestType value =
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<TestType>(SEED + 1)));
+		CAPTURE(value);
+
+		bitset.append(value);
+		REQUIRE(bitset.size() == (bitset_copy.size() + bits_number<TestType>));
+
+		// new bits added
+		for(size_t i = 0; i < bits_number<TestType>; ++i)
+		{
+			CAPTURE(i);
+			REQUIRE(bitset[bitset_copy.size() + i] == bit_value(value, i));
+		}
+
+		// initial bits not changed
+		for(size_t i = 0; i < bitset_copy.size(); ++i)
+		{
+			CAPTURE(i);
+			REQUIRE(bitset[i] == bitset_copy[i]);
+		}
+	}
+
+	SECTION("two values initializer_list")
+	{
+		const std::tuple<TestType, TestType> init_values = GENERATE(multitake(
+		  RANDOM_VARIATIONS_TO_TEST, randomInt<TestType>(SEED + 1), randomInt<TestType>(SEED + 2)));
+		std::initializer_list<TestType> init_values_list = {std::get<0>(init_values),
+		                                                    std::get<1>(init_values)};
+		CAPTURE(init_values_list);
+
+		bitset.append(init_values_list);
+		REQUIRE(bitset.size()
+		        == (bitset_copy.size() + init_values_list.size() * bits_number<TestType>));
+
+		// new bits added
+		size_t value_i = 0;
+		for(const TestType& value: init_values_list)
+		{
+			for(size_t bit_i = 0; bit_i < bits_number<TestType>; ++bit_i)
+			{
+				CAPTURE(value_i, bit_i);
+				REQUIRE(bitset[bitset_copy.size() + value_i * bits_number<TestType> + bit_i]
+				        == bit_value(value, bit_i));
+			}
+			++value_i;
+		}
+
+		// initial bits not changed
+		for(size_t i = 0; i < bitset_copy.size(); ++i)
+		{
+			CAPTURE(i);
+			REQUIRE(bitset[i] == bitset_copy[i]);
+		}
+	}
+}
