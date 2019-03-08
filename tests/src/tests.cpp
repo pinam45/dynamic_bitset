@@ -1184,3 +1184,39 @@ TEMPLATE_TEST_CASE("find_first find_next", "[dynamic_bitset]", uint16_t, uint32_
 	REQUIRE(bitset.find_next(first_bit_pos) == second_bit_pos);
 	REQUIRE(bitset.find_next(second_bit_pos) == bitset.npos);
 }
+
+TEMPLATE_TEST_CASE("swap", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	const std::tuple<dynamic_bitset<TestType>, dynamic_bitset<TestType>> bitsets =
+	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+	                     randomDynamicBitset<TestType>(SEED),
+	                     randomDynamicBitset<TestType>(SEED + 1)));
+	dynamic_bitset<TestType> bitset1 = std::get<0>(bitsets);
+	dynamic_bitset<TestType> bitset2 = std::get<1>(bitsets);
+	CAPTURE(bitset1, bitset2);
+
+	SECTION("member function")
+	{
+		const dynamic_bitset<TestType> bitset1_copy = bitset1;
+		const dynamic_bitset<TestType> bitset2_copy = bitset2;
+		bitset1.swap(bitset2);
+		REQUIRE(bitset1 == bitset2_copy);
+		REQUIRE(bitset2 == bitset1_copy);
+	}
+
+	SECTION("external function")
+	{
+		const dynamic_bitset<TestType> bitset1_copy = bitset1;
+		const dynamic_bitset<TestType> bitset2_copy = bitset2;
+		swap(bitset1, bitset2);
+		REQUIRE(bitset1 == bitset2_copy);
+		REQUIRE(bitset2 == bitset1_copy);
+	}
+}
+
+TEMPLATE_TEST_CASE("get_allocator", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	dynamic_bitset<TestType> bitset;
+	static_cast<void>(bitset.get_allocator()); // avoid unused warnings
+}
