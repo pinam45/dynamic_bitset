@@ -793,3 +793,49 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 		}
 	}
 }
+
+TEMPLATE_TEST_CASE("test", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	const std::tuple<unsigned long long, size_t> values =
+	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+	                     randomInt<unsigned long long>(SEED),
+	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	unsigned long long value = std::get<0>(values);
+	const size_t bits_to_take = std::get<1>(values);
+	CAPTURE(value, bits_to_take);
+
+	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	CAPTURE(bitset);
+
+	// check
+	for(size_t i = 0; i < bits_to_take; ++i)
+	{
+		CAPTURE(i);
+		REQUIRE(bitset.test(i) == bit_value(value, i));
+	}
+}
+
+TEMPLATE_TEST_CASE("test_set", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	const std::tuple<unsigned long long, size_t> values =
+	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+	                     randomInt<unsigned long long>(SEED),
+	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	unsigned long long value = std::get<0>(values);
+	const size_t bits_to_take = std::get<1>(values);
+	const bool set_to = GENERATE(true, false);
+	CAPTURE(value, bits_to_take, set_to);
+
+	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	CAPTURE(bitset);
+
+	// check
+	for(size_t i = 0; i < bits_to_take; ++i)
+	{
+		CAPTURE(i);
+		REQUIRE(bitset.test_set(i, set_to) == bit_value(value, i));
+		REQUIRE(bitset[i] == set_to);
+	}
+}
