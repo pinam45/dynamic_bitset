@@ -502,3 +502,85 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 		}
 	}
 }
+
+TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	const std::tuple<unsigned long long, size_t, size_t> values =
+	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+	                     randomInt<unsigned long long>(SEED),
+	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1),
+	                     randomInt<size_t>(0, bits_number<unsigned long long> - 1, SEED + 2)));
+	unsigned long long value = std::get<0>(values);
+	const size_t bits_to_take = std::get<1>(values);
+	const size_t shift = std::get<2>(values);
+	CAPTURE(value, bits_to_take, shift);
+
+	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	CAPTURE(bitset);
+
+	SECTION("assignement operators")
+	{
+		SECTION("operator<<=")
+		{
+			bitset <<= shift;
+			value <<= shift;
+
+			// check bits
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset[i] == bit_value(value, i));
+			}
+		}
+
+		SECTION("operator>>=")
+		{
+			bitset >>= shift;
+			value &=
+			  ~static_cast<unsigned long long>(0)
+			  >> (bits_number<unsigned long long> - bits_to_take); // set not taken left bits to 0
+			value >>= shift;
+
+			// check bits
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset[i] == bit_value(value, i));
+			}
+		}
+	}
+
+	SECTION("binary operators")
+	{
+		SECTION("operator<<")
+		{
+			const dynamic_bitset<TestType> shifted_bitset = bitset << shift;
+			const unsigned long long shifted_value = value << shift;
+
+			// check bits
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(shifted_bitset[i] == bit_value(shifted_value, i));
+			}
+		}
+
+		SECTION("operator>>")
+		{
+			const dynamic_bitset<TestType> shifted_bitset = bitset >> shift;
+			const unsigned long long shifted_value =
+			  (value
+			   & (~static_cast<unsigned long long>(0)
+			      >> (bits_number<unsigned long long> - bits_to_take)))
+			  >> shift;
+
+			// check bits
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(shifted_bitset[i] == bit_value(shifted_value, i));
+			}
+		}
+	}
+}
