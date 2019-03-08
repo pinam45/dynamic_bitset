@@ -1245,3 +1245,127 @@ TEMPLATE_TEST_CASE("to_string", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 
 	REQUIRE(bitset.to_string() == string);
 }
+
+TEMPLATE_TEST_CASE("operator== operator!=", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	dynamic_bitset<TestType> bitset =
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	CAPTURE(bitset);
+
+	SECTION("same")
+	{
+		const dynamic_bitset<TestType> bitset_copy = bitset;
+		REQUIRE(bitset == bitset_copy);
+		REQUIRE_FALSE(bitset != bitset_copy);
+	}
+
+	SECTION("different size and same bits")
+	{
+		const dynamic_bitset<TestType> bitset_copy = bitset;
+		bitset.push_back(true);
+		REQUIRE_FALSE(bitset == bitset_copy);
+		REQUIRE_FALSE(bitset_copy == bitset);
+		REQUIRE(bitset != bitset_copy);
+		REQUIRE(bitset_copy != bitset);
+	}
+
+	SECTION("same size and different bits")
+	{
+		if(bitset.empty())
+		{
+			bitset.push_back(true);
+		}
+		const dynamic_bitset<TestType> bitset_copy = bitset;
+
+		size_t pos =
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1))) % bitset.size();
+		bitset.flip(pos);
+		REQUIRE_FALSE(bitset == bitset_copy);
+		REQUIRE_FALSE(bitset_copy == bitset);
+		REQUIRE(bitset != bitset_copy);
+		REQUIRE(bitset_copy != bitset);
+	}
+}
+
+TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
+                   "[dynamic_bitset]",
+                   uint16_t,
+                   uint32_t,
+                   uint64_t)
+{
+	CAPTURE(SEED);
+	const std::tuple<unsigned long long, unsigned long long> values =
+	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+	                     randomInt<unsigned long long>(SEED),
+	                     randomInt<unsigned long long>(SEED + 1)));
+	const unsigned long long value1 = std::get<0>(values);
+	const unsigned long long value2 = std::get<1>(values) % value1; // value2 != value1
+	const size_t bits_to_take = bits_number<unsigned long long>;
+	CAPTURE(value1, value2, bits_to_take);
+
+	SECTION("same")
+	{
+		const dynamic_bitset<TestType> bitset1(bits_to_take, value1);
+		const dynamic_bitset<TestType> bitset2(bits_to_take, value1);
+
+		REQUIRE_FALSE(bitset1 < bitset2);
+		REQUIRE_FALSE(bitset2 < bitset1);
+		REQUIRE(bitset1 <= bitset2);
+		REQUIRE(bitset2 <= bitset1);
+
+		REQUIRE_FALSE(bitset1 > bitset2);
+		REQUIRE_FALSE(bitset2 > bitset1);
+		REQUIRE(bitset1 >= bitset2);
+		REQUIRE(bitset2 >= bitset1);
+	}
+
+	SECTION("different size and same bits")
+	{
+		const dynamic_bitset<TestType> bitset1(bits_to_take, value1);
+		dynamic_bitset<TestType> bitset2(bits_to_take, value1);
+		const bool added_value = GENERATE(true, false);
+		CAPTURE(added_value);
+		bitset2.push_back(added_value);
+
+		REQUIRE(bitset1 < bitset2);
+		REQUIRE_FALSE(bitset2 < bitset1);
+		REQUIRE(bitset1 <= bitset2);
+		REQUIRE_FALSE(bitset2 <= bitset1);
+
+		REQUIRE_FALSE(bitset1 > bitset2);
+		REQUIRE(bitset2 > bitset1);
+		REQUIRE_FALSE(bitset1 >= bitset2);
+		REQUIRE(bitset2 >= bitset1);
+	}
+
+	SECTION("same size and different bits")
+	{
+		const dynamic_bitset<TestType> bitset1(bits_to_take, value1);
+		const dynamic_bitset<TestType> bitset2(bits_to_take, value2);
+		if(value1 < value2)
+		{
+			REQUIRE(bitset1 < bitset2);
+			REQUIRE_FALSE(bitset2 < bitset1);
+			REQUIRE(bitset1 <= bitset2);
+			REQUIRE_FALSE(bitset2 <= bitset1);
+
+			REQUIRE_FALSE(bitset1 > bitset2);
+			REQUIRE(bitset2 > bitset1);
+			REQUIRE_FALSE(bitset1 >= bitset2);
+			REQUIRE(bitset2 >= bitset1);
+		}
+		else
+		{
+			REQUIRE(bitset2 < bitset1);
+			REQUIRE_FALSE(bitset1 < bitset2);
+			REQUIRE(bitset2 <= bitset1);
+			REQUIRE_FALSE(bitset1 <= bitset2);
+
+			REQUIRE_FALSE(bitset2 > bitset1);
+			REQUIRE(bitset1 > bitset2);
+			REQUIRE_FALSE(bitset2 >= bitset1);
+			REQUIRE(bitset1 >= bitset2);
+		}
+	}
+}
