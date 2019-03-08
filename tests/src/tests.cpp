@@ -1080,3 +1080,51 @@ TEMPLATE_TEST_CASE("reserve shrink_to_fit", "[dynamic_bitset]", uint16_t, uint32
 
 	bitset.shrink_to_fit();
 }
+
+TEMPLATE_TEST_CASE("is_subset_of is_proper_subset_of",
+                   "[dynamic_bitset]",
+                   uint16_t,
+                   uint32_t,
+                   uint64_t)
+{
+	CAPTURE(SEED);
+	dynamic_bitset<TestType> bitset =
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	CAPTURE(bitset);
+
+	const dynamic_bitset<TestType> bitset_copy = bitset;
+
+	SECTION("subset")
+	{
+		REQUIRE(bitset.is_subset_of(bitset_copy) == true);
+		REQUIRE(bitset.is_proper_subset_of(bitset_copy) == false);
+	}
+
+	SECTION("proper subset")
+	{
+		if(bitset.any())
+		{
+			bitset.flip(bitset.find_first());
+			REQUIRE(bitset.is_subset_of(bitset_copy) == true);
+			REQUIRE(bitset.is_proper_subset_of(bitset_copy) == true);
+		}
+	}
+
+	SECTION("not a subset")
+	{
+		if(!bitset.all())
+		{
+			// flip first bit at 0
+			for(size_t i = 0; i < bitset.size(); ++i)
+			{
+				if(bitset.test(i) == false)
+				{
+					bitset.flip(i);
+					break;
+				}
+			}
+			REQUIRE(bitset.is_subset_of(bitset_copy) == false);
+			REQUIRE(bitset.is_proper_subset_of(bitset_copy) == false);
+		}
+	}
+}
