@@ -888,3 +888,147 @@ TEMPLATE_TEST_CASE("count", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 	REQUIRE(bitset.count() == count);
 }
+
+TEMPLATE_TEST_CASE("operator[]", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	const std::tuple<unsigned long long, size_t> values =
+	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+	                     randomInt<unsigned long long>(SEED),
+	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	unsigned long long value = std::get<0>(values);
+	const size_t bits_to_take = std::get<1>(values);
+	CAPTURE(value, bits_to_take);
+
+	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	CAPTURE(bitset);
+
+	SECTION("access")
+	{
+		for(size_t i = 0; i < bits_to_take; ++i)
+		{
+			CAPTURE(i);
+			REQUIRE(bitset[i] == bit_value(value, i));
+		}
+	}
+
+	SECTION("reference operator=")
+	{
+		const unsigned long long other_value =
+		  GENERATE(take(1, randomInt<unsigned long long>(SEED + 2)));
+		dynamic_bitset<TestType> other_bitset(bits_to_take, other_value);
+		CAPTURE(other_bitset);
+
+		SECTION("with bool")
+		{
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				bitset[i] = other_bitset.test(i);
+			}
+			REQUIRE(bitset == other_bitset);
+		}
+
+		SECTION("with reference")
+		{
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				bitset[i] = other_bitset[i];
+			}
+			REQUIRE(bitset == other_bitset);
+		}
+	}
+
+	SECTION("reference binary operators")
+	{
+		const unsigned long long other_value =
+		  GENERATE(take(1, randomInt<unsigned long long>(SEED + 2)));
+		dynamic_bitset<TestType> other_bitset(bits_to_take, other_value);
+		CAPTURE(other_bitset);
+
+		dynamic_bitset<TestType> bitset_copy = bitset;
+
+		SECTION("operator&=")
+		{
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				bitset[i] &= other_bitset[i];
+			}
+
+			bitset_copy &= other_bitset;
+			REQUIRE(bitset == bitset_copy);
+		}
+
+		SECTION("operator|=")
+		{
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				bitset[i] |= other_bitset[i];
+			}
+
+			bitset_copy |= other_bitset;
+			REQUIRE(bitset == bitset_copy);
+		}
+
+		SECTION("operator^=")
+		{
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				bitset[i] ^= other_bitset[i];
+			}
+
+			bitset_copy ^= other_bitset;
+			REQUIRE(bitset == bitset_copy);
+		}
+
+		SECTION("operator-=")
+		{
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				bitset[i] -= other_bitset[i];
+			}
+
+			bitset_copy -= other_bitset;
+			REQUIRE(bitset == bitset_copy);
+		}
+	}
+
+	SECTION("reference operator~")
+	{
+		for(size_t i = 0; i < bits_to_take; ++i)
+		{
+			CAPTURE(i);
+			REQUIRE(~bitset[i] == !bit_value(value, i));
+		}
+	}
+
+	SECTION("set reset flip assign")
+	{
+		const size_t pos =
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 2))) % bits_to_take;
+
+		SECTION("set")
+		{
+			bitset[pos].set();
+			REQUIRE(bitset[pos] == true);
+		}
+
+		SECTION("reset")
+		{
+			bitset[pos].reset();
+			REQUIRE(bitset[pos] == false);
+		}
+
+		SECTION("flip")
+		{
+			bitset[pos].flip();
+			REQUIRE(bitset[pos] == !bit_value(value, pos));
+		}
+
+		SECTION("assign")
+		{
+			const bool new_value = GENERATE(true, false);
+			bitset[pos].assign(new_value);
+			REQUIRE(bitset[pos] == new_value);
+		}
+	}
+}
