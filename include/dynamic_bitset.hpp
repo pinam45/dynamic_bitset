@@ -888,7 +888,8 @@ constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::fl
 template<typename Block, typename Allocator>
 constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::flip()
 {
-	std::transform(std::cbegin(m_blocks),std::cend(m_blocks),std::begin(m_blocks), std::bit_not());
+	std::transform(
+	  std::cbegin(m_blocks), std::cend(m_blocks), std::begin(m_blocks), std::bit_not<block_type>());
 	sanitize();
 	return *this;
 }
