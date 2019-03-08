@@ -1032,3 +1032,51 @@ TEMPLATE_TEST_CASE("operator[]", "[dynamic_bitset]", uint16_t, uint32_t, uint64_
 		}
 	}
 }
+
+TEMPLATE_TEST_CASE("size num_blocks empty capacity",
+                   "[dynamic_bitset]",
+                   uint16_t,
+                   uint32_t,
+                   uint64_t)
+{
+	CAPTURE(SEED);
+	const std::tuple<unsigned long long, size_t> values =
+	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+	                     randomInt<unsigned long long>(SEED),
+	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	unsigned long long value = std::get<0>(values);
+	const size_t bits_to_take = std::get<1>(values);
+	CAPTURE(value, bits_to_take);
+
+	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	CAPTURE(bitset);
+
+	// size
+	REQUIRE(bitset.size() == bits_to_take);
+
+	// num_blocks
+	const size_t num_blocks =
+	  bits_to_take
+	    / bits_number<TestType> + static_cast<size_t>(bits_to_take % bits_number<TestType>> 0);
+	REQUIRE(bitset.num_blocks() == num_blocks);
+
+	const size_t old_capacity = bitset.capacity();
+	bitset.clear();
+	REQUIRE(bitset.empty());
+
+	REQUIRE(bitset.capacity() == old_capacity);
+}
+
+TEMPLATE_TEST_CASE("reserve shrink_to_fit", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	const size_t size = GENERATE(
+	  take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(1, 8 * bits_number<TestType>, SEED)));
+
+	dynamic_bitset<TestType> bitset;
+	bitset.reserve(size);
+
+	REQUIRE(bitset.capacity() > 0);
+
+	bitset.shrink_to_fit();
+}
