@@ -839,3 +839,52 @@ TEMPLATE_TEST_CASE("test_set", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 		REQUIRE(bitset[i] == set_to);
 	}
 }
+
+TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	const size_t bitset_size =
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST,
+	                randomInt<size_t>(3 * bits_number<TestType>, 8 * bits_number<TestType>, SEED)));
+	CAPTURE(bitset_size);
+
+	dynamic_bitset<TestType> bitset(bitset_size);
+	CAPTURE(bitset);
+
+	SECTION("all")
+	{
+		bitset.set();
+		REQUIRE(bitset.all());
+	}
+
+	SECTION("any")
+	{
+		const size_t pos =
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1))) % bitset_size;
+		bitset.reset();
+		bitset.set(pos);
+		REQUIRE(bitset.any());
+	}
+
+	SECTION("all")
+	{
+		bitset.reset();
+		REQUIRE(bitset.none());
+	}
+}
+
+TEMPLATE_TEST_CASE("count", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	dynamic_bitset<TestType> bitset =
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	CAPTURE(bitset);
+
+	size_t count = 0;
+	for(size_t i = 0; i < bitset.size(); ++i)
+	{
+		count += bitset[i];
+	}
+
+	REQUIRE(bitset.count() == count);
+}
