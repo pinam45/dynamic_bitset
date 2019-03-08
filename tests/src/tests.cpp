@@ -1220,3 +1220,28 @@ TEMPLATE_TEST_CASE("get_allocator", "[dynamic_bitset]", uint16_t, uint32_t, uint
 	dynamic_bitset<TestType> bitset;
 	static_cast<void>(bitset.get_allocator()); // avoid unused warnings
 }
+
+TEMPLATE_TEST_CASE("to_string", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	const std::tuple<unsigned long long, size_t> values =
+	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+	                     randomInt<unsigned long long>(SEED),
+	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	unsigned long long value = std::get<0>(values);
+	const size_t bits_to_take = std::get<1>(values);
+	CAPTURE(value, bits_to_take);
+
+	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	CAPTURE(bitset);
+
+	std::string string;
+	string.reserve(bits_to_take);
+	for(size_t i = bits_to_take - 1; i > 0; --i)
+	{
+		string.push_back(bit_value(value, i) ? '1' : '0');
+	}
+	string.push_back(bit_value(value, 0) ? '1' : '0');
+
+	REQUIRE(bitset.to_string() == string);
+}
