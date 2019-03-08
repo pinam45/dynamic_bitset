@@ -1128,3 +1128,40 @@ TEMPLATE_TEST_CASE("is_subset_of is_proper_subset_of",
 		}
 	}
 }
+
+TEMPLATE_TEST_CASE("intersects", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	dynamic_bitset<TestType> bitset =
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	CAPTURE(bitset);
+
+	// require non 0-only bitset
+	if(bitset.none())
+	{
+		bitset.push_back(true);
+	}
+
+	const dynamic_bitset<TestType> bitset_copy = bitset;
+
+	REQUIRE(bitset.intersects(bitset_copy));
+
+	if(!bitset.all())
+	{
+		// flip first bit at 0
+		for(size_t i = 0; i < bitset.size(); ++i)
+		{
+			if(bitset.test(i) == false)
+			{
+				bitset.flip(i);
+				break;
+			}
+		}
+		REQUIRE(bitset.intersects(bitset_copy));
+	}
+
+	bitset.flip();
+	REQUIRE_FALSE(bitset.intersects(bitset_copy));
+	bitset.reset();
+	REQUIRE_FALSE(bitset.intersects(bitset_copy));
+}
