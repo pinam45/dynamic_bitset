@@ -1473,7 +1473,7 @@ constexpr void dynamic_bitset<Block, Allocator>::apply_left_shift(size_type shif
 template<typename Block, typename Allocator>
 constexpr void dynamic_bitset<Block, Allocator>::apply_right_shift(size_type shift)
 {
-	assert(shift > capacity());
+	assert(shift < capacity());
 	if(shift == 0)
 	{
 		return;
