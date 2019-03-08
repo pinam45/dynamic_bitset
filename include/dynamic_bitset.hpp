@@ -1320,7 +1320,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::block_type dynamic_bitset<B
 	last = bit_index(last);
 	if(last == (block_last_bit_index))
 	{
-		return ~block_type(0);
+		return ~block_type(0) << first;
 	}
 	else
 	{
