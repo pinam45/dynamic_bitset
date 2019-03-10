@@ -461,15 +461,23 @@ constexpr dynamic_bitset<Block, Allocator>::dynamic_bitset(
   _CharT zero,
   _CharT one,
   const allocator_type& allocator)
-  : m_blocks(), m_bits_number(0)
+  : m_blocks(allocator), m_bits_number(0)
 {
-	static_cast<void>(str);
-	static_cast<void>(pos);
-	static_cast<void>(n);
-	static_cast<void>(zero);
-	static_cast<void>(one);
-	static_cast<void>(allocator);
-	assert(false); //TODO
+	assert(pos < str.size());
+
+	const size_type size = std::min(n, str.size() - pos);
+	m_bits_number = size;
+
+	m_blocks.resize(blocks_required(size));
+	for(size_t i = 0; i < size; ++i)
+	{
+		const _CharT c = str[(pos + size - 1) - i];
+		assert(c == zero || c == one);
+		if(c == one)
+		{
+			set(i);
+		}
+	}
 }
 
 template<typename Block, typename Allocator>
