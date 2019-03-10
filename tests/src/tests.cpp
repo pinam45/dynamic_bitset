@@ -109,6 +109,61 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 			}
 		}
 	}
+
+	SECTION("string constructor")
+	{
+		const std::tuple<unsigned long long, size_t> values =
+		  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+		                     randomInt<unsigned long long>(SEED),
+		                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+		const unsigned long long value = std::get<0>(values);
+		const size_t bits_to_take = std::get<1>(values);
+		CAPTURE(value, bits_to_take);
+
+		std::string str(bits_to_take, '0');
+		const size_t size = str.size();
+		for(size_t i = 0; i < bits_to_take; ++i)
+		{
+			if(bit_value(value, i))
+			{
+				str[size - 1 - i] = '1';
+			}
+		}
+		CAPTURE(str);
+
+		SECTION("full string")
+		{
+			const dynamic_bitset<TestType> bitset(str);
+			CAPTURE(bitset);
+
+			for(size_t i = 0; i < bits_to_take; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset[i] == bit_value(value, i));
+			}
+
+			REQUIRE(bitset.to_string() == str);
+		}
+
+		SECTION("partial string")
+		{
+			const std::tuple<size_t, size_t> parameters = GENERATE(multitake(
+			  RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 2), randomInt<size_t>(SEED + 3)));
+			const size_t pos = std::get<0>(parameters) % bits_to_take;
+			const size_t n =
+			  (pos == (bits_to_take - 1)) ? std::get<1>(parameters) % (bits_to_take - pos) : 0;
+			CAPTURE(pos, n);
+
+			const dynamic_bitset<TestType> bitset(str, pos, n);
+			CAPTURE(bitset);
+
+			for(size_t i = 0; i < n; ++i)
+			{
+				CAPTURE(i);
+				REQUIRE(bitset[i] == bit_value(value, pos + i));
+			}
+		}
+	}
 }
 
 TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
