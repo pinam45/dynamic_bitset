@@ -883,7 +883,7 @@ TEMPLATE_TEST_CASE("count", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 	size_t count = 0;
 	for(size_t i = 0; i < bitset.size(); ++i)
 	{
-		count += bitset[i];
+		count += static_cast<size_t>(bitset[i]);
 	}
 
 	REQUIRE(bitset.count() == count);
