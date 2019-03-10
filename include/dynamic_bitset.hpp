@@ -177,6 +177,8 @@ private:
 	std::vector<Block, Allocator> m_blocks;
 	size_type m_bits_number;
 
+	static constexpr block_type zero_block = block_type(0);
+	static constexpr block_type one_block = block_type(~zero_block);
 	static constexpr size_type block_last_bit_index = bits_per_block - 1;
 
 	static constexpr size_type blocks_required(size_type nbits) noexcept;
@@ -301,8 +303,8 @@ constexpr typename dynamic_bitset<Block, Allocator>::reference& dynamic_bitset<B
 }
 
 template<typename Block, typename Allocator>
-constexpr typename dynamic_bitset<Block, Allocator>::reference& dynamic_bitset<Block, Allocator>::reference::operator=(
-  dynamic_bitset::reference&& rhs) noexcept
+constexpr typename dynamic_bitset<Block, Allocator>::reference& dynamic_bitset<Block, Allocator>::
+  reference::operator=(dynamic_bitset::reference&& rhs) noexcept
 {
 	assign(rhs);
 	return *this;
@@ -355,13 +357,13 @@ constexpr typename dynamic_bitset<Block, Allocator>::reference& dynamic_bitset<B
 template<typename Block, typename Allocator>
 constexpr bool dynamic_bitset<Block, Allocator>::reference::operator~() const
 {
-	return (m_block & m_mask) == block_type(0);
+	return (m_block & m_mask) == zero_block;
 }
 
 template<typename Block, typename Allocator>
 constexpr dynamic_bitset<Block, Allocator>::reference::operator bool() const
 {
-	return (m_block & m_mask) != block_type(0);
+	return (m_block & m_mask) != zero_block;
 }
 
 template<typename Block, typename Allocator>
@@ -431,7 +433,7 @@ constexpr dynamic_bitset<Block, Allocator>::dynamic_bitset(size_type nbits,
 	}
 	else
 	{
-		const unsigned long long block_mask = static_cast<unsigned long long>(~block_type(0));
+		const unsigned long long block_mask = static_cast<unsigned long long>(one_block);
 		const size_type blocks_to_init = std::min(m_blocks.size(), init_val_required_blocks);
 		for(size_type i = 0; i < blocks_to_init; ++i)
 		{
@@ -481,7 +483,7 @@ constexpr void dynamic_bitset<Block, Allocator>::resize(size_type nbits, bool va
 	const size_type old_num_blocks = num_blocks();
 	const size_type new_num_blocks = blocks_required(nbits);
 
-	const block_type init_value = value ? block_type(~block_type(0)) : block_type(0);
+	const block_type init_value = value ? one_block : zero_block;
 	if(new_num_blocks != old_num_blocks)
 	{
 		m_blocks.resize(new_num_blocks, init_value);
@@ -775,7 +777,7 @@ constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::se
 			set_block_bits(m_blocks[last_block], 0, last_bit_index, value);
 		}
 
-		const block_type full_block = value ? ~block_type(0) : block_type(0);
+		const block_type full_block = value ? one_block : zero_block;
 		for(size_type i = first_full_block; i <= last_full_block; ++i)
 		{
 			m_blocks[i] = full_block;
@@ -806,7 +808,7 @@ constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::se
 template<typename Block, typename Allocator>
 constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::set()
 {
-	std::fill(std::begin(m_blocks), std::end(m_blocks), ~block_type(0));
+	std::fill(std::begin(m_blocks), std::end(m_blocks), one_block);
 	sanitize();
 	return *this;
 }
@@ -827,7 +829,7 @@ constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::re
 template<typename Block, typename Allocator>
 constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::reset()
 {
-	std::fill(std::begin(m_blocks), std::end(m_blocks), block_type(0));
+	std::fill(std::begin(m_blocks), std::end(m_blocks), zero_block);
 	return *this;
 }
 
@@ -898,7 +900,7 @@ template<typename Block, typename Allocator>
 constexpr bool dynamic_bitset<Block, Allocator>::test(size_type pos) const
 {
 	assert(pos < size());
-	return (m_blocks[block_index(pos)] & bit_mask(pos)) != block_type(0);
+	return (m_blocks[block_index(pos)] & bit_mask(pos)) != zero_block;
 }
 
 template<typename Block, typename Allocator>
@@ -920,7 +922,7 @@ constexpr bool dynamic_bitset<Block, Allocator>::all() const
 		return true;
 	}
 
-	const block_type full_block = ~block_type(0);
+	const block_type full_block = one_block;
 	if(extra_bits_number() == 0)
 	{
 		for(const block_type& block: m_blocks)
@@ -953,7 +955,7 @@ constexpr bool dynamic_bitset<Block, Allocator>::any() const
 {
 	for(const block_type& block: m_blocks)
 	{
-		if(block != block_type(0))
+		if(block != zero_block)
 		{
 			return true;
 		}
@@ -984,28 +986,28 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 	// full blocks
 	for(size_type i = 0; i < m_blocks.size() - 1; ++i)
 	{
-		if(m_blocks[i] == block_type(0))
+		if(m_blocks[i] == zero_block)
 		{
 			continue;
 		}
 		block_type mask = 1;
 		for(size_type bit_index = 0; bit_index < bits_per_block; ++bit_index)
 		{
-			count += ((m_blocks[i] & mask) != block_type(0));
+			count += ((m_blocks[i] & mask) != zero_block);
 			mask <<= 1;
 		}
 	}
 
 	// last block
 	const block_type& block = last_block();
-	if(block != block_type(0))
+	if(block != zero_block)
 	{
 		block_type mask = 1;
 		const size_t extra_bits = extra_bits_number();
 		const size_t last_block_bits = extra_bits == 0 ? bits_per_block : extra_bits;
 		for(size_type bit_index = 0; bit_index < last_block_bits; ++bit_index)
 		{
-			count += ((block & mask) != block_type(0));
+			count += ((block & mask) != zero_block);
 			mask <<= 1;
 		}
 	}
@@ -1077,7 +1079,7 @@ constexpr bool dynamic_bitset<Block, Allocator>::is_subset_of(
 	assert(size() == bitset.size());
 	for(size_type i = 0; i < m_blocks.size(); ++i)
 	{
-		if((m_blocks[i] & ~bitset.m_blocks[i]) != block_type(0))
+		if((m_blocks[i] & ~bitset.m_blocks[i]) != zero_block)
 		{
 			return false;
 		}
@@ -1096,11 +1098,11 @@ constexpr bool dynamic_bitset<Block, Allocator>::is_proper_subset_of(
 		const block_type& self_block = m_blocks[i];
 		const block_type& other_block = bitset.m_blocks[i];
 
-		if((self_block & ~other_block) != block_type(0))
+		if((self_block & ~other_block) != zero_block)
 		{
 			return false;
 		}
-		if((~self_block & other_block) != block_type(0))
+		if((~self_block & other_block) != zero_block)
 		{
 			is_proper = true;
 		}
@@ -1115,7 +1117,7 @@ constexpr bool dynamic_bitset<Block, Allocator>::intersects(
 	const size_type min_blocks_number = std::min(m_blocks.size(), bitset.m_blocks.size());
 	for(size_type i = 0; i < min_blocks_number; ++i)
 	{
-		if((m_blocks[i] & bitset.m_blocks[i]) != block_type(0))
+		if((m_blocks[i] & bitset.m_blocks[i]) != zero_block)
 		{
 			return true;
 		}
@@ -1129,7 +1131,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 {
 	for(size_type i = 0; i < m_blocks.size(); ++i)
 	{
-		if(m_blocks[i] != block_type(0))
+		if(m_blocks[i] != zero_block)
 		{
 			return i * bits_per_block + first_on(m_blocks[i]);
 		}
@@ -1151,7 +1153,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 	const size_type first_bit_index = bit_index(first_bit);
 	const block_type first_block_shifted = m_blocks[first_block] >> first_bit_index;
 
-	if(first_block_shifted != block_type(0))
+	if(first_block_shifted != zero_block)
 	{
 		return first_bit + first_on(first_block_shifted);
 	}
@@ -1159,7 +1161,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 	{
 		for(size_type i = first_block + 1; i < m_blocks.size(); ++i)
 		{
-			if(m_blocks[i] != block_type(0))
+			if(m_blocks[i] != zero_block)
 			{
 				return i * bits_per_block + first_on(m_blocks[i]);
 			}
@@ -1193,7 +1195,7 @@ constexpr std::basic_string<_CharT, _Traits, _Alloc> dynamic_bitset<Block, Alloc
 	std::basic_string<_CharT, _Traits, _Alloc> str(len, zero);
 	for(size_type i_block = 0; i_block < m_blocks.size(); ++i_block)
 	{
-		if(m_blocks[i_block] == block_type(0))
+		if(m_blocks[i_block] == zero_block)
 		{
 			continue;
 		}
@@ -1202,7 +1204,7 @@ constexpr std::basic_string<_CharT, _Traits, _Alloc> dynamic_bitset<Block, Alloc
 		  i_block * bits_per_block < len ? len - i_block * bits_per_block : bits_per_block;
 		for(size_type i_bit = 0; i_bit < limit; ++i_bit)
 		{
-			if((m_blocks[i_block] & mask) != block_type(0))
+			if((m_blocks[i_block] & mask) != zero_block)
 			{
 				_Traits::assign(str[len - (i_block * bits_per_block + i_bit + 1)], one);
 			}
@@ -1318,11 +1320,11 @@ constexpr typename dynamic_bitset<Block, Allocator>::block_type dynamic_bitset<B
 	last = bit_index(last);
 	if(last == (block_last_bit_index))
 	{
-		return ~block_type(0) << first;
+		return block_type(one_block << first);
 	}
 	else
 	{
-		return ((block_type(1) << (last + 1)) - 1) ^ ((block_type(1) << first) - 1);
+		return block_type(((block_type(1) << (last + 1)) - 1) ^ ((block_type(1) << first) - 1));
 	}
 }
 
@@ -1354,14 +1356,14 @@ template<typename Block, typename Allocator>
 constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Block, Allocator>::
   first_on(const block_type& block) noexcept
 {
-	assert(block != block_type(0));
+	assert(block != zero_block);
 
 	//FIXME: dummy implementation
 
 	block_type mask = block_type(1);
 	for(size_type i = 0; i < bits_per_block; ++i)
 	{
-		if((block & mask) != block_type(0))
+		if((block & mask) != zero_block)
 		{
 			return i;
 		}
@@ -1458,14 +1460,18 @@ constexpr void dynamic_bitset<Block, Allocator>::apply_left_shift(size_type shif
 		const size_type reverse_bits_offset = bits_per_block - bits_offset;
 		for(size_type i = m_blocks.size() - 1; i > blocks_shift; --i)
 		{
-			m_blocks[i] = ((m_blocks[i - blocks_shift] << bits_offset)
-			               | (m_blocks[i - blocks_shift - 1] >> reverse_bits_offset));
+			m_blocks[i] =
+			  block_type((m_blocks[i - blocks_shift] << bits_offset)
+			             | block_type(m_blocks[i - blocks_shift - 1] >> reverse_bits_offset));
 		}
-		m_blocks[blocks_shift] = m_blocks[0] << bits_offset;
+		m_blocks[blocks_shift] = block_type(m_blocks[0] << bits_offset);
 	}
 
 	// set bit that came at the right to 0 in unmodified blocks
-	std::fill(std::begin(m_blocks), std::begin(m_blocks) + blocks_shift, block_type(0));
+	std::fill(std::begin(m_blocks),
+	          std::begin(m_blocks)
+	            + static_cast<typename decltype(m_blocks)::difference_type>(blocks_shift),
+	          zero_block);
 }
 
 template<typename Block, typename Allocator>
@@ -1493,14 +1499,19 @@ constexpr void dynamic_bitset<Block, Allocator>::apply_right_shift(size_type shi
 		const size_type reverse_bits_offset = bits_per_block - bits_offset;
 		for(size_type i = 0; i < last_block_to_shift; ++i)
 		{
-			m_blocks[i] = ((m_blocks[i + blocks_shift] >> bits_offset)
-			               | (m_blocks[i + blocks_shift + 1] << reverse_bits_offset));
+			m_blocks[i] =
+			  block_type((m_blocks[i + blocks_shift] >> bits_offset)
+			             | block_type(m_blocks[i + blocks_shift + 1] << reverse_bits_offset));
 		}
-		m_blocks[last_block_to_shift] = m_blocks[m_blocks.size() - 1] >> bits_offset;
+		m_blocks[last_block_to_shift] = block_type(m_blocks[m_blocks.size() - 1] >> bits_offset);
 	}
 
 	// set bit that came at the left to 0 in unmodified blocks
-	std::fill(std::begin(m_blocks) + (last_block_to_shift + 1), std::end(m_blocks), block_type(0));
+	std::fill(
+	  std::begin(m_blocks)
+	    + static_cast<typename decltype(m_blocks)::difference_type>(last_block_to_shift + 1),
+	  std::end(m_blocks),
+	  zero_block);
 }
 
 template<typename Block, typename Allocator>
@@ -1509,7 +1520,7 @@ constexpr void dynamic_bitset<Block, Allocator>::sanitize()
 	size_type shift = m_bits_number % bits_per_block;
 	if(shift > 0)
 	{
-		last_block() &= ~(block_type(~block_type(0)) << shift);
+		last_block() &= ~(one_block << shift);
 	}
 }
 
@@ -1519,7 +1530,7 @@ constexpr bool dynamic_bitset<Block, Allocator>::check_unused_bits() const noexc
 	const size_type extra_bits = extra_bits_number();
 	if(extra_bits > 0)
 	{
-		return (last_block() & (block_type(~block_type(0)) << extra_bits)) == block_type(0);
+		return (last_block() & (one_block << extra_bits)) == zero_block;
 	}
 	return true;
 }
