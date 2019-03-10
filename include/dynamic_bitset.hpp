@@ -11,6 +11,7 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <string>
 #include <climits>
 #include <cmath>
 #include <cassert>
@@ -571,7 +572,7 @@ constexpr void dynamic_bitset<Block, Allocator>::append(block_type block)
 	else
 	{
 		last_block() |= (block << extra_bits);
-		m_blocks.push_back(block >> (bits_per_block - extra_bits));
+		m_blocks.push_back(block_type(block >> (bits_per_block - extra_bits)));
 	}
 
 	m_bits_number += bits_per_block;
@@ -620,14 +621,14 @@ constexpr void dynamic_bitset<Block, Allocator>::append(BlockInputIterator first
 	else
 	{
 		last_block() |= (*first << extra_bits);
-		block_type block = *first >> unused_bits;
+		block_type block = block_type(*first >> unused_bits);
 		++first;
 		while(first != last)
 		{
 			block |= (*first << extra_bits);
 			m_blocks.push_back(block);
 			m_bits_number += bits_per_block;
-			block = *first >> unused_bits;
+			block = block_type(*first >> unused_bits);
 			++first;
 		}
 		m_blocks.push_back(block);
@@ -880,7 +881,7 @@ constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::fl
 
 		for(size_type i = first_full_block; i <= last_full_block; ++i)
 		{
-			m_blocks[i] = ~m_blocks[i];
+			m_blocks[i] = block_type(~m_blocks[i]);
 		}
 	}
 
@@ -1159,7 +1160,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 	const size_type first_bit = prev + 1;
 	const size_type first_block = block_index(first_bit);
 	const size_type first_bit_index = bit_index(first_bit);
-	const block_type first_block_shifted = m_blocks[first_block] >> first_bit_index;
+	const block_type first_block_shifted = block_type(m_blocks[first_block] >> first_bit_index);
 
 	if(first_block_shifted != zero_block)
 	{
