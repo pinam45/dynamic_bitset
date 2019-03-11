@@ -1,0 +1,18 @@
+
+platform:
+  - x86
+  - x64
+
+image:
+  - Visual Studio 2017
+
+install:
+  - git submodule update --init --recursive
+
+build_script:
+  - if "%PLATFORM%" == "x64" (set ARCH=_x64) else (set ARCH= )
+  - pushd ide
+  - configure_VS2017%ARCH%.cmd
+  - pushd VS2017_v141%ARCH%
+  - cmake --build . --config Debug -- /M
+  - ctest
