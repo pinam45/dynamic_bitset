@@ -30,7 +30,7 @@ add_library(dynamic_bitset::dynamic_bitset ALIAS dynamic_bitset)
 # Add includes
 target_include_directories(
   dynamic_bitset INTERFACE
-  "${CMAKE_SOURCE_DIR}/include"
+  "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
 
 # CMake utilities
@@ -87,5 +87,5 @@ endif()
 
 # Generate format target
 if(DYNAMICBITSET_FORMAT_TARGET)
-	cmutils_generate_clang_format(format-dynamic_bitset RECURSE "${CMAKE_SOURCE_DIR}/include")
+	cmutils_generate_clang_format(format-dynamic_bitset RECURSE "${CMAKE_CURRENT_SOURCE_DIR}/include")
 endif()
