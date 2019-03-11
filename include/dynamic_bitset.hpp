@@ -12,6 +12,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <type_traits>
 #include <climits>
 #include <cmath>
 #include <cassert>
