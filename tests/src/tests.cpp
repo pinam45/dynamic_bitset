@@ -133,16 +133,47 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 		SECTION("full string")
 		{
-			const dynamic_bitset<TestType> bitset(str);
-			CAPTURE(bitset);
-
-			for(size_t i = 0; i < bits_to_take; ++i)
+			SECTION("std::string_view")
 			{
-				CAPTURE(i);
-				REQUIRE(bitset[i] == bit_value(value, i));
+				const dynamic_bitset<TestType> bitset(std::string_view{str});
+				CAPTURE(bitset);
+
+				for(size_t i = 0; i < bits_to_take; ++i)
+				{
+					CAPTURE(i);
+					REQUIRE(bitset[i] == bit_value(value, i));
+				}
+
+				REQUIRE(bitset.to_string() == str);
 			}
 
-			REQUIRE(bitset.to_string() == str);
+			SECTION("std::string")
+			{
+				const dynamic_bitset<TestType> bitset(str);
+				CAPTURE(bitset);
+
+				for(size_t i = 0; i < bits_to_take; ++i)
+				{
+					CAPTURE(i);
+					REQUIRE(bitset[i] == bit_value(value, i));
+				}
+
+				REQUIRE(bitset.to_string() == str);
+			}
+
+			SECTION("const char*")
+			{
+				const dynamic_bitset<TestType> bitset(str.c_str());
+				CAPTURE(bitset);
+
+				for(size_t i = 0; i < bits_to_take; ++i)
+				{
+					CAPTURE(i);
+					REQUIRE(bitset[i] == bit_value(value, i));
+				}
+
+				REQUIRE(bitset.to_string() == str);
+			}
 		}
 
 		SECTION("partial string")
@@ -154,13 +185,40 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 			  (pos == (bits_to_take - 1)) ? std::get<1>(parameters) % (bits_to_take - pos) : 0;
 			CAPTURE(pos, n);
 
-			const dynamic_bitset<TestType> bitset(str, pos, n);
-			CAPTURE(bitset);
-
-			for(size_t i = 0; i < n; ++i)
+			SECTION("std::string_view")
 			{
-				CAPTURE(i);
-				REQUIRE(bitset[i] == bit_value(value, pos + i));
+				const dynamic_bitset<TestType> bitset(std::string_view{str}, pos, n);
+				CAPTURE(bitset);
+
+				for(size_t i = 0; i < n; ++i)
+				{
+					CAPTURE(i);
+					REQUIRE(bitset[i] == bit_value(value, pos + i));
+				}
+			}
+
+			SECTION("std::string")
+			{
+				const dynamic_bitset<TestType> bitset(str, pos, n);
+				CAPTURE(bitset);
+
+				for(size_t i = 0; i < n; ++i)
+				{
+					CAPTURE(i);
+					REQUIRE(bitset[i] == bit_value(value, pos + i));
+				}
+			}
+
+			SECTION("const char*")
+			{
+				const dynamic_bitset<TestType> bitset(str.c_str(), pos, n);
+				CAPTURE(bitset);
+
+				for(size_t i = 0; i < n; ++i)
+				{
+					CAPTURE(i);
+					REQUIRE(bitset[i] == bit_value(value, pos + i));
+				}
 			}
 		}
 	}
