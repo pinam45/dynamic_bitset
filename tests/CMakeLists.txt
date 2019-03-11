@@ -43,9 +43,6 @@ cmutils_target_enable_warnings(dynamic_bitset_tests)
 # Build in C++17
 cmutils_target_set_standard(dynamic_bitset_tests CXX 17)
 
-# Set static runtime
-cmutils_target_set_runtime(dynamic_bitset_tests STATIC)
-
 # Enable sanitizers in debug
 #cmutils_target_enable_sanitizers(
 #  dynamic_bitset_tests
