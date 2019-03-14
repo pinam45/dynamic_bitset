@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <string>
 #include <string_view>
+#include <functional>
 #include <type_traits>
 #include <climits>
 #include <cmath>
