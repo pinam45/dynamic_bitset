@@ -28,10 +28,18 @@ add_library(dynamic_bitset INTERFACE)
 add_library(dynamic_bitset::dynamic_bitset ALIAS dynamic_bitset)
 
 # Add includes
-target_include_directories(
-  dynamic_bitset INTERFACE
-  "${CMAKE_CURRENT_SOURCE_DIR}/include"
-)
+if(DYNAMICBITSET_MASTER_PROJECT)
+	target_include_directories(
+	  dynamic_bitset INTERFACE
+	  "${CMAKE_CURRENT_SOURCE_DIR}/include"
+	)
+else()
+	# If used via add_subdirectory, disable warnings on headers
+	target_include_directories(
+	  dynamic_bitset SYSTEM INTERFACE
+	  "${CMAKE_CURRENT_SOURCE_DIR}/include"
+	)
+endif()
 
 # CMake utilities
 if(DYNAMICBITSET_MASTER_PROJECT
