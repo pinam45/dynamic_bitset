@@ -986,7 +986,7 @@ TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 	}
 }
 
-TEMPLATE_TEST_CASE("count", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+TEMPLATE_TEST_CASE("count", "[dynamic_bitset][libpopcnt]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
 	dynamic_bitset<TestType> bitset =

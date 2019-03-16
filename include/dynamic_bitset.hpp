@@ -19,6 +19,13 @@
 #include <cmath>
 #include <cassert>
 
+#ifndef DYNAMIC_BITSET_NO_LIBPOPCNT
+#	if __has_include(<libpopcnt.h>)
+#		include <libpopcnt.h>
+#		define DYNAMIC_BITSET_USE_LIBPOPCNT
+#	endif
+#endif
+
 template<typename Block = unsigned long long, typename Allocator = std::allocator<Block>>
 class dynamic_bitset
 {
@@ -1030,13 +1037,15 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
                                                                               Allocator>::count()
   const noexcept
 {
-	//FIXME: dummy implementation
-
 	if(size() == 0)
 	{
 		return 0;
 	}
 
+#ifdef DYNAMIC_BITSET_USE_LIBPOPCNT
+	const size_type count =
+	  static_cast<size_type>(popcnt(m_blocks.data(), m_blocks.size() * sizeof(block_type)));
+#else
 	size_type count = 0;
 
 	// full blocks
@@ -1067,7 +1076,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 			mask <<= 1;
 		}
 	}
-
+#endif
 	return count;
 }
 

@@ -18,6 +18,7 @@ if (ABSOLUTE_CURRENT_SOURCE_DIR STREQUAL ABSOLUTE_SOURCE_DIR)
 endif()
 
 # Options
+option(DYNAMICBITSET_USE_LIBPOPCNT "Enable using libpopcnt for bits counting operations" ON)
 option(DYNAMICBITSET_BUILD_TESTS "Enable building tests for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
 option(DYNAMICBITSET_BUILD_EXAMPLE "Enable building example for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
 option(DYNAMICBITSET_FORMAT_TARGET "Enable generating a code formating target for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
@@ -27,18 +28,34 @@ option(DYNAMICBITSET_HEADERS_TARGET_IDE "Enable generating a target with headers
 add_library(dynamic_bitset INTERFACE)
 add_library(dynamic_bitset::dynamic_bitset ALIAS dynamic_bitset)
 
+# If used via add_subdirectory, disable warnings on headers
+set(MAYBE_SYSTEM)
+if(NOT DYNAMICBITSET_MASTER_PROJECT)
+	set(MAYBE_SYSTEM SYSTEM)
+endif()
+
 # Add includes
-if(DYNAMICBITSET_MASTER_PROJECT)
-	target_include_directories(
-	  dynamic_bitset INTERFACE
-	  "${CMAKE_CURRENT_SOURCE_DIR}/include"
-	)
-else()
-	# If used via add_subdirectory, disable warnings on headers
-	target_include_directories(
-	  dynamic_bitset SYSTEM INTERFACE
-	  "${CMAKE_CURRENT_SOURCE_DIR}/include"
-	)
+target_include_directories(
+  dynamic_bitset ${MAYBE_SYSTEM} INTERFACE
+  "${CMAKE_CURRENT_SOURCE_DIR}/include"
+)
+
+# Configure libpopcnt
+if(DYNAMICBITSET_USE_LIBPOPCNT)
+	get_filename_component(LIBPOPCNT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extlibs/libpopcnt/libpopcnt.h" ABSOLUTE)
+	if(EXISTS "${LIBPOPCNT_PATH}")
+		message(STATUS "libpopcnt is present and will be used")
+		target_include_directories(
+		  dynamic_bitset SYSTEM INTERFACE
+		  "${CMAKE_CURRENT_SOURCE_DIR}/extlibs/libpopcnt"
+		)
+	else()
+		message(WARNING "libpopcnt is missing and won't be used, maybe you didn't pull the git submodules")
+		set(DYNAMICBITSET_USE_LIBPOPCNT OFF)
+	endif()
+endif()
+if(NOT DYNAMICBITSET_USE_LIBPOPCNT)
+	target_compile_definitions(dynamic_bitset INTERFACE DYNAMIC_BITSET_NO_LIBPOPCNT)
 endif()
 
 # CMake utilities
@@ -48,7 +65,7 @@ if(DYNAMICBITSET_MASTER_PROJECT
 	OR DYNAMICBITSET_FORMAT_TARGET
 	OR DYNAMICBITSET_HEADERS_TARGET_IDE
   )
-	get_filename_component(CMUTILS_PATH "cmake/CMutils/cmutils.cmake" ABSOLUTE)
+	get_filename_component(CMUTILS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CMutils/cmutils.cmake" ABSOLUTE)
 	if(EXISTS "${CMUTILS_PATH}")
 		include(${CMUTILS_PATH})
 	else()
