@@ -4,3 +4,6 @@
 [submodule "extlibs/Catch2"]
 	path = extlibs/Catch2
 	url = https://github.com/catchorg/Catch2
+[submodule "extlibs/libpopcnt"]
+	path = extlibs/libpopcnt
+	url = https://github.com/kimwalisch/libpopcnt
