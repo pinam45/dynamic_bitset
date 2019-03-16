@@ -1509,8 +1509,21 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 {
 	assert(block != zero_block);
 
-	//FIXME: dummy implementation
-
+#if defined(DYNAMIC_BITSET_GCC) \
+  || (defined(DYNAMIC_BITSET_CLANG) && defined(DYNAMIC_BITSET_CLANG_builtin_ctz))
+	if constexpr(std::is_same_v<block_type, unsigned long long>)
+	{
+		return static_cast<size_type>(__builtin_ctzll(block));
+	}
+	else if constexpr(std::is_same_v<block_type, unsigned long>)
+	{
+		return static_cast<size_type>(__builtin_ctzl(block));
+	}
+	else
+	{
+		return static_cast<size_type>(__builtin_ctz(static_cast<unsigned int>(block)));
+	}
+#else
 	block_type mask = block_type(1);
 	for(size_type i = 0; i < bits_per_block; ++i)
 	{
@@ -1520,6 +1533,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 		}
 		mask <<= 1;
 	}
+#endif
 	return npos;
 }
 

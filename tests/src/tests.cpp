@@ -986,7 +986,7 @@ TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 	}
 }
 
-TEMPLATE_TEST_CASE("count", "[dynamic_bitset][libpopcnt]", uint16_t, uint32_t, uint64_t)
+TEMPLATE_TEST_CASE("count", "[dynamic_bitset][libpopcnt][builtin]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
 	dynamic_bitset<TestType> bitset =
@@ -1279,7 +1279,11 @@ TEMPLATE_TEST_CASE("intersects", "[dynamic_bitset]", uint16_t, uint32_t, uint64_
 	REQUIRE_FALSE(bitset.intersects(bitset_copy));
 }
 
-TEMPLATE_TEST_CASE("find_first find_next", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+TEMPLATE_TEST_CASE("find_first find_next",
+                   "[dynamic_bitset][builtin]",
+                   uint16_t,
+                   uint32_t,
+                   uint64_t)
 {
 	CAPTURE(SEED);
 	const std::tuple<size_t, size_t> values =
