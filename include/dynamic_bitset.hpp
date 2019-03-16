@@ -26,6 +26,24 @@
 #	endif
 #endif
 
+#if defined(__clang__)
+#	define DYNAMIC_BITSET_CLANG
+#	ifdef __has_builtin
+#		if __has_builtin(__builtin_popcount) && __has_builtin(__builtin_popcountl) \
+		  && __has_builtin(__builtin_popcountll)
+#			define DYNAMIC_BITSET_CLANG_builtin_popcount
+#		endif
+#		if __has_builtin(__builtin_ctz) && __has_builtin(__builtin_ctzl) \
+		  && __has_builtin(__builtin_ctzll)
+#			define DYNAMIC_BITSET_CLANG_builtin_ctz
+#		endif
+#	endif
+#elif defined(__GNUC__)
+#	define DYNAMIC_BITSET_GCC
+#elif defined(_MSC_VER)
+#	define DYNAMIC_BITSET_MSVC
+#endif
+
 template<typename Block = unsigned long long, typename Allocator = std::allocator<Block>>
 class dynamic_bitset
 {
@@ -228,6 +246,9 @@ private:
 	static constexpr void flip_block_bits(block_type& block,
 	                                      size_type first,
 	                                      size_type last) noexcept;
+
+	static constexpr size_type block_count(const block_type& block) noexcept;
+	static constexpr size_type block_count(const block_type& block, size_type nbits) noexcept;
 
 	static constexpr size_type first_on(const block_type& block) noexcept;
 
@@ -1051,29 +1072,21 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 	// full blocks
 	for(size_type i = 0; i < m_blocks.size() - 1; ++i)
 	{
-		if(m_blocks[i] == zero_block)
-		{
-			continue;
-		}
-		block_type mask = 1;
-		for(size_type bit_index = 0; bit_index < bits_per_block; ++bit_index)
-		{
-			count += ((m_blocks[i] & mask) != zero_block);
-			mask <<= 1;
-		}
+		count += block_count(m_blocks[i]);
 	}
 
 	// last block
 	const block_type& block = last_block();
 	if(block != zero_block)
 	{
-		block_type mask = 1;
 		const size_t extra_bits = extra_bits_number();
-		const size_t last_block_bits = extra_bits == 0 ? bits_per_block : extra_bits;
-		for(size_type bit_index = 0; bit_index < last_block_bits; ++bit_index)
+		if(extra_bits == 0)
 		{
-			count += ((block & mask) != zero_block);
-			mask <<= 1;
+			count += block_count(block);
+		}
+		else
+		{
+			count += block_count(block, extra_bits);
 		}
 	}
 #endif
@@ -1415,6 +1428,79 @@ constexpr void dynamic_bitset<Block, Allocator>::flip_block_bits(block_type& blo
                                                                  size_type last) noexcept
 {
 	block ^= bit_mask(first, last);
+}
+
+template<typename Block, typename Allocator>
+constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Block, Allocator>::
+  block_count(const block_type& block) noexcept
+{
+	if(block == zero_block)
+	{
+		return 0;
+	}
+
+	size_type count = 0;
+#if defined(DYNAMIC_BITSET_GCC) \
+  || (defined(DYNAMIC_BITSET_CLANG) && defined(DYNAMIC_BITSET_CLANG_builtin_popcount))
+	if constexpr(std::is_same_v<block_type, unsigned long long>)
+	{
+		count = static_cast<size_type>(__builtin_popcountll(block));
+	}
+	else if constexpr(std::is_same_v<block_type, unsigned long>)
+	{
+		count = static_cast<size_type>(__builtin_popcountl(block));
+	}
+	else
+	{
+		count = static_cast<size_type>(__builtin_popcount(static_cast<unsigned int>(block)));
+	}
+#else
+	block_type mask = 1;
+	for(size_type bit_index = 0; bit_index < bits_per_block; ++bit_index)
+	{
+		count += ((block & mask) != zero_block);
+		mask <<= 1;
+	}
+#endif
+	return count;
+}
+
+template<typename Block, typename Allocator>
+constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Block, Allocator>::
+  block_count(const block_type& block, size_type nbits) noexcept
+{
+	assert(nbits <= bits_per_block);
+	if(block == zero_block)
+	{
+		return 0;
+	}
+
+	size_type count = 0;
+#if defined(DYNAMIC_BITSET_GCC) \
+  || (defined(DYNAMIC_BITSET_CLANG) && defined(DYNAMIC_BITSET_CLANG_builtin_popcount))
+	block_type shifted_block = block_type(block << (bits_per_block - nbits));
+	if constexpr(std::is_same_v<block_type, unsigned long long>)
+	{
+		count = static_cast<size_type>(__builtin_popcountll(shifted_block));
+	}
+	else if constexpr(std::is_same_v<block_type, unsigned long>)
+	{
+		count = static_cast<size_type>(__builtin_popcountl(shifted_block));
+	}
+	else
+	{
+		count =
+		  static_cast<size_type>(__builtin_popcount(static_cast<unsigned int>(shifted_block)));
+	}
+#else
+	block_type mask = 1;
+	for(size_type bit_index = 0; bit_index < nbits; ++bit_index)
+	{
+		count += ((block & mask) != zero_block);
+		mask <<= 1;
+	}
+#endif
+	return count;
 }
 
 template<typename Block, typename Allocator>
