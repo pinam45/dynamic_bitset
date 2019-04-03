@@ -7,6 +7,7 @@
 //
 #include "RandomIntGenerator.hpp"
 #include "RandomDynamicBitsetGenerator.hpp"
+#include "RandomBitsetStringGenerator.hpp"
 #include "RandomChunkGenerator.hpp"
 #include "MultiTakeGenerator.hpp"
 
@@ -1512,4 +1513,31 @@ TEMPLATE_TEST_CASE("ostream operator<<", "[dynamic_bitset]", uint16_t, uint32_t,
 			REQUIRE(str[i] == '0');
 		}
 	}
+}
+
+TEMPLATE_TEST_CASE("istream operator>>", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	std::string str = GENERATE(take(RANDOM_VECTORS_TO_TEST, randomBitsetString(SEED)));
+	CAPTURE(str);
+
+	std::stringstream sstream;
+	sstream.str(str);
+	dynamic_bitset<TestType> bitset;
+	sstream >> bitset;
+	CAPTURE(bitset);
+
+	REQUIRE(bitset.size() == str.size());
+	for(size_t i = 0; i < str.size(); ++i)
+	{
+		if(str[str.size() - i - 1] == '1')
+		{
+			REQUIRE(bitset.test(i));
+		}
+		else
+		{
+			REQUIRE_FALSE(bitset.test(i));
+		}
+	}
+	REQUIRE(sstream.eof());
 }
