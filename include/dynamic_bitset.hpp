@@ -333,9 +333,8 @@ constexpr std::basic_ostream<_CharT, _Traits>& operator<<(
   const dynamic_bitset<Block, Allocator>& bitset);
 
 template<typename _CharT, typename _Traits, typename Block, typename Allocator>
-constexpr std::basic_istream<_CharT, _Traits>& operator>>(
-  std::basic_istream<_CharT, _Traits>& is,
-  const dynamic_bitset<Block, Allocator>& bitset);
+constexpr std::basic_istream<_CharT, _Traits>& operator>>(std::basic_istream<_CharT, _Traits>& is,
+                                                          dynamic_bitset<Block, Allocator>& bitset);
 
 template<typename Block, typename Allocator>
 constexpr void swap(dynamic_bitset<Block, Allocator>& bitset1,
@@ -1841,9 +1840,8 @@ constexpr std::basic_ostream<_CharT, _Traits>& operator<<(
 }
 
 template<typename _CharT, typename _Traits, typename Block, typename Allocator>
-constexpr std::basic_istream<_CharT, _Traits>& operator>>(
-  std::basic_istream<_CharT, _Traits>& is,
-  const dynamic_bitset<Block, Allocator>& bitset)
+constexpr std::basic_istream<_CharT, _Traits>& operator>>(std::basic_istream<_CharT, _Traits>& is,
+                                                          dynamic_bitset<Block, Allocator>& bitset)
 {
 	// A better implementation is possible
 	constexpr _CharT zero = _CharT('0');
@@ -1854,25 +1852,39 @@ constexpr std::basic_istream<_CharT, _Traits>& operator>>(
 		return is;
 	}
 
-	bitset.clear();
+	dynamic_bitset<Block, Allocator> reverse_bitset;
+	_CharT val;
+	is.get(val);
 	while(is.good())
 	{
-		_CharT val;
-		is.get(val);
 		if(val == one)
 		{
-			bitset.push_back(true);
+			reverse_bitset.push_back(true);
 		}
 		else if(val == zero)
 		{
-			bitset.push_back(false);
+			reverse_bitset.push_back(false);
 		}
 		else
 		{
 			is.unget();
 			break;
 		}
+		is.get(val);
 	}
+
+	bitset.clear();
+	if(!reverse_bitset.empty())
+	{
+		for(typename dynamic_bitset<Block, Allocator>::size_type i = reverse_bitset.size() - 1;
+		    i > 0;
+		    --i)
+		{
+			bitset.push_back(reverse_bitset.test(i));
+		}
+		bitset.push_back(reverse_bitset.test(0));
+	}
+
 	return is;
 }
 
