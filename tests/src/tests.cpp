@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <vector>
 #include <list>
+#include <sstream>
 #include <cstdint>
 
 constexpr size_t RANDOM_VECTORS_TO_TEST = 100;
@@ -1483,6 +1484,32 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 			REQUIRE(bitset1 > bitset2);
 			REQUIRE_FALSE(bitset2 >= bitset1);
 			REQUIRE(bitset1 >= bitset2);
+		}
+	}
+}
+
+TEMPLATE_TEST_CASE("ostream operator<<", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	dynamic_bitset<TestType> bitset =
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	CAPTURE(bitset);
+
+	std::stringstream sstream;
+	sstream << bitset;
+	std::string str = sstream.str();
+	CAPTURE(str);
+
+	REQUIRE(str.size() == bitset.size());
+	for(size_t i = 0; i < bitset.size(); ++i)
+	{
+		if(bitset[bitset.size() - i - 1])
+		{
+			REQUIRE(str[i] == '1');
+		}
+		else
+		{
+			REQUIRE(str[i] == '0');
 		}
 	}
 }
