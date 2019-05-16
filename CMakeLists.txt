@@ -89,8 +89,7 @@ endif()
 
 # Example
 if(DYNAMICBITSET_BUILD_EXAMPLE)
-	# TODO
-	#add_subdirectory(example)
+	add_subdirectory(example)
 endif()
 
 # Tests
