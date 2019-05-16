@@ -1570,7 +1570,7 @@ constexpr void dynamic_bitset<Block, Allocator>::init_from_string(
   std::basic_string_view<_CharT, _Traits> str,
   typename std::basic_string_view<_CharT, _Traits>::size_type pos,
   typename std::basic_string_view<_CharT, _Traits>::size_type n,
-  _CharT zero,
+  [[maybe_unused]] _CharT zero,
   _CharT one)
 {
 	assert(pos < str.size());
