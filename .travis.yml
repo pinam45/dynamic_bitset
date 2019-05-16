@@ -79,5 +79,5 @@ script:
   - mkdir cmake-build
   - cd cmake-build
   - cmake ..
-  - cmake --build . --config Debug -- -j8
+  - cmake --build . --config Debug -- -j$(nproc)
   - ctest
