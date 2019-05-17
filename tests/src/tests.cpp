@@ -1004,7 +1004,7 @@ TEMPLATE_TEST_CASE("count", "[dynamic_bitset][libpopcnt][builtin]", uint16_t, ui
 	REQUIRE(bitset.count() == count);
 }
 
-TEMPLATE_TEST_CASE("operator[]", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
 	const std::tuple<unsigned long long, size_t> values =
