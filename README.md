@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/pinam45/dynamic_bitset.svg?branch=master)](https://travis-ci.org/pinam45/dynamic_bitset)
 [![Build status](https://ci.appveyor.com/api/projects/status/h0vnyjlaunqgbrp4/branch/master?svg=true)](https://ci.appveyor.com/project/pinam45/dynamic-bitset/branch/master)
+[![codecov](https://codecov.io/gh/pinam45/dynamic_bitset/branch/master/graph/badge.svg)](https://codecov.io/gh/pinam45/dynamic_bitset)
 [![license](https://img.shields.io/github/license/pinam45/dynamic_bitset.svg)](LICENSE)
 
 A C++ header-only dynamic bitset
