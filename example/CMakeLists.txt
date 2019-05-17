@@ -34,11 +34,11 @@ cmutils_target_enable_warnings(dynamic_bitset_example)
 cmutils_target_set_standard(dynamic_bitset_example CXX 17)
 
 # Enable sanitizers in debug
-cmutils_target_enable_sanitizers(
-  dynamic_bitset_example
-  ADDRESS LEAK UNDEFINED MEMORY
-  DEBUG
-)
+#cmutils_target_enable_sanitizers(
+#  dynamic_bitset_example
+#  ADDRESS LEAK MEMORY UNDEFINED
+#  DEBUG
+#)
 
 # Set target IDE folder
 cmutils_target_set_ide_folder(dynamic_bitset_example "dynamic_bitset")
