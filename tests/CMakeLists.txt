@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.10) # For CXX_STANDARD 17 property on Visual Studio
 
+# Options
+option(DYNAMICBITSET_ENABLE_COVERAGE "Enable coverage informations generation" OFF)
+
 # Check dynamic_bitset
 if(NOT TARGET dynamic_bitset)
 	message(FATAL_ERROR "dynamic_bitset target required for the example")
@@ -36,6 +39,16 @@ target_link_libraries(dynamic_bitset_tests PRIVATE Catch2::Catch2)
 
 # Configure compile options
 cmutils_target_configure_compile_options(dynamic_bitset_tests)
+if(DYNAMICBITSET_ENABLE_COVERAGE)
+	target_compile_options(dynamic_bitset_tests PRIVATE "--coverage")
+	if(COMMAND target_link_options)
+		target_link_options(dynamic_bitset_tests PRIVATE "--coverage")
+	else()
+		# old CMake version: use ugly workaround
+		__cmutils_target_link_flag_property(dynamic_bitset_tests "--coverage")
+	endif()
+	message(STATUS "Enabled coverage for dynamic_bitset_tests")
+endif()
 
 # Enable cmutils default warnings
 cmutils_target_enable_warnings(dynamic_bitset_tests)

@@ -3,10 +3,32 @@ language: cpp
 dist: xenial
 
 git:
+  depth: 1
   submodules: true
 
 matrix:
   include:
+    # coverage
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-7', 'lcov']
+      env:
+        - COMPILER=g++-7
+        - CMAKE_EXTRA_ARGS="-DDYNAMICBITSET_ENABLE_COVERAGE=ON"
+      after_success:
+        - cd ${TRAVIS_BUILD_DIR}
+        # Create lcov report
+        # capture coverage info
+        - lcov --directory . --capture --output-file coverage.info
+        # keep only dynamic_bitset.h
+        - lcov --extract coverage.info '*/dynamic_bitset.hpp' --output-file coverage.info
+        # Uploading to CodeCov
+        # '-f' specifies file(s) to use and disables manual coverage gathering and file search which has already been done above
+        - bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage reports"
+
     - os: linux
       compiler: gcc
       addons:
@@ -78,6 +100,6 @@ script:
   - ${CXX} --version
   - mkdir cmake-build
   - cd cmake-build
-  - cmake ..
+  - cmake .. -DCMAKE_BUILD_TYPE=Debug ${CMAKE_EXTRA_ARGS}
   - cmake --build . --config Debug -- -j$(nproc)
   - ctest
