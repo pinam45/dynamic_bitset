@@ -983,34 +983,53 @@ TEMPLATE_TEST_CASE("test_set", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
-	const size_t bitset_size =
-	  GENERATE(take(RANDOM_VECTORS_TO_TEST,
-	                randomInt<size_t>(3 * bits_number<TestType>, 8 * bits_number<TestType>, SEED)));
-	CAPTURE(bitset_size);
-
-	dynamic_bitset<TestType> bitset(bitset_size);
-	CAPTURE(bitset);
-
-	SECTION("all")
+	SECTION("empty bitset")
 	{
-		bitset.set();
+		dynamic_bitset<TestType> bitset;
+		CAPTURE(bitset);
+
 		REQUIRE(bitset.all());
-	}
-
-	SECTION("any")
-	{
-		const size_t pos =
-		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1))) % bitset_size;
-		bitset.reset();
-		bitset.set(pos);
-		REQUIRE(bitset.any());
-	}
-
-	SECTION("all")
-	{
-		bitset.reset();
+		REQUIRE_FALSE(bitset.any());
 		REQUIRE(bitset.none());
+	}
+
+	SECTION("non-empty bitset")
+	{
+		CAPTURE(SEED);
+		const size_t bitset_size = GENERATE(
+		  take(RANDOM_VECTORS_TO_TEST,
+		       randomInt<size_t>(3 * bits_number<TestType>, 8 * bits_number<TestType>, SEED)));
+		CAPTURE(bitset_size);
+
+		dynamic_bitset<TestType> bitset(bitset_size);
+		CAPTURE(bitset);
+
+		SECTION("all bits on")
+		{
+			bitset.set();
+			REQUIRE(bitset.all());
+			REQUIRE(bitset.any());
+			REQUIRE_FALSE(bitset.none());
+		}
+
+		SECTION("one bit on")
+		{
+			const size_t pos =
+			  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1))) % bitset_size;
+			bitset.reset();
+			bitset.set(pos);
+			REQUIRE_FALSE(bitset.all());
+			REQUIRE(bitset.any());
+			REQUIRE_FALSE(bitset.none());
+		}
+
+		SECTION("no bit on")
+		{
+			bitset.reset();
+			REQUIRE_FALSE(bitset.all());
+			REQUIRE_FALSE(bitset.any());
+			REQUIRE(bitset.none());
+		}
 	}
 }
 
