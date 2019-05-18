@@ -1064,7 +1064,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
                                                                               Allocator>::count()
   const noexcept
 {
-	if(size() == 0)
+	if(empty())
 	{
 		return 0;
 	}
