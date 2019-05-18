@@ -102,4 +102,4 @@ script:
   - cd cmake-build
   - cmake .. -DCMAKE_BUILD_TYPE=Debug ${CMAKE_EXTRA_ARGS}
   - cmake --build . --config Debug -- -j$(nproc)
-  - ctest
+  - ctest --output-on-failure
