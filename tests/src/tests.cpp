@@ -335,30 +335,42 @@ TEMPLATE_TEST_CASE("push_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 TEMPLATE_TEST_CASE("pop_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	std::tuple<dynamic_bitset<TestType>, size_t> values =
-	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-	                     randomDynamicBitset<TestType>(SEED),
-	                     randomInt<TestType>(1, 2 * bits_number<TestType>, SEED + 1)));
-	dynamic_bitset<TestType>& bitset = std::get<0>(values);
-	size_t to_pop = std::min(bitset.size(), std::get<1>(values));
 
-	const dynamic_bitset<TestType> bitset_copy = bitset;
-	size_t size = bitset.size();
-
-	// bits removed
-	for(size_t i = 0; i < to_pop; ++i)
+	SECTION("empty bitset")
 	{
-		CAPTURE(i, size);
+		dynamic_bitset<TestType> bitset;
+
 		bitset.pop_back();
-		--size;
-		REQUIRE(bitset.size() == size);
+		REQUIRE(bitset.empty());
 	}
 
-	// initial bits not changed
-	for(size_t i = 0; i < bitset.size(); ++i)
+	SECTION("non-empty bitset")
 	{
-		CAPTURE(i);
-		REQUIRE(bitset[i] == bitset_copy[i]);
+		std::tuple<dynamic_bitset<TestType>, size_t> values =
+		  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+		                     randomDynamicBitset<TestType>(SEED),
+		                     randomInt<TestType>(1, 2 * bits_number<TestType>, SEED + 1)));
+		dynamic_bitset<TestType>& bitset = std::get<0>(values);
+		size_t to_pop = std::min(bitset.size(), std::get<1>(values));
+
+		const dynamic_bitset<TestType> bitset_copy = bitset;
+		size_t size = bitset.size();
+
+		// bits removed
+		for(size_t i = 0; i < to_pop; ++i)
+		{
+			CAPTURE(i, size);
+			bitset.pop_back();
+			--size;
+			REQUIRE(bitset.size() == size);
+		}
+
+		// initial bits not changed
+		for(size_t i = 0; i < bitset.size(); ++i)
+		{
+			CAPTURE(i);
+			REQUIRE(bitset[i] == bitset_copy[i]);
+		}
 	}
 }
 
