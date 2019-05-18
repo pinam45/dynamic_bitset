@@ -647,80 +647,109 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	const std::tuple<unsigned long long, size_t, size_t> values =
-	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-	                     randomInt<unsigned long long>(SEED),
-	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1),
-	                     randomInt<size_t>(0, bits_number<unsigned long long> - 1, SEED + 2)));
-	unsigned long long value = std::get<0>(values);
-	const size_t bits_to_take = std::get<1>(values);
-	const size_t shift = std::get<2>(values);
-	CAPTURE(value, bits_to_take, shift);
 
-	dynamic_bitset<TestType> bitset(bits_to_take, value);
-	CAPTURE(bitset);
-
-	SECTION("assignement operators")
+	SECTION("null shifts")
 	{
-		SECTION("operator<<=")
-		{
-			bitset <<= shift;
-			value <<= shift;
+		dynamic_bitset<TestType> bitset =
+		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+		CAPTURE(bitset);
 
-			// check bits
-			for(size_t i = 0; i < bits_to_take; ++i)
-			{
-				CAPTURE(i);
-				REQUIRE(bitset[i] == bit_value(value, i));
-			}
+		dynamic_bitset<TestType> bitset_copy = bitset;
+
+		SECTION("assignement operators")
+		{
+			bitset <<= 0;
+			REQUIRE(bitset == bitset_copy);
+			bitset >>= 0;
+			REQUIRE(bitset == bitset_copy);
 		}
 
-		SECTION("operator>>=")
+		SECTION("binary operators")
 		{
-			bitset >>= shift;
-			value &=
-			  ~static_cast<unsigned long long>(0)
-			  >> (bits_number<unsigned long long> - bits_to_take); // set not taken left bits to 0
-			value >>= shift;
-
-			// check bits
-			for(size_t i = 0; i < bits_to_take; ++i)
-			{
-				CAPTURE(i);
-				REQUIRE(bitset[i] == bit_value(value, i));
-			}
+			dynamic_bitset<TestType> result = bitset << 0;
+			REQUIRE(bitset == bitset_copy);
+			result = bitset >> 0;
+			REQUIRE(bitset == bitset_copy);
 		}
 	}
 
-	SECTION("binary operators")
+	SECTION("real shifts")
 	{
-		SECTION("operator<<")
-		{
-			const dynamic_bitset<TestType> shifted_bitset = bitset << shift;
-			const unsigned long long shifted_value = value << shift;
+		const std::tuple<unsigned long long, size_t, size_t> values =
+		  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+		                     randomInt<unsigned long long>(SEED),
+		                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1),
+		                     randomInt<size_t>(0, bits_number<unsigned long long> - 1, SEED + 2)));
+		unsigned long long value = std::get<0>(values);
+		const size_t bits_to_take = std::get<1>(values);
+		const size_t shift = std::get<2>(values);
+		CAPTURE(value, bits_to_take, shift);
 
-			// check bits
-			for(size_t i = 0; i < bits_to_take; ++i)
+		dynamic_bitset<TestType> bitset(bits_to_take, value);
+		CAPTURE(bitset);
+
+		SECTION("assignement operators")
+		{
+			SECTION("operator<<=")
 			{
-				CAPTURE(i);
-				REQUIRE(shifted_bitset[i] == bit_value(shifted_value, i));
+				bitset <<= shift;
+				value <<= shift;
+
+				// check bits
+				for(size_t i = 0; i < bits_to_take; ++i)
+				{
+					CAPTURE(i);
+					REQUIRE(bitset[i] == bit_value(value, i));
+				}
+			}
+
+			SECTION("operator>>=")
+			{
+				bitset >>= shift;
+				value &= ~static_cast<unsigned long long>(0)
+				         >> (bits_number<
+				               unsigned long long> - bits_to_take); // set not taken left bits to 0
+				value >>= shift;
+
+				// check bits
+				for(size_t i = 0; i < bits_to_take; ++i)
+				{
+					CAPTURE(i);
+					REQUIRE(bitset[i] == bit_value(value, i));
+				}
 			}
 		}
 
-		SECTION("operator>>")
+		SECTION("binary operators")
 		{
-			const dynamic_bitset<TestType> shifted_bitset = bitset >> shift;
-			const unsigned long long shifted_value =
-			  (value
-			   & (~static_cast<unsigned long long>(0)
-			      >> (bits_number<unsigned long long> - bits_to_take)))
-			  >> shift;
-
-			// check bits
-			for(size_t i = 0; i < bits_to_take; ++i)
+			SECTION("operator<<")
 			{
-				CAPTURE(i);
-				REQUIRE(shifted_bitset[i] == bit_value(shifted_value, i));
+				const dynamic_bitset<TestType> shifted_bitset = bitset << shift;
+				const unsigned long long shifted_value = value << shift;
+
+				// check bits
+				for(size_t i = 0; i < bits_to_take; ++i)
+				{
+					CAPTURE(i);
+					REQUIRE(shifted_bitset[i] == bit_value(shifted_value, i));
+				}
+			}
+
+			SECTION("operator>>")
+			{
+				const dynamic_bitset<TestType> shifted_bitset = bitset >> shift;
+				const unsigned long long shifted_value =
+				  (value
+				   & (~static_cast<unsigned long long>(0)
+				      >> (bits_number<unsigned long long> - bits_to_take)))
+				  >> shift;
+
+				// check bits
+				for(size_t i = 0; i < bits_to_take; ++i)
+				{
+					CAPTURE(i);
+					REQUIRE(shifted_bitset[i] == bit_value(shifted_value, i));
+				}
 			}
 		}
 	}
