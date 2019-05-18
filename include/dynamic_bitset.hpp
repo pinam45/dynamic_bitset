@@ -1316,18 +1316,14 @@ template<typename Block, typename Allocator>
 	const size_type lhs_blocks_size = lhs.m_blocks.size();
 	const size_type rhs_blocks_size = rhs.m_blocks.size();
 
-	// empty bitset inferior to 0-only bitset
-	if(lhs_size == 0)
-	{
-		return true;
-	}
-	if(rhs_size == 0)
-	{
-		return false;
-	}
-
 	if(lhs_size == rhs_size)
 	{
+		// if comparison of two empty bitsets
+		if(lhs_size == 0)
+		{
+			return false;
+		}
+
 		for(size_type i = lhs_blocks_size - 1; i > 0; --i)
 		{
 			if(lhs.m_blocks[i] != rhs.m_blocks[i])
@@ -1336,6 +1332,16 @@ template<typename Block, typename Allocator>
 			}
 		}
 		return lhs.m_blocks[0] < rhs.m_blocks[0];
+	}
+
+	// empty bitset inferior to 0-only bitset
+	if(lhs_size == 0)
+	{
+		return true;
+	}
+	if(rhs_size == 0)
+	{
+		return false;
 	}
 
 	const bool rhs_longer = rhs_size > lhs_size;
