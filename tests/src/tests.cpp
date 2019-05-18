@@ -1036,17 +1036,28 @@ TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 TEMPLATE_TEST_CASE("count", "[dynamic_bitset][libpopcnt][builtin]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	dynamic_bitset<TestType> bitset =
-	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
-	CAPTURE(bitset);
 
-	size_t count = 0;
-	for(size_t i = 0; i < bitset.size(); ++i)
+	SECTION("empty bitset")
 	{
-		count += static_cast<size_t>(bitset[i]);
+		dynamic_bitset<TestType> bitset;
+
+		REQUIRE(bitset.count() == 0);
 	}
 
-	REQUIRE(bitset.count() == count);
+	SECTION("non-empty bitset")
+	{
+		dynamic_bitset<TestType> bitset =
+		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+		CAPTURE(bitset);
+
+		size_t count = 0;
+		for(size_t i = 0; i < bitset.size(); ++i)
+		{
+			count += static_cast<size_t>(bitset[i]);
+		}
+
+		REQUIRE(bitset.count() == count);
+	}
 }
 
 TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
