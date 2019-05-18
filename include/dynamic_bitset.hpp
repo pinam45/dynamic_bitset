@@ -1664,11 +1664,8 @@ constexpr void dynamic_bitset<Block, Allocator>::apply(UnaryOperation unary_op)
 template<typename Block, typename Allocator>
 constexpr void dynamic_bitset<Block, Allocator>::apply_left_shift(size_type shift)
 {
+	assert(shift > 0);
 	assert(shift < capacity());
-	if(shift == 0)
-	{
-		return;
-	}
 
 	const size_type blocks_shift = shift / bits_per_block;
 	const size_type bits_offset = shift % bits_per_block;
@@ -1702,11 +1699,8 @@ constexpr void dynamic_bitset<Block, Allocator>::apply_left_shift(size_type shif
 template<typename Block, typename Allocator>
 constexpr void dynamic_bitset<Block, Allocator>::apply_right_shift(size_type shift)
 {
+	assert(shift > 0);
 	assert(shift < capacity());
-	if(shift == 0)
-	{
-		return;
-	}
 
 	const size_type blocks_shift = shift / bits_per_block;
 	const size_type bits_offset = shift % bits_per_block;
