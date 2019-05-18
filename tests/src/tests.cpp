@@ -1593,6 +1593,81 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 				REQUIRE(bitset1 >= bitset2);
 			}
 		}
+
+		SECTION("different size and different bits")
+		{
+			SECTION("difference in common blocks")
+			{
+				dynamic_bitset<TestType> bitset1(bits_to_take, value1);
+				dynamic_bitset<TestType> bitset2(bits_to_take, value1);
+
+				// make bitset1 < bitset2
+				const size_t bit_pos =
+				  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 2)))
+				  % bitset1.size();
+				CAPTURE(bit_pos);
+				if(bitset1[bit_pos])
+				{
+					bitset1.reset(bit_pos);
+				}
+				else
+				{
+					bitset2.set(bit_pos);
+				}
+
+				// add some 0 to a bitset to have a different size
+				const size_t bits_to_add =
+				  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
+				                randomInt<size_t>(0, 2 * bits_number<TestType>, SEED + 3)));
+				const bool bitset_to_add = GENERATE(true, false);
+				CAPTURE(bits_to_add, bitset_to_add);
+
+				dynamic_bitset<TestType>& longest_bitset = bitset_to_add ? bitset1 : bitset2;
+				for(size_t i = 0; i < bits_to_add; ++i)
+				{
+					longest_bitset.push_back(false);
+				}
+
+				REQUIRE(bitset1 < bitset2);
+				REQUIRE_FALSE(bitset2 < bitset1);
+				REQUIRE(bitset1 <= bitset2);
+				REQUIRE_FALSE(bitset2 <= bitset1);
+
+				REQUIRE_FALSE(bitset1 > bitset2);
+				REQUIRE(bitset2 > bitset1);
+				REQUIRE_FALSE(bitset1 >= bitset2);
+				REQUIRE(bitset2 >= bitset1);
+			}
+
+			SECTION("difference in extra blocks")
+			{
+				dynamic_bitset<TestType> longest_bitset(bits_to_take, value1);
+				dynamic_bitset<TestType> bitset(bits_to_take, value1);
+
+				dynamic_bitset<TestType> bits_to_add =
+				  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
+				                randomDynamicBitset<TestType>(1, 2 * bits_number<TestType>, SEED)));
+				CAPTURE(bits_to_add);
+				if(bits_to_add.none())
+				{
+					bits_to_add.set(0);
+				}
+				for(size_t i = 0; i < bits_to_add.size(); ++i)
+				{
+					longest_bitset.push_back(longest_bitset[i]);
+				}
+
+				REQUIRE(bitset < longest_bitset);
+				REQUIRE_FALSE(longest_bitset < bitset);
+				REQUIRE(bitset <= longest_bitset);
+				REQUIRE_FALSE(longest_bitset <= bitset);
+
+				REQUIRE_FALSE(bitset > longest_bitset);
+				REQUIRE(longest_bitset > bitset);
+				REQUIRE_FALSE(bitset >= longest_bitset);
+				REQUIRE(longest_bitset >= bitset);
+			}
+		}
 	}
 }
 
