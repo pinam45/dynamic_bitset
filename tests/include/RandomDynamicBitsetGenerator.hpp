@@ -30,7 +30,7 @@ class RandomDynamicBitsetGenerator : public Catch::Generators::IGenerator<dynami
 {
 public:
 	typedef typename dynamic_bitset<Block>::size_type size_type;
-	static constexpr size_type default_min_size = 0;
+	static constexpr size_type default_min_size = 1;
 	static constexpr size_type default_max_size = 8 * sizeof(Block) * CHAR_BIT;
 
 	constexpr explicit RandomDynamicBitsetGenerator(

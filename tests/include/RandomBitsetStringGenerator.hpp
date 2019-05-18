@@ -27,7 +27,7 @@ class RandomBitsetStringGenerator : public Catch::Generators::IGenerator<std::st
 {
 public:
 	typedef std::string::size_type size_type;
-	static constexpr size_type default_min_size = 0;
+	static constexpr size_type default_min_size = 1;
 	static constexpr size_type default_max_size = 8 * 32;
 
 	explicit RandomBitsetStringGenerator(
