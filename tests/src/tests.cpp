@@ -406,6 +406,12 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 		}
 	}
 
+	SECTION("empty initializer_list")
+	{
+		bitset.append({});
+		REQUIRE(bitset.size() == bitset_copy.size());
+	}
+
 	SECTION("two values initializer_list")
 	{
 		const std::tuple<TestType, TestType> init_values = GENERATE(multitake(
@@ -436,6 +442,14 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 			CAPTURE(i);
 			REQUIRE(bitset[i] == bitset_copy[i]);
 		}
+	}
+
+	SECTION("same iterators")
+	{
+		const std::vector<TestType> values;
+
+		bitset.append(std::cbegin(values), std::cend(values));
+		REQUIRE(bitset.size() == bitset_copy.size());
 	}
 
 	SECTION("random access iterators")
