@@ -1740,26 +1740,74 @@ TEMPLATE_TEST_CASE("ostream operator<<", "[dynamic_bitset]", uint16_t, uint32_t,
 TEMPLATE_TEST_CASE("istream operator>>", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	std::string str = GENERATE(take(RANDOM_VECTORS_TO_TEST, randomBitsetString(SEED)));
-	CAPTURE(str);
 
-	std::stringstream sstream;
-	sstream.str(str);
-	dynamic_bitset<TestType> bitset;
-	sstream >> bitset;
-	CAPTURE(bitset);
-
-	REQUIRE(bitset.size() == str.size());
-	for(size_t i = 0; i < str.size(); ++i)
+	SECTION("invalid stream")
 	{
-		if(str[str.size() - i - 1] == '1')
+		std::stringstream sstream;
+		dynamic_bitset<TestType> bitset;
+		sstream >> bitset;
+		REQUIRE(bitset.empty());
+	}
+
+	SECTION("valid stream")
+	{
+		SECTION("only valid characters")
 		{
-			REQUIRE(bitset.test(i));
+			std::string str = GENERATE(take(RANDOM_VECTORS_TO_TEST, randomBitsetString(SEED)));
+			CAPTURE(str);
+
+			std::stringstream sstream;
+			sstream.str(str);
+			dynamic_bitset<TestType> bitset;
+			sstream >> bitset;
+			CAPTURE(bitset);
+
+			REQUIRE(bitset.size() == str.size());
+			for(size_t i = 0; i < str.size(); ++i)
+			{
+				CAPTURE(i);
+				if(str[str.size() - i - 1] == '1')
+				{
+					REQUIRE(bitset.test(i));
+				}
+				else
+				{
+					REQUIRE_FALSE(bitset.test(i));
+				}
+			}
+			REQUIRE(sstream.eof());
 		}
-		else
+
+		SECTION("with invalid characters")
 		{
-			REQUIRE_FALSE(bitset.test(i));
+			std::string str = GENERATE(take(RANDOM_VECTORS_TO_TEST, randomBitsetString(SEED)));
+			CAPTURE(str);
+
+			std::stringstream sstream;
+			sstream << str;
+			sstream << 'E';
+			dynamic_bitset<TestType> bitset;
+			sstream >> bitset;
+			CAPTURE(bitset);
+
+			REQUIRE(bitset.size() == str.size());
+			for(size_t i = 0; i < str.size(); ++i)
+			{
+				CAPTURE(i);
+				if(str[str.size() - i - 1] == '1')
+				{
+					REQUIRE(bitset.test(i));
+				}
+				else
+				{
+					REQUIRE_FALSE(bitset.test(i));
+				}
+			}
+			char E;
+			sstream >> E;
+			REQUIRE(E == 'E');
+			sstream >> E;
+			REQUIRE(sstream.eof());
 		}
 	}
-	REQUIRE(sstream.eof());
 }
