@@ -867,7 +867,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 		}
 	}
 
-	SECTION("sigle bit")
+	SECTION("single bit")
 	{
 		const size_t pos =
 		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1))) % bitset.size();
