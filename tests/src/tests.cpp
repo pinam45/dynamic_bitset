@@ -310,6 +310,7 @@ TEMPLATE_TEST_CASE("push_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 	                     randomDynamicBitset<TestType>(1, 2 * bits_number<TestType>, SEED + 1)));
 	dynamic_bitset<TestType>& bitset = std::get<0>(values);
 	dynamic_bitset<TestType>& to_push = std::get<1>(values);
+	CAPTURE(bitset, to_push);
 
 	const dynamic_bitset<TestType> bitset_copy = bitset;
 	size_t size = bitset.size();
@@ -352,6 +353,7 @@ TEMPLATE_TEST_CASE("pop_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 		                     randomInt<TestType>(1, 2 * bits_number<TestType>, SEED + 1)));
 		dynamic_bitset<TestType>& bitset = std::get<0>(values);
 		size_t to_pop = std::min(bitset.size(), std::get<1>(values));
+		CAPTURE(bitset, to_pop);
 
 		const dynamic_bitset<TestType> bitset_copy = bitset;
 		size_t size = bitset.size();
@@ -802,6 +804,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 		SECTION("set")
 		{
 			const bool set_to = GENERATE(true, false);
+			CAPTURE(set_to);
 			bitset.set(pos, len, set_to);
 
 			// check bits
@@ -878,6 +881,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 		SECTION("set")
 		{
 			const bool set_to = GENERATE(true, false);
+			CAPTURE(set_to);
 			bitset.set(pos, set_to);
 
 			// check bits
@@ -1045,6 +1049,7 @@ TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 		{
 			const size_t pos =
 			  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1))) % bitset_size;
+			CAPTURE(pos);
 			bitset.reset();
 			bitset.set(pos);
 			REQUIRE_FALSE(bitset.all());
@@ -1205,6 +1210,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 	{
 		const size_t pos =
 		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 2))) % bits_to_take;
+		CAPTURE(pos);
 
 		SECTION("set")
 		{
@@ -1227,6 +1233,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 		SECTION("assign")
 		{
 			const bool new_value = GENERATE(true, false);
+			CAPTURE(new_value);
 			bitset[pos].assign(new_value);
 			REQUIRE(bitset[pos] == new_value);
 		}
@@ -1272,6 +1279,7 @@ TEMPLATE_TEST_CASE("reserve shrink_to_fit", "[dynamic_bitset]", uint16_t, uint32
 	CAPTURE(SEED);
 	const size_t size = GENERATE(
 	  take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(1, 8 * bits_number<TestType>, SEED)));
+	CAPTURE(size);
 
 	dynamic_bitset<TestType> bitset;
 	bitset.reserve(size);
@@ -1498,6 +1506,7 @@ TEMPLATE_TEST_CASE("operator== operator!=", "[dynamic_bitset]", uint16_t, uint32
 
 		size_t pos =
 		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1))) % bitset.size();
+		CAPTURE(pos);
 		bitset.flip(pos);
 		REQUIRE_FALSE(bitset == bitset_copy);
 		REQUIRE_FALSE(bitset_copy == bitset);
@@ -1535,6 +1544,7 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 		const dynamic_bitset<TestType> bitset =
 		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
 		const dynamic_bitset<TestType> empty_bitset;
+		CAPTURE(bitset);
 
 		REQUIRE(empty_bitset < bitset);
 		REQUIRE_FALSE(bitset < empty_bitset);
@@ -1715,6 +1725,7 @@ TEMPLATE_TEST_CASE("ostream operator<<", "[dynamic_bitset]", uint16_t, uint32_t,
 	REQUIRE(str.size() == bitset.size());
 	for(size_t i = 0; i < bitset.size(); ++i)
 	{
+		CAPTURE(i);
 		if(bitset[bitset.size() - i - 1])
 		{
 			REQUIRE(str[i] == '1');
