@@ -47,7 +47,7 @@ if(DYNAMICBITSET_ENABLE_COVERAGE)
 		# old CMake version: use ugly workaround
 		__cmutils_target_link_flag_property(dynamic_bitset_tests "--coverage")
 	endif()
-	message(STATUS "Enabled coverage for dynamic_bitset_tests")
+	message(STATUS "dynamic_bitset_tests: enabled coverage")
 endif()
 
 # Enable cmutils default warnings

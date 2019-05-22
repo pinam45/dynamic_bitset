@@ -19,6 +19,7 @@ endif()
 
 # Options
 option(DYNAMICBITSET_USE_LIBPOPCNT "Enable using libpopcnt for bits counting operations" ON)
+option(DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE "Enable adding libpopcnt submodule to include paths (disable if your project already include libpopcnt)" ON)
 option(DYNAMICBITSET_BUILD_TESTS "Enable building tests for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
 option(DYNAMICBITSET_BUILD_EXAMPLE "Enable building example for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
 option(DYNAMICBITSET_FORMAT_TARGET "Enable generating a code formating target for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
@@ -42,20 +43,25 @@ target_include_directories(
 
 # Configure libpopcnt
 if(DYNAMICBITSET_USE_LIBPOPCNT)
-	get_filename_component(LIBPOPCNT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extlibs/libpopcnt/libpopcnt.h" ABSOLUTE)
-	if(EXISTS "${LIBPOPCNT_PATH}")
-		message(STATUS "libpopcnt is present and will be used")
-		target_include_directories(
-		  dynamic_bitset SYSTEM INTERFACE
-		  "${CMAKE_CURRENT_SOURCE_DIR}/extlibs/libpopcnt"
-		)
+	message(STATUS "dynamic_bitset: libpopcnt usage enabled")
+	if(DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE)
+		get_filename_component(LIBPOPCNT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extlibs/libpopcnt/libpopcnt.h" ABSOLUTE)
+		if(EXISTS "${LIBPOPCNT_PATH}")
+			message(STATUS "dynamic_bitset: libpopcnt submodule is present and will be used")
+			target_include_directories(
+			  dynamic_bitset SYSTEM INTERFACE
+			  "${CMAKE_CURRENT_SOURCE_DIR}/extlibs/libpopcnt"
+			)
+		else()
+			message(WARNING "dynamic_bitset: libpopcnt submodule is missing and won't be used, maybe you didn't pull the git submodules")
+			set(DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE OFF)
+		endif()
 	else()
-		message(WARNING "libpopcnt is missing and won't be used, maybe you didn't pull the git submodules")
-		set(DYNAMICBITSET_USE_LIBPOPCNT OFF)
+		message(STATUS "dynamic_bitset: libpopcnt submodule won't be used")
 	endif()
-endif()
-if(NOT DYNAMICBITSET_USE_LIBPOPCNT)
+else()
 	target_compile_definitions(dynamic_bitset INTERFACE DYNAMIC_BITSET_NO_LIBPOPCNT)
+	message(STATUS "dynamic_bitset: libpopcnt usage disabled")
 endif()
 
 # CMake utilities
