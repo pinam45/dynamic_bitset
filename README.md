@@ -39,9 +39,13 @@ int main()
 }
 ```
 
+## Optional dependency
+
+Optionally, [libpopcnt](https://github.com/kimwalisch/libpopcnt) will be used optimize the bits counting operations, if the header is available (``__has_include(<libpopcnt.h>)``) and ``DYNAMIC_BITSET_NO_LIBPOPCNT`` is not defined.
+
 ## Integration
 
-As it is a header-only library, the easiest way to integrate the *dynamic_bitset* class in your project is to just copy *dynamic_bitset.hpp* in your project sources.
+As it is a header-only library, the easiest way to integrate the *dynamic_bitset* class in your project is to just copy *dynamic_bitset.hpp* in your project sources. Optionally, if you also copy *libpopcnt.h* from [libpopcnt](https://github.com/kimwalisch/libpopcnt), it will be used by default if it is available.
 
 ## CMake integration
 
@@ -65,6 +69,30 @@ add_subdirectory(extlibs/dynamic_bitset)
 target_link_libraries(CoolProject PRIVATE dynamic_bitset)
 ```
 
+If you pulled the git submodule [libpopcnt](extlibs/libpopcnt) and set the *dynamic_bitset* CMake options ``DYNAMICBITSET_USE_LIBPOPCNT`` and ``DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE`` to ``ON``(default values), the folder containing *libpopcnt.h* will also be added to the headers paths and libpopcnt will be used.
+
+## CMake options
+
+### Descriptions
+
+- ``DYNAMICBITSET_USE_LIBPOPCNT``: Enable using libpopcnt for bits counting operations
+- ``DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE``: Enable adding libpopcnt submodule to include paths (disable if your project already include libpopcnt)
+- ``DYNAMICBITSET_BUILD_TESTS``: Enable building tests for dynamic_bitset
+- ``DYNAMICBITSET_BUILD_EXAMPLE``: Enable building example for dynamic_bitset
+- ``DYNAMICBITSET_FORMAT_TARGET``: Enable generating a code formating target for dynamic_bitset
+- ``DYNAMICBITSET_HEADERS_TARGET_IDE``: Enable generating a target with headers for ide for dynamic_bitset
+
+### Default values
+
+| Option                                | Default value as master project | Default value as subdirectory |
+| ------------------------------------- | :-----------------------------: | :---------------------------: |
+| DYNAMICBITSET_USE_LIBPOPCNT           | ON                              | ON                            |
+| DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE | ON                              | ON                            |
+| DYNAMICBITSET_BUILD_TESTS             | ON                              | OFF                           |
+| DYNAMICBITSET_BUILD_EXAMPLE           | ON                              | OFF                           |
+| DYNAMICBITSET_FORMAT_TARGET           | ON                              | OFF                           |
+| DYNAMICBITSET_HEADERS_TARGET_IDE      | ON                              | OFF                           |
+
 ## Build tests and example
 
 To build the tests and the example, git submodules are required, so don't forget to pull the submodules with the repository using ``--recursive``:
@@ -73,10 +101,9 @@ To build the tests and the example, git submodules are required, so don't forget
 
 or if you have already cloned the repository:
 
-    git submodule init
-    git submodule update
+    git submodule update --init
 
-The project uses CMake to build and define the options *DYNAMICBITSET_BUILD_TESTS* and *DYNAMICBITSET_BUILD_EXAMPLE* to enable the generation of the tests and example targets, these option are enabled by default if the project is the master project (not included from another *CMakeLists.txt* with *add_subdirectory*).
+The project uses CMake to build and define the options ``DYNAMICBITSET_BUILD_TESTS`` and ``DYNAMICBITSET_BUILD_EXAMPLE`` to enable the generation of the tests and example targets, these option are enabled by default if the project is the master project (not included from another *CMakeLists.txt* with *add_subdirectory*).
 
 For running the tests, just build the *dynamic_bitset_tests* target and launch the tests using ctest. See [Running CMake](https://cmake.org/runningcmake/) and [the ctest documentation](https://cmake.org/cmake/help/latest/manual/ctest.1.html) for more information.
 
