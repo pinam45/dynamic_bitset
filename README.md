@@ -69,7 +69,7 @@ add_subdirectory(extlibs/dynamic_bitset)
 target_link_libraries(CoolProject PRIVATE dynamic_bitset)
 ```
 
-If you pulled the git submodule linpopcnt (in [extlibs](extlibs)) and set the *dynamic_bitset* CMake options ``DYNAMICBITSET_USE_LIBPOPCNT`` and ``DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE`` to ``ON``(default values), the folder containing *libpopcnt.h* will also be added to the headers paths and libpopcnt will be used.
+If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the *dynamic_bitset* CMake options ``DYNAMICBITSET_USE_LIBPOPCNT`` and ``DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE`` to ``ON``(default values), the folder containing *libpopcnt.h* will also be added to the headers paths and libpopcnt will be used.
 
 ## CMake options
 
