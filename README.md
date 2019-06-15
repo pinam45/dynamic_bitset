@@ -39,6 +39,14 @@ int main()
 }
 ```
 
+Possible output:
+```
+bitset1     = 100010110111
+bitset2     = 001011011011
+common bits = 000010010011
+```
+See it on [godbolt.org](https://godbolt.org/z/eUAVDm).
+
 ## Optional dependency
 
 Optionally, [libpopcnt](https://github.com/kimwalisch/libpopcnt) will be used optimize the bits counting operations, if the header is available (``__has_include(<libpopcnt.h>)``) and ``DYNAMIC_BITSET_NO_LIBPOPCNT`` is not defined.
