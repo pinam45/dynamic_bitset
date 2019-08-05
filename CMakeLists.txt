@@ -87,7 +87,7 @@ if(DYNAMICBITSET_MASTER_PROJECT)
 endif()
 
 # Headers target for ide
-if(DYNAMICBITSET_MASTER_PROJECT)
+if(DYNAMICBITSET_HEADERS_TARGET_IDE)
 	cmutils_interface_target_generate_headers_target(dynamic_bitset dynamic_bitset_headers_for_ide)
 	cmutils_target_source_group(dynamic_bitset_headers_for_ide "${CMAKE_CURRENT_SOURCE_DIR}")
 	cmutils_target_set_ide_folder(dynamic_bitset_headers_for_ide "dynamic_bitset")
