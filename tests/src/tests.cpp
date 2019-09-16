@@ -1472,6 +1472,111 @@ TEMPLATE_TEST_CASE("to_string", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 	REQUIRE(bitset.to_string() == string);
 }
 
+TEMPLATE_TEST_CASE("iterate_bits_on", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+	const std::tuple<unsigned long long, size_t> values =
+	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+	                     randomInt<unsigned long long>(SEED),
+	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	unsigned long long value = std::get<0>(values);
+	const size_t bits_to_take = std::get<1>(values);
+	CAPTURE(value, bits_to_take);
+
+	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	CAPTURE(bitset);
+
+	SECTION("return void")
+	{
+		SECTION("no parameters")
+		{
+			size_t current_check_bit = 0;
+			bitset.iterate_bits_on([&](size_t bit_pos) {
+				while(current_check_bit < bit_pos)
+				{
+					REQUIRE(bitset[current_check_bit] == false);
+					++current_check_bit;
+				}
+				REQUIRE(bitset[bit_pos] == true);
+				++current_check_bit;
+			});
+			for(size_t i = current_check_bit; i < bits_to_take; ++i)
+			{
+				REQUIRE(bitset[i] == false);
+			}
+		}
+
+		SECTION("parameters")
+		{
+			dynamic_bitset<TestType> check_bitset(bits_to_take);
+			bitset.iterate_bits_on(
+			  [](size_t bit_pos, dynamic_bitset<TestType>& check_bitset_) {
+				  check_bitset_[bit_pos] = true;
+			  },
+			  check_bitset);
+			REQUIRE(check_bitset == bitset);
+		}
+	}
+
+	SECTION("return bool")
+	{
+		if(bitset.count() == 0)
+		{
+			bitset.push_back(true);
+		}
+		const size_t stop_at_bit =
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 2))) % bitset.count()
+		  + 1;
+
+		SECTION("no parameters")
+		{
+			size_t current_check_bit = 0;
+			size_t bit_count = 0;
+			bitset.iterate_bits_on([&](size_t bit_pos) {
+				while(current_check_bit < bit_pos)
+				{
+					REQUIRE(bitset[current_check_bit] == false);
+					++current_check_bit;
+				}
+				REQUIRE(bitset[bit_pos] == true);
+				++current_check_bit;
+
+				++bit_count;
+				return bit_count < stop_at_bit;
+			});
+			REQUIRE(bit_count == stop_at_bit);
+		}
+
+		SECTION("parameters")
+		{
+			size_t bit_count = 0;
+			size_t last_bit_pos = 0;
+			dynamic_bitset<TestType> check_bitset(bitset.size());
+			bitset.iterate_bits_on(
+			  [](size_t bit_pos,
+			     dynamic_bitset<TestType>& check_bitset_,
+			     size_t& bit_count_,
+			     size_t& last_bit_pos_,
+			     const size_t stop_at_bit_) {
+				  check_bitset_[bit_pos] = true;
+				  last_bit_pos_ = bit_pos;
+
+				  ++bit_count_;
+				  return bit_count_ < stop_at_bit_;
+			  },
+			  check_bitset,
+			  bit_count,
+			  last_bit_pos,
+			  stop_at_bit);
+			REQUIRE(bit_count == stop_at_bit);
+
+			check_bitset.resize(last_bit_pos);
+			bitset.resize(last_bit_pos);
+			REQUIRE(check_bitset == bitset);
+		}
+	}
+}
+
 TEMPLATE_TEST_CASE("operator== operator!=", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);

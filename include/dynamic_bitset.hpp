@@ -221,6 +221,8 @@ public:
 	[[nodiscard]] constexpr std::basic_string<_CharT, _Traits, _Alloc> to_string(
 	  _CharT zero = _CharT('0'),
 	  _CharT one = _CharT('1')) const;
+	template<typename Function, typename... Parameters>
+	constexpr void iterate_bits_on(Function&& function, Parameters&&... parameters) const;
 
 	// friend external binary operators
 	template<typename Block_, typename Allocator_>
@@ -231,6 +233,11 @@ public:
 	                                const dynamic_bitset<Block_, Allocator_>& rhs);
 
 private:
+	template<typename T>
+	struct dependent_false : public std::false_type
+	{
+	};
+
 	std::vector<Block, Allocator> m_blocks;
 	size_type m_bits_number;
 
@@ -1296,6 +1303,48 @@ constexpr std::basic_string<_CharT, _Traits, _Alloc> dynamic_bitset<Block, Alloc
 		}
 	}
 	return str;
+}
+
+template<typename Block, typename Allocator>
+template<typename Function, typename... Parameters>
+constexpr void dynamic_bitset<Block, Allocator>::iterate_bits_on(Function&& function,
+                                                                 Parameters&&... parameters) const
+{
+	if constexpr(!std::is_invocable_v<Function, size_t, Parameters...>)
+	{
+		static_assert(dependent_false<Function>::value, "Function take invalid arguments");
+		// function should take (size_t, parameters...) as arguments
+	}
+
+	if constexpr(std::is_same_v<std::invoke_result_t<Function, size_t, Parameters...>, void>)
+	{
+		size_t i_bit = find_first();
+		while(i_bit != npos)
+		{
+			std::invoke(
+			  std::forward<Function>(function), i_bit, std::forward<Parameters>(parameters)...);
+			i_bit = find_next(i_bit);
+		}
+	}
+	else if constexpr(std::is_convertible_v<std::invoke_result_t<Function, size_t, Parameters...>,
+	                                        bool>)
+	{
+		size_t i_bit = find_first();
+		while(i_bit != npos)
+		{
+			if(!std::invoke(
+			     std::forward<Function>(function), i_bit, std::forward<Parameters>(parameters)...))
+			{
+				break;
+			}
+			i_bit = find_next(i_bit);
+		}
+	}
+	else
+	{
+		static_assert(dependent_false<Function>::value, "Function have invalid return type");
+		// return type should be void, or convertible to bool
+	}
 }
 
 template<typename Block, typename Allocator>

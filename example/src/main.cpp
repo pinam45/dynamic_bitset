@@ -115,6 +115,21 @@ int main()
 	// conversion to string with 0 and 1
 	std::cout << "String representation (0 and 1): " << a.to_string() << std::endl;
 
+	// iterate on bits on
+	std::cout << "Bits on: ";
+	a.iterate_bits_on([](size_t bit_pos) noexcept { std::cout << bit_pos << ' '; });
+	std::cout << std::endl;
+	// (it is possible to pass parameters and return a 'continue' bool)
+	size_t bit_counter = 0;
+	std::cout << "3 first bits on: ";
+	a.iterate_bits_on(
+	  [&bit_counter](size_t bit_pos, size_t limit) noexcept {
+		  std::cout << bit_pos << ' ';
+		  return ++bit_counter < limit;
+	  },
+	  3);
+	std::cout << std::endl;
+
 	// reserve 64 bits
 	a.reserve(64);
 
