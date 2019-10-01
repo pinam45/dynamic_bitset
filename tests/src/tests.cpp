@@ -1312,7 +1312,16 @@ TEMPLATE_TEST_CASE("is_subset_of is_proper_subset_of",
 	{
 		if(bitset.any())
 		{
-			bitset.flip(bitset.find_first());
+			const size_t bit_to_reset =
+			  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1)))
+			  % bitset.count();
+			size_t bit_to_reset_pos = bitset.find_first();
+			for(size_t i = 1; i < bit_to_reset; ++i)
+			{
+				bit_to_reset_pos = bitset.find_next(bit_to_reset_pos);
+			}
+			bitset.reset(bit_to_reset_pos);
+
 			REQUIRE(bitset.is_subset_of(bitset_copy) == true);
 			REQUIRE(bitset.is_proper_subset_of(bitset_copy) == true);
 		}
@@ -1322,15 +1331,17 @@ TEMPLATE_TEST_CASE("is_subset_of is_proper_subset_of",
 	{
 		if(!bitset.all())
 		{
-			// flip first bit at 0
-			for(size_t i = 0; i < bitset.size(); ++i)
+			const dynamic_bitset<TestType> not_bitset = ~bitset;
+			const size_t bit_to_set =
+			  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1)))
+			  % not_bitset.count();
+			size_t bit_to_set_pos = not_bitset.find_first();
+			for(size_t i = 1; i < bit_to_set; ++i)
 			{
-				if(bitset.test(i) == false)
-				{
-					bitset.flip(i);
-					break;
-				}
+				bit_to_set_pos = not_bitset.find_next(bit_to_set_pos);
 			}
+			bitset.set(bit_to_set_pos);
+
 			REQUIRE(bitset.is_subset_of(bitset_copy) == false);
 			REQUIRE(bitset.is_proper_subset_of(bitset_copy) == false);
 		}
