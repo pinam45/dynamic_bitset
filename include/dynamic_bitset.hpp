@@ -91,12 +91,9 @@ public:
 		constexpr reference& assign(bool v);
 
 	private:
-		friend class dynamic_bitset;
-
 		block_type& m_block;
 		block_type m_mask;
 	};
-	friend class reference;
 	typedef bool const_reference;
 
 	// copy/move constructors = default
