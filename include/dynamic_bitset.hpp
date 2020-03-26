@@ -839,11 +839,11 @@ constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::se
                                                                                   bool value)
 {
 	assert(pos < size());
-	assert(pos + len - 1 < size());
 	if(len == 0)
 	{
 		return *this;
 	}
+	assert(pos + len - 1 < size());
 
 	const size_type first_block = block_index(pos);
 	const size_type last_block = block_index(pos + len - 1);
@@ -932,11 +932,11 @@ constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::fl
                                                                                    size_type len)
 {
 	assert(pos < size());
-	assert(pos + len - 1 < size());
 	if(len == 0)
 	{
 		return *this;
 	}
+	assert(pos + len - 1 < size());
 
 	const size_type first_block = block_index(pos);
 	const size_type last_block = block_index(pos + len - 1);

@@ -805,6 +805,13 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 		{
 			const bool set_to = GENERATE(true, false);
 			CAPTURE(set_to);
+
+			bitset.set(0, 0, set_to);
+			REQUIRE(bitset == bitset_copy);
+
+			bitset.set(pos, 0, set_to);
+			REQUIRE(bitset == bitset_copy);
+
 			bitset.set(pos, len, set_to);
 
 			// check bits
@@ -827,6 +834,12 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 
 		SECTION("reset")
 		{
+			bitset.reset(0, 0);
+			REQUIRE(bitset == bitset_copy);
+
+			bitset.reset(pos, 0);
+			REQUIRE(bitset == bitset_copy);
+
 			bitset.reset(pos, len);
 
 			// check bits
@@ -849,6 +862,12 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 
 		SECTION("flip")
 		{
+			bitset.flip(0, 0);
+			REQUIRE(bitset == bitset_copy);
+
+			bitset.flip(pos, 0);
+			REQUIRE(bitset == bitset_copy);
+
 			bitset.flip(pos, len);
 
 			// check bits
