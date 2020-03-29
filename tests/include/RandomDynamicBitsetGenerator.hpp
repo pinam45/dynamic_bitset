@@ -31,7 +31,7 @@ class RandomDynamicBitsetGenerator : public Catch::Generators::IGenerator<dynami
 public:
 	typedef typename dynamic_bitset<Block>::size_type size_type;
 	static constexpr size_type default_min_size = 1;
-	static constexpr size_type default_max_size = 8 * sizeof(Block) * CHAR_BIT;
+	static constexpr size_type default_max_size = 8 * std::numeric_limits<Block>::digits;
 
 	constexpr explicit RandomDynamicBitsetGenerator(
 	  std::minstd_rand::result_type seed =

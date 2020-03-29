@@ -15,7 +15,7 @@
 #include <string_view>
 #include <functional>
 #include <type_traits>
-#include <climits>
+#include <limits>
 #include <cmath>
 #include <cassert>
 
@@ -61,7 +61,7 @@ public:
 	typedef Block block_type;
 	typedef Allocator allocator_type;
 
-	static constexpr size_type bits_per_block = CHAR_BIT * sizeof(block_type);
+	static constexpr size_type bits_per_block = std::numeric_limits<block_type>::digits;
 	static constexpr size_type npos = std::numeric_limits<size_type>::max();
 
 	class reference

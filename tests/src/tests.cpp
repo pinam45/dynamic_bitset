@@ -26,7 +26,7 @@ constexpr std::minstd_rand::result_type SEED = 314159;
 //const std::minstd_rand::result_type SEED = std::random_device{}();
 
 template<typename T>
-constexpr size_t bits_number = sizeof(T) * CHAR_BIT;
+constexpr size_t bits_number = std::numeric_limits<T>::digits;
 
 template<typename T>
 constexpr bool bit_value(T value, size_t bit_pos)
