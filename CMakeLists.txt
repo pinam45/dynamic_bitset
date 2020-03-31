@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.10) # For CXX_STANDARD 17 property on Visual St
 project(
   dynamic_bitset
   VERSION 1.0.0
-  DESCRIPTION "C++ dynamic bitset"
+  DESCRIPTION "A C++17 header-only dynamic bitset"
   HOMEPAGE_URL "https://github.com/pinam45/dynamic_bitset"
   LANGUAGES CXX
 )
@@ -20,8 +20,9 @@ endif()
 # Options
 option(DYNAMICBITSET_USE_LIBPOPCNT "Enable using libpopcnt for bits counting operations" ON)
 option(DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE "Enable adding libpopcnt submodule to include paths (disable if your project already include libpopcnt)" ON)
-option(DYNAMICBITSET_BUILD_TESTS "Enable building tests for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
 option(DYNAMICBITSET_BUILD_EXAMPLE "Enable building example for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
+option(DYNAMICBITSET_BUILD_TESTS "Enable building tests for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
+option(DYNAMICBITSET_BUILD_DOCS "Enable building documentation for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
 option(DYNAMICBITSET_FORMAT_TARGET "Enable generating a code formating target for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
 option(DYNAMICBITSET_HEADERS_TARGET_IDE "Enable generating a target with headers for ide for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
 
@@ -113,6 +114,11 @@ if(DYNAMICBITSET_BUILD_TESTS)
 
 	# Tests
 	add_subdirectory(tests)
+endif()
+
+# Docs
+if(DYNAMICBITSET_BUILD_DOCS)
+	add_subdirectory(docs)
 endif()
 
 # Generate format target

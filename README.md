@@ -3,9 +3,9 @@
 [![Build Status](https://travis-ci.org/pinam45/dynamic_bitset.svg?branch=master)](https://travis-ci.org/pinam45/dynamic_bitset)
 [![Build status](https://ci.appveyor.com/api/projects/status/h0vnyjlaunqgbrp4/branch/master?svg=true)](https://ci.appveyor.com/project/pinam45/dynamic-bitset/branch/master)
 [![codecov](https://codecov.io/gh/pinam45/dynamic_bitset/branch/master/graph/badge.svg)](https://codecov.io/gh/pinam45/dynamic_bitset)
-[![license](https://img.shields.io/github/license/pinam45/dynamic_bitset.svg)](LICENSE)
+[![license](https://img.shields.io/github/license/pinam45/dynamic_bitset.svg)](http://opensource.org/licenses/MIT)
 
-A C++ header-only dynamic bitset
+A C++17 header-only dynamic bitset
 
 ## Requirements
 
@@ -13,7 +13,7 @@ To use this *dynamic_bitset*, you will need a **C++17 compliant compiler**. If y
 
 ## Usage sample
 
-```c++
+```cpp
 #include <dynamic_bitset.hpp>
 #include <iostream>
 #include <random>
@@ -40,12 +40,12 @@ int main()
 ```
 
 Possible output:
-```
-bitset1     = 100010110111
-bitset2     = 001011011011
-common bits = 000010010011
-```
-See it on [godbolt.org](https://godbolt.org/z/eUAVDm).
+
+    bitset1     = 100010110111
+    bitset2     = 001011011011
+    common bits = 000010010011
+
+Test it on [godbolt.org](https://godbolt.org/z/eUAVDm).
 
 ## Optional dependency
 
@@ -85,8 +85,9 @@ If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the *d
 
 - ``DYNAMICBITSET_USE_LIBPOPCNT``: Enable using libpopcnt for bits counting operations
 - ``DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE``: Enable adding libpopcnt submodule to include paths (disable if your project already include libpopcnt)
-- ``DYNAMICBITSET_BUILD_TESTS``: Enable building tests for dynamic_bitset
 - ``DYNAMICBITSET_BUILD_EXAMPLE``: Enable building example for dynamic_bitset
+- ``DYNAMICBITSET_BUILD_TESTS``: Enable building tests for dynamic_bitset
+- ``DYNAMICBITSET_BUILD_DOCS``: Enable building documentation for dynamic_bitset
 - ``DYNAMICBITSET_FORMAT_TARGET``: Enable generating a code formating target for dynamic_bitset
 - ``DYNAMICBITSET_HEADERS_TARGET_IDE``: Enable generating a target with headers for ide for dynamic_bitset
 
@@ -96,8 +97,9 @@ If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the *d
 | ------------------------------------- | :-----------------------------: | :---------------------------: |
 | DYNAMICBITSET_USE_LIBPOPCNT           | ON                              | ON                            |
 | DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE | ON                              | ON                            |
-| DYNAMICBITSET_BUILD_TESTS             | ON                              | OFF                           |
 | DYNAMICBITSET_BUILD_EXAMPLE           | ON                              | OFF                           |
+| DYNAMICBITSET_BUILD_TESTS             | ON                              | OFF                           |
+| DYNAMICBITSET_BUILD_DOCS              | ON                              | OFF                           |
 | DYNAMICBITSET_FORMAT_TARGET           | ON                              | OFF                           |
 | DYNAMICBITSET_HEADERS_TARGET_IDE      | ON                              | OFF                           |
 
@@ -105,11 +107,11 @@ If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the *d
 
 To build the tests and the example, git submodules are required, so don't forget to pull the submodules with the repository using ``--recursive``:
 
-    git clone --recursive https://github.com/pinam45/dynamic_bitset.git
+    $ git clone --recursive https://github.com/pinam45/dynamic_bitset.git
 
 or if you have already cloned the repository:
 
-    git submodule update --init
+    $ git submodule update --init --recursive
 
 The project uses CMake to build and define the options ``DYNAMICBITSET_BUILD_TESTS`` and ``DYNAMICBITSET_BUILD_EXAMPLE`` to enable the generation of the tests and example targets, these option are enabled by default if the project is the master project (not included from another *CMakeLists.txt* with *add_subdirectory*).
 
