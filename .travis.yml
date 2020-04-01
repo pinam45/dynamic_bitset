@@ -1,6 +1,6 @@
 language: cpp
 
-dist: xenial
+dist: bionic
 
 git:
   depth: 1
@@ -8,13 +8,18 @@ git:
 
 matrix:
   include:
-    # coverage
+
+    # Coverage
     - os: linux
       compiler: gcc
       addons:
         apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-7', 'lcov']
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+            - ninja-build
+            - lcov
       env:
         - COMPILER=g++-7
         - CMAKE_EXTRA_ARGS="-DDYNAMICBITSET_ENABLE_COVERAGE=ON"
@@ -29,12 +34,16 @@ matrix:
         # '-f' specifies file(s) to use and disables manual coverage gathering and file search which has already been done above
         - bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage reports"
 
+    # Linux / GCC
     - os: linux
       compiler: gcc
       addons:
         apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-7']
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+            - ninja-build
       env:
         - COMPILER=g++-7
 
@@ -42,17 +51,50 @@ matrix:
       compiler: gcc
       addons:
         apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-8']
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-8
+            - ninja-build
       env:
         - COMPILER=g++-8
 
     - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-9
+            - ninja-build
+      env:
+        - COMPILER=g++-9
+
+#    - os: linux
+#      compiler: gcc
+#      addons:
+#        apt:
+#          sources:
+#            - ubuntu-toolchain-r-test
+#          packages:
+#            - g++-10
+#            - ninja-build
+#      env:
+#        - COMPILER=g++-10
+
+    # Linux / Clang
+    - os: linux
       compiler: clang
       addons:
         apt:
-          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-xenial-5']
-          packages: ['clang-5.0', 'g++-7']
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-bionic-5.0
+          packages:
+            - clang-5.0
+            - g++-7
+            - ninja-build
       env:
         - COMPILER=clang++-5.0
 
@@ -60,8 +102,13 @@ matrix:
       compiler: clang
       addons:
         apt:
-          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-xenial-6']
-          packages: ['clang-6.0', 'g++-7']
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-bionic-6.0
+          packages:
+            - clang-6.0
+            - g++-7
+            - ninja-build
       env:
         - COMPILER=clang++-6.0
 
@@ -69,8 +116,13 @@ matrix:
       compiler: clang
       addons:
         apt:
-          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-xenial-7']
-          packages: ['clang-7', 'g++-7']
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-bionic-7
+          packages:
+            - clang-7
+            - g++-7
+            - ninja-build
       env:
         - COMPILER=clang++-7
 
@@ -78,28 +130,62 @@ matrix:
       compiler: clang
       addons:
         apt:
-          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-xenial-8']
-          packages: ['clang-8', 'g++-8']
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-bionic-8
+          packages:
+            - clang-8
+            - g++-8
+            - ninja-build
       env:
         - COMPILER=clang++-8
 
-#    - os: osx
-#      osx_image: xcode9.4
-#      compiler: clang
-#      env:
-#        - COMPILER=clang++
+    - os: linux
+      compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-bionic-9
+          packages:
+            - clang-9
+            - g++-9
+            - ninja-build
+      env:
+        - COMPILER=clang++-9
+
+      # OSX / Clang
+    - os: osx
+      osx_image: xcode10
+
+    - os: osx
+      osx_image: xcode10.1
 
     - os: osx
       osx_image: xcode10.2
-      compiler: clang
-      env:
-        - COMPILER=clang++
+
+    - os: osx
+      osx_image: xcode11.2
+
+    - os: osx
+      osx_image: xcode11.3
 
 script:
+  - |
+     if [[ (-x $(which brew)) ]]; then
+       brew update
+       brew install cmake ninja
+       brew upgrade cmake ninja
+     fi
   - if [[ "${COMPILER}" != "" ]]; then export CXX=${COMPILER}; fi
+
+  - uname -a
+  - cmake --version
+  - ninja --version
   - ${CXX} --version
+
   - mkdir cmake-build
   - cd cmake-build
-  - cmake .. -DCMAKE_BUILD_TYPE=Debug -DDYNAMICBITSET_BUILD_DOCS=OFF ${CMAKE_EXTRA_ARGS}
-  - cmake --build . --config Debug -- -j$(nproc)
+  - cmake .. -DCMAKE_BUILD_TYPE=Debug -DDYNAMICBITSET_BUILD_DOCS=OFF ${CMAKE_EXTRA_ARGS} -GNinja
+  - cmake --build . --config Debug
   - ctest --output-on-failure
