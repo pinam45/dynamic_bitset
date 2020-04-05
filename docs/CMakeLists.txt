@@ -5,13 +5,6 @@ if(NOT TARGET dynamic_bitset)
 	message(FATAL_ERROR "dynamic_bitset target required for the docs")
 endif()
 
-# Project declaration
-project(
-  dynamic_bitset_example
-  DESCRIPTION "C++ dynamic bitset docs"
-  LANGUAGES CXX
-)
-
 # Find Doxygen
 find_package(Doxygen QUIET)
 if(DOXYGEN_FOUND)

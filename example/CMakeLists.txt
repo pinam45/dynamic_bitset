@@ -5,13 +5,6 @@ if(NOT TARGET dynamic_bitset)
 	message(FATAL_ERROR "dynamic_bitset target required for the example")
 endif()
 
-# Project declaration
-project(
-  dynamic_bitset_example
-  DESCRIPTION "C++ dynamic bitset example"
-  LANGUAGES CXX
-)
-
 # Declare dynamic_bitset_example
 add_executable(dynamic_bitset_example)
 
