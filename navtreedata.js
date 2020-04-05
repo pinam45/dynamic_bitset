@@ -32,7 +32,7 @@ var NAVTREE =
       [ "Descriptions", "index.html#autotoc_md7", null ],
       [ "Default values", "index.html#autotoc_md8", null ]
     ] ],
-    [ "Build tests and example", "index.html#autotoc_md9", null ],
+    [ "Build tests, example, and documentation", "index.html#autotoc_md9", null ],
     [ "License", "index.html#autotoc_md10", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
