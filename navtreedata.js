@@ -22,20 +22,18 @@ for the JavaScript code in this file
 */
 var NAVTREE =
 [
-  [ "dynamic_bitset_example", "index.html", [
-    [ "dynamic_bitset", "index.html", [
-      [ "Requirements", "index.html#autotoc_md1", null ],
-      [ "Usage sample", "index.html#autotoc_md2", null ],
-      [ "Optional dependency", "index.html#autotoc_md3", null ],
-      [ "Integration", "index.html#autotoc_md4", null ],
-      [ "CMake integration", "index.html#autotoc_md5", null ],
-      [ "CMake options", "index.html#autotoc_md6", [
-        [ "Descriptions", "index.html#autotoc_md7", null ],
-        [ "Default values", "index.html#autotoc_md8", null ]
-      ] ],
-      [ "Build tests and example", "index.html#autotoc_md9", null ],
-      [ "License", "index.html#autotoc_md10", null ]
+  [ "dynamic_bitset", "index.html", [
+    [ "Requirements", "index.html#autotoc_md1", null ],
+    [ "Usage sample", "index.html#autotoc_md2", null ],
+    [ "Optional dependency", "index.html#autotoc_md3", null ],
+    [ "Integration", "index.html#autotoc_md4", null ],
+    [ "CMake integration", "index.html#autotoc_md5", null ],
+    [ "CMake options", "index.html#autotoc_md6", [
+      [ "Descriptions", "index.html#autotoc_md7", null ],
+      [ "Default values", "index.html#autotoc_md8", null ]
     ] ],
+    [ "Build tests and example", "index.html#autotoc_md9", null ],
+    [ "License", "index.html#autotoc_md10", null ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
