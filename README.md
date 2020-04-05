@@ -1,5 +1,7 @@
 # dynamic_bitset
 
+[![Actions Status](https://github.com/pinam45/dynamic_bitset/workflows/build%20and%20test/badge.svg)](https://github.com/pinam45/dynamic_bitset/actions)
+[![Actions Status](https://github.com/pinam45/dynamic_bitset/workflows/documentation/badge.svg)](https://pinam45.github.io/dynamic_bitset)
 [![Build Status](https://travis-ci.org/pinam45/dynamic_bitset.svg?branch=master)](https://travis-ci.org/pinam45/dynamic_bitset)
 [![Build status](https://ci.appveyor.com/api/projects/status/h0vnyjlaunqgbrp4/branch/master?svg=true)](https://ci.appveyor.com/project/pinam45/dynamic-bitset/branch/master)
 [![codecov](https://codecov.io/gh/pinam45/dynamic_bitset/branch/master/graph/badge.svg)](https://codecov.io/gh/pinam45/dynamic_bitset)
@@ -103,9 +105,11 @@ If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the *d
 | DYNAMICBITSET_FORMAT_TARGET           | ON                              | OFF                           |
 | DYNAMICBITSET_HEADERS_TARGET_IDE      | ON                              | OFF                           |
 
-## Build tests and example
+## Build tests, example, and documentation
 
-To build the tests and the example, git submodules are required, so don't forget to pull the submodules with the repository using ``--recursive``:
+The latest version of the documentation is available online [here](https://pinam45.github.io/dynamic_bitset).
+
+To build the tests, the example, and the documentation, git submodules are required, so don't forget to pull the submodules with the repository using ``--recursive``:
 
     $ git clone --recursive https://github.com/pinam45/dynamic_bitset.git
 
@@ -113,11 +117,11 @@ or if you have already cloned the repository:
 
     $ git submodule update --init --recursive
 
-The project uses CMake to build and define the options ``DYNAMICBITSET_BUILD_TESTS`` and ``DYNAMICBITSET_BUILD_EXAMPLE`` to enable the generation of the tests and example targets, these option are enabled by default if the project is the master project (not included from another *CMakeLists.txt* with *add_subdirectory*).
+The project uses CMake to build and define the options ``DYNAMICBITSET_BUILD_TESTS``, ``DYNAMICBITSET_BUILD_EXAMPLE``, and ``DYNAMICBITSET_BUILD_DOCS`` to enable the generation of the tests, example, and documentation targets, these option are enabled by default if the project is the master project (not included from another *CMakeLists.txt* with *add_subdirectory*).
 
-For running the tests, just build the *dynamic_bitset_tests* target and launch the tests using ctest. See [Running CMake](https://cmake.org/runningcmake/) and [the ctest documentation](https://cmake.org/cmake/help/latest/manual/ctest.1.html) for more information.
+Generating the documentation requires **[Doxygen](http://www.doxygen.nl/) 1.8.16 or later** and is done by building the target *dynamic_bitset_docs*. For running the tests, build the *dynamic_bitset_tests* target and launch the tests using ctest.
 
-On linux, a common way of doing this is:
+See [Running CMake](https://cmake.org/runningcmake/) and [the ctest documentation](https://cmake.org/cmake/help/latest/manual/ctest.1.html) for more information. On linux, a common way of doing this is:
 
 	$ mkdir cmake-build
 	$ cd cmake-build
@@ -125,7 +129,7 @@ On linux, a common way of doing this is:
 	$ cmake --build .
 	$ ctest
 
-On Windows, there is batch files available to configure a Visual Studio project in the ``ide`` folder.
+On Windows, there is batch files available to configure a Visual Studio project in the [ide](ide) folder.
 
 ## License
 
