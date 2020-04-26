@@ -1221,8 +1221,8 @@ public:
 	 *             size.
 	 *
 	 * @details    The size comparison is necessary for the comparison operators to keep their
-	 *             properties. For example without the size comparison the "\<=" operator (defined
-	 *             for "A \<= B" by "!(B < A)") would no longer be antisymmetric (if A \<= B and B
+	 *             properties. For example without the size comparison the "<=" operator (defined
+	 *             for "A <= B" by "!(B < A)") would no longer be antisymmetric (if A \<= B and B
 	 *             \<= A, then A == B) because @ref operator==() compare the @ref dynamic_bitset as
 	 *             a container and not a number. For example with bitsets A(0011) and B(011),
 	 *             without the size comparison B \< A would be @a false, A \<= B would be @a true, B
