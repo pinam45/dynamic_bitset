@@ -25,7 +25,7 @@ jobs:
       shell: cmake -P {0}
       run: |
         set(doxygen_version $ENV{DOXYGEN_VERSION})
-        set(doxygen_url "doxygen.nl/files/doxygen-${doxygen_version}.linux.bin.tar.gz")
+        set(doxygen_url "https://sourceforge.net/projects/doxygen/files/rel-${doxygen_version}/doxygen-${doxygen_version}.linux.bin.tar.gz/download")
         set(doxygen_dir "doxygen-${doxygen_version}/bin")
         file(DOWNLOAD "${doxygen_url}" ./doxygen.tar.gz SHOW_PROGRESS)
         execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./doxygen.tar.gz)
