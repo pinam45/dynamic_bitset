@@ -9,7 +9,7 @@
 #define DYNAMIC_BITSET_DYNAMIC_BITSET_HPP
 
 /** @file
- * @brief      @ref dynamic_bitset declaration and implementation.
+ * @brief      @ref sul::dynamic_bitset declaration and implementation.
  *
  * @details    Standalone file, does not depend on other implementation files or dependencies other
  *             than the standard library, can be taken and used directly.
@@ -63,6 +63,14 @@
 #	endif
 #endif
 
+#ifndef DYNAMIC_BITSET_NO_LIBPOPCNT
+/**
+ * @brief      Simple Useful Libraries.
+ */
+namespace sul
+{
+#endif
+
 /**
  * @brief      Dynamic bitset.
  *
@@ -87,7 +95,7 @@ class dynamic_bitset
 
 public:
 	/**
-	 * @brief      Type used to represent the size of a @ref dynamic_bitset.
+	 * @brief      Type used to represent the size of a @ref sul::dynamic_bitset.
 	 */
 	typedef size_t size_type;
 
@@ -112,22 +120,22 @@ public:
 	static constexpr size_type npos = std::numeric_limits<size_type>::max();
 
 	/**
-	 * @brief      Reference to a @ref dynamic_bitset bit.
+	 * @brief      Reference to a @ref sul::dynamic_bitset bit.
 	 *
-	 * @details    As the bits in the @ref dynamic_bitset class are stored in an optimized way in
-	 *             blocks, it is not possible for the subscript operators to return a reference to a
-	 *             boolean. Hence this class is used as a proxy to enable subscript operator of the
-	 *             @ref dynamic_bitset class to be used as if it was an array of bools.
+	 * @details    As the bits in the @ref sul::dynamic_bitset class are stored in an optimized way
+	 *             in blocks, it is not possible for the subscript operators to return a reference
+	 *             to a boolean. Hence this class is used as a proxy to enable subscript operator of
+	 *             the @ref sul::dynamic_bitset class to be used as if it was an array of bools.
 	 */
 	class reference
 	{
 	public:
 		/**
-		 * @brief      Constructs a @ref reference to a bit from a @ref dynamic_bitset and a bit
-		 *             position.
+		 * @brief      Constructs a @ref reference to a bit from a @ref sul::dynamic_bitset and a
+		 *             bit position.
 		 *
-		 * @param      bitset   @ref dynamic_bitset containing the bit
-		 * @param[in]  bit_pos  Position of the bit to reference in the @ref dynamic_bitset
+		 * @param      bitset   @ref sul::dynamic_bitset containing the bit
+		 * @param[in]  bit_pos  Position of the bit to reference in the @ref sul::dynamic_bitset
 		 *
 		 * @complexity Constant.
 		 */
@@ -299,7 +307,7 @@ public:
 	};
 
 	/**
-	 * @brief      Const reference to a @ref dynamic_bitset bit, type bool.
+	 * @brief      Const reference to a @ref sul::dynamic_bitset bit, type bool.
 	 */
 	typedef bool const_reference;
 
@@ -326,7 +334,7 @@ public:
 	  dynamic_bitset<Block, Allocator>&& other) noexcept = default;
 
 	/**
-	 * @brief      Constructs an empty @ref dynamic_bitset.
+	 * @brief      Constructs an empty @ref sul::dynamic_bitset.
 	 *
 	 * @details    A copy of @p allocator will be used for memory management.
 	 *
@@ -337,15 +345,15 @@ public:
 	constexpr explicit dynamic_bitset(const allocator_type& allocator = allocator_type());
 
 	/**
-	 * @brief      Constructs a @ref dynamic_bitset of @p nbits bits from an initial value.
+	 * @brief      Constructs a @ref sul::dynamic_bitset of @p nbits bits from an initial value.
 	 *
 	 * @details    The first bits are initialized with the bits from @p init_val, if @p nbits \>
 	 *             std\::numeric_limits\<unsigned long long\>\::digits , all other bits are
 	 *             initialized to @a false. A copy of @p allocator will be used for memory
 	 *             management.
 	 *
-	 * @param[in]  nbits      Number of bits of the @ref dynamic_bitset
-	 * @param[in]  init_val   Value to initialize the @ref dynamic_bitset with
+	 * @param[in]  nbits      Number of bits of the @ref sul::dynamic_bitset
+	 * @param[in]  init_val   Value to initialize the @ref sul::dynamic_bitset with
 	 * @param[in]  allocator  Allocator to use for memory management
 	 *
 	 * @complexity Linear in @p nbits / @ref bits_per_block.
@@ -355,13 +363,13 @@ public:
 	                                  const allocator_type& allocator = allocator_type());
 
 	/**
-	 * @brief      Constructs a @ref dynamic_bitset using @p init_vals to initialize the first
+	 * @brief      Constructs a @ref sul::dynamic_bitset using @p init_vals to initialize the first
 	 *             blocks.
 	 *
-	 * @details    The size of the newly created @ref dynamic_bitset is @p init_vals.size() * @ref
-	 *             bits_per_block.  A copy of @p allocator will be used for memory management.
+	 * @details    The size of the newly created @ref sul::dynamic_bitset is @p init_vals.size() *
+	 *             @ref bits_per_block. A copy of @p allocator will be used for memory management.
 	 *
-	 * @param[in]  init_vals  Value of the @ref dynamic_bitset first blocks
+	 * @param[in]  init_vals  Value of the @ref sul::dynamic_bitset first blocks
 	 * @param[in]  allocator  Allocator to use for memory management
 	 *
 	 * @complexity Linear in @p init_vals.size().
@@ -370,10 +378,10 @@ public:
 	                         const allocator_type& allocator = allocator_type());
 
 	/**
-	 * @brief      Constructs a @ref dynamic_bitset from a string or a part of a string.
+	 * @brief      Constructs a @ref sul::dynamic_bitset from a string or a part of a string.
 	 *
-	 * @details    Construct the @ref dynamic_bitset using the characters from @p str in the range
-	 *             \[@p pos, std\::min(@p pos + @p n, @p str.size())\[.
+	 * @details    Construct the @ref sul::dynamic_bitset using the characters from @p str in the
+	 *             range \[@p pos, std\::min(@p pos + @p n, @p str.size())\[.
 	 *
 	 * @param[in]  str        String containing the part to use
 	 * @param[in]  pos        Starting position of the string part to use in @p str
@@ -403,10 +411,10 @@ public:
 	  const allocator_type& allocator = allocator_type());
 
 	/**
-	 * @brief      Constructs a @ref dynamic_bitset from a string or a part of a string.
+	 * @brief      Constructs a @ref sul::dynamic_bitset from a string or a part of a string.
 	 *
-	 * @details    Construct the @ref dynamic_bitset using the characters from @p str in the range
-	 *             \[@p pos, std\::min(@p pos + @p n, @p str.size())\[.
+	 * @details    Construct the @ref sul::dynamic_bitset using the characters from @p str in the
+	 *             range \[@p pos, std\::min(@p pos + @p n, @p str.size())\[.
 	 *
 	 * @param[in]  str        String containing the part to use
 	 * @param[in]  pos        Starting position of the string part to use in @p str
@@ -437,10 +445,10 @@ public:
 	  const allocator_type& allocator = allocator_type());
 
 	/**
-	 * @brief      Constructs a @ref dynamic_bitset from a string or a part of a string.
+	 * @brief      Constructs a @ref sul::dynamic_bitset from a string or a part of a string.
 	 *
-	 * @details    Construct the @ref dynamic_bitset using the characters from @p str in the range
-	 *             \[@p pos, std\::min(@p pos + @p n, @p _Traits\::length(@p str))\[.
+	 * @details    Construct the @ref sul::dynamic_bitset using the characters from @p str in the
+	 *             range \[@p pos, std\::min(@p pos + @p n, @p _Traits\::length(@p str))\[.
 	 *
 	 * @param[in]  str        String containing the part to use
 	 * @param[in]  pos        Starting position of the string part to use
@@ -474,12 +482,12 @@ public:
 	~dynamic_bitset() noexcept = default;
 
 	/**
-	 * @brief      Resize the @ref dynamic_bitset to contain @p nbits bits.
+	 * @brief      Resize the @ref sul::dynamic_bitset to contain @p nbits bits.
 	 *
 	 * @details    Bits keep the value they had before the resize and, if @p nbits is greater than
 	 *             the current size, new bit are initialized to @p value.
 	 *
-	 * @param[in]  nbits  New size of the @ref dynamic_bitset
+	 * @param[in]  nbits  New size of the @ref sul::dynamic_bitset
 	 * @param[in]  value  Value of the new bits
 	 *
 	 * @complexity Linear in the difference between the current size and @p nbits.
@@ -489,19 +497,19 @@ public:
 	constexpr void resize(size_type nbits, bool value = false);
 
 	/**
-	 * @brief      Clears the @ref dynamic_bitset, resize it to 0.
+	 * @brief      Clears the @ref sul::dynamic_bitset, resize it to 0.
 	 *
 	 * @details    Equivalent to:
 	 *             @code
 	 *             this.resize(0);
 	 *             @endcode
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	constexpr void clear();
 
 	/**
-	 * @brief      Add a new bit with the value @p value at the end of the @ref dynamic_bitset.
+	 * @brief      Add a new bit with the value @p value at the end of the @ref sul::dynamic_bitset.
 	 *
 	 * @details    Increase the size of the bitset by one, the added bit becomes the
 	 *             most-significant bit.
@@ -513,19 +521,19 @@ public:
 	constexpr void push_back(bool value);
 
 	/**
-	 * @brief      Remove the last bit of the @ref dynamic_bitset.
+	 * @brief      Remove the last bit of the @ref sul::dynamic_bitset.
 	 *
-	 * @details    Decrease the size of the @ref dynamic_bitset by one, does nothing if the @ref
-	 *             dynamic_bitset is empty.
+	 * @details    Decrease the size of the @ref sul::dynamic_bitset by one, does nothing if the
+	 *             @ref dynamic_bitset is empty.
 	 *
 	 * @complexity Constant.
 	 */
 	constexpr void pop_back();
 
 	/**
-	 * @brief      Append a block of bits @p block at the end of the @ref dynamic_bitset.
+	 * @brief      Append a block of bits @p block at the end of the @ref sul::dynamic_bitset.
 	 *
-	 * @details    Increase the size of the @ref dynamic_bitset by @ref bits_per_block.
+	 * @details    Increase the size of the @ref sul::dynamic_bitset by @ref bits_per_block.
 	 *
 	 * @param[in]  block  Block of bits to add
 	 *
@@ -534,7 +542,7 @@ public:
 	constexpr void append(block_type block);
 
 	/**
-	 * @brief      Append blocks of bits from @p blocks at the end of the @ref dynamic_bitset.
+	 * @brief      Append blocks of bits from @p blocks at the end of the @ref sul::dynamic_bitset.
 	 *
 	 * @param[in]  blocks  Blocks of bits to add
 	 *
@@ -564,15 +572,15 @@ public:
 	 * @brief      Sets the bits to the result of binary AND on corresponding pairs of bits of *this
 	 *             and @p rhs.
 	 *
-	 * @param[in]  rhs   Right hand side @ref dynamic_bitset of the operator
+	 * @param[in]  rhs   Right hand side @ref sul::dynamic_bitset of the operator
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
 	 * @pre       @code
 	 *             size() == rhs.size()
 	 *             @endcode
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	constexpr dynamic_bitset<Block, Allocator>& operator&=(
 	  const dynamic_bitset<Block, Allocator>& rhs);
@@ -581,15 +589,15 @@ public:
 	 * @brief      Sets the bits to the result of binary OR on corresponding pairs of bits of *this
 	 *             and @p rhs.
 	 *
-	 * @param[in]  rhs   Right hand side @ref dynamic_bitset of the operator
+	 * @param[in]  rhs   Right hand side @ref sul::dynamic_bitset of the operator
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
 	 * @pre        @code
 	 *             size() == rhs.size()
 	 *             @endcode
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	constexpr dynamic_bitset<Block, Allocator>& operator|=(
 	  const dynamic_bitset<Block, Allocator>& rhs);
@@ -598,15 +606,15 @@ public:
 	 * @brief      Sets the bits to the result of binary XOR on corresponding pairs of bits of *this
 	 *             and @p rhs.
 	 *
-	 * @param[in]  rhs   Right hand side @ref dynamic_bitset of the operator
+	 * @param[in]  rhs   Right hand side @ref sul::dynamic_bitset of the operator
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
 	 * @pre        @code
 	 *             size() == rhs.size()
 	 *             @endcode
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	constexpr dynamic_bitset<Block, Allocator>& operator^=(
 	  const dynamic_bitset<Block, Allocator>& rhs);
@@ -620,15 +628,15 @@ public:
 	 *             this &= ~rhs;
 	 *             @endcode
 	 *
-	 * @param[in]  rhs   Right hand side @ref dynamic_bitset of the operator
+	 * @param[in]  rhs   Right hand side @ref sul::dynamic_bitset of the operator
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
 	 * @pre        @code
 	 *             size() == rhs.size()
 	 *             @endcode
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	constexpr dynamic_bitset<Block, Allocator>& operator-=(
 	  const dynamic_bitset<Block, Allocator>& rhs);
@@ -640,9 +648,9 @@ public:
 	 *
 	 * @param[in]  shift  Number of positions to shift the bits
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	constexpr dynamic_bitset<Block, Allocator>& operator<<=(size_type shift);
 
@@ -653,9 +661,9 @@ public:
 	 *
 	 * @param[in]  shift  Number of positions to shift the bits
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	constexpr dynamic_bitset<Block, Allocator>& operator>>=(size_type shift);
 
@@ -671,9 +679,9 @@ public:
 	 *
 	 * @param[in]  shift  Number of positions to shift the bits
 	 *
-	 * @return     A new @ref dynamic_bitset containing the shifted bits
+	 * @return     A new @ref sul::dynamic_bitset containing the shifted bits
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	[[nodiscard]] constexpr dynamic_bitset<Block, Allocator> operator<<(size_type shift) const;
 
@@ -689,9 +697,9 @@ public:
 	 *
 	 * @param[in]  shift  Number of positions to shift the bits
 	 *
-	 * @return     A new @ref dynamic_bitset containing the shifted bits
+	 * @return     A new @ref sul::dynamic_bitset containing the shifted bits
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	[[nodiscard]] constexpr dynamic_bitset<Block, Allocator> operator>>(size_type shift) const;
 
@@ -706,7 +714,7 @@ public:
 	 *
 	 * @return     A copy of *this with all bits flipped
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	[[nodiscard]] constexpr dynamic_bitset<Block, Allocator> operator~() const;
 
@@ -719,7 +727,7 @@ public:
 	 * @param[in]  len    Length of the range
 	 * @param[in]  value  Value to set the bits to
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
 	 * @pre        @code
 	 *             (pos < size()) && ((len == 0) || (pos + len - 1 < size()))
@@ -735,7 +743,7 @@ public:
 	 * @param[in]  pos    Position of the bit to set
 	 * @param[in]  value  Value to set the bit to
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
 	 * @pre        @code
 	 *             pos < size()
@@ -746,11 +754,11 @@ public:
 	constexpr dynamic_bitset<Block, Allocator>& set(size_type pos, bool value = true);
 
 	/**
-	 * @brief      Set all the bits of the @ref dynamic_bitset to @a true.
+	 * @brief      Set all the bits of the @ref sul::dynamic_bitset to @a true.
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	constexpr dynamic_bitset<Block, Allocator>& set();
 
@@ -760,7 +768,7 @@ public:
 	 * @param[in]  pos   Position of the first bit of the range
 	 * @param[in]  len   Length of the range
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
 	 * @pre        @code
 	 *             (pos < size()) && ((len == 0) || (pos + len - 1 < size()))
@@ -775,7 +783,7 @@ public:
 	 *
 	 * @param[in]  pos    Position of the bit to reset
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
 	 * @pre        @code
 	 *             pos < size()
@@ -786,11 +794,11 @@ public:
 	constexpr dynamic_bitset<Block, Allocator>& reset(size_type pos);
 
 	/**
-	 * @brief      Reset all the bits of the @ref dynamic_bitset to @a false.
+	 * @brief      Reset all the bits of the @ref sul::dynamic_bitset to @a false.
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	constexpr dynamic_bitset<Block, Allocator>& reset();
 
@@ -800,7 +808,7 @@ public:
 	 * @param[in]  pos   Position of the first bit of the range
 	 * @param[in]  len   Length of the range
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
 	 * @pre        @code
 	 *             (pos < size()) && ((len == 0) || (pos + len - 1 < size()))
@@ -815,7 +823,7 @@ public:
 	 *
 	 * @param[in]  pos    Position of the bit to reset
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
 	 * @pre        @code
 	 *             pos < size()
@@ -826,11 +834,11 @@ public:
 	constexpr dynamic_bitset<Block, Allocator>& flip(size_type pos);
 
 	/**
-	 * @brief      Flip all the bits of the @ref dynamic_bitset.
+	 * @brief      Flip all the bits of the @ref sul::dynamic_bitset.
 	 *
-	 * @return     A reference to the @ref dynamic_bitset *this
+	 * @return     A reference to the @ref sul::dynamic_bitset *this
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	constexpr dynamic_bitset<Block, Allocator>& flip();
 
@@ -871,11 +879,11 @@ public:
 	 *
 	 * @return     @a true if all bits are set to @a true, otherwise @a false
 	 *
-	 * @remark     Return @a true if the @ref dynamic_bitset is empty, the logic is that you are
-	 *             checking if all bits are set to @a true, meaning none of them is set to @a false,
-	 *             and in an empty @ref dynamic_bitset no bits are set to @a false.
+	 * @remark     Return @a true if the @ref sul::dynamic_bitset is empty, the logic is that you
+	 *             are checking if all bits are set to @a true, meaning none of them is set to @a
+	 *             false, and in an empty @ref sul::dynamic_bitset no bits are set to @a false.
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	[[nodiscard]] constexpr bool all() const;
 
@@ -884,11 +892,11 @@ public:
 	 *
 	 * @return     @a true if any of the bits is set to @a true, otherwise @a false
 	 *
-	 * @remark     Return @a false if the @ref dynamic_bitset is empty, the logic is you are
+	 * @remark     Return @a false if the @ref sul::dynamic_bitset is empty, the logic is you are
 	 *             checking if there is at least one bit set to @a true and in an empty @ref
 	 *             dynamic_bitset there is no bit set to @a true.
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	[[nodiscard]] constexpr bool any() const;
 
@@ -897,22 +905,22 @@ public:
 	 *
 	 * @return     @a true if none of the bits is set to @a true, otherwise @a false
 	 *
-	 * @remark     Return @a true if the @ref dynamic_bitset is empty, the logic is that you are
-	 *             checking if there is no bit set to @a true and in an empty @ref dynamic_bitset
-	 *             there is no bit that can be set to @a true.
+	 * @remark     Return @a true if the @ref sul::dynamic_bitset is empty, the logic is that you
+	 *             are checking if there is no bit set to @a true and in an empty @ref
+	 *             sul::dynamic_bitset there is no bit that can be set to @a true.
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	[[nodiscard]] constexpr bool none() const;
 
 	/**
 	 * @brief      Count the number of bits set to @a true.
 	 *
-	 * @details    Return 0 if the @ref dynamic_bitset is empty.
+	 * @details    Return 0 if the @ref sul::dynamic_bitset is empty.
 	 *
 	 * @return     The number of bits that are set to @a true
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	[[nodiscard]] constexpr size_type count() const noexcept;
 
@@ -947,39 +955,39 @@ public:
 	[[nodiscard]] constexpr const_reference operator[](size_type pos) const;
 
 	/**
-	 * @brief      Give the number of bits of the @ref dynamic_bitset.
+	 * @brief      Give the number of bits of the @ref sul::dynamic_bitset.
 	 *
-	 * @return     The number of bits of the @ref dynamic_bitset
+	 * @return     The number of bits of the @ref sul::dynamic_bitset
 	 *
 	 * @complexity Constant.
 	 */
 	[[nodiscard]] constexpr size_type size() const noexcept;
 
 	/**
-	 * @brief      Give the number of blocks used by the @ref dynamic_bitset.
+	 * @brief      Give the number of blocks used by the @ref sul::dynamic_bitset.
 	 *
-	 * @return     The number of blocks used by the @ref dynamic_bitset
+	 * @return     The number of blocks used by the @ref sul::dynamic_bitset
 	 *
 	 * @complexity Constant.
 	 */
 	[[nodiscard]] constexpr size_type num_blocks() const noexcept;
 
 	/**
-	 * @brief      Checks if the @ref dynamic_bitset is empty.
+	 * @brief      Checks if the @ref sul::dynamic_bitset is empty.
 	 *
 	 * @details    Equivalent to:
 	 *             @code
 	 *             size() == 0;
 	 *             @endcode
 	 *
-	 * @return     @a true if the @ref dynamic_bitset is empty, @a false otherwise
+	 * @return     @a true if the @ref sul::dynamic_bitset is empty, @a false otherwise
 	 *
 	 * @complexity Constant.
 	 */
 	[[nodiscard]] constexpr bool empty() const noexcept;
 
 	/**
-	 * @brief      Give the number of bits that the @ref dynamic_bitset has currently allocated
+	 * @brief      Give the number of bits that the @ref sul::dynamic_bitset has currently allocated
 	 *             space for.
 	 *
 	 * @return     Capacity of the currently allocated storage.
@@ -989,16 +997,16 @@ public:
 	[[nodiscard]] constexpr size_type capacity() const noexcept;
 
 	/**
-	 * @brief      Increase the capacity of the @ref dynamic_bitset to a value that's greater or
-	 *             equal to @p num_bits.
+	 * @brief      Increase the capacity of the @ref sul::dynamic_bitset to a value that's greater
+	 *             or equal to @p num_bits.
 	 *
 	 * @details    If @p num_bits is greater than the current capacity, new storage is allocated and
-	 *             all @ref reference on bits of the @ref dynamic_bitset are invalidated, otherwise
-	 *             the method does nothing.
+	 *             all @ref reference on bits of the @ref sul::dynamic_bitset are invalidated,
+	 *             otherwise the method does nothing.
 	 *
-	 * @param[in]  num_bits  New capacity of the @ref dynamic_bitset
+	 * @param[in]  num_bits  New capacity of the @ref sul::dynamic_bitset
 	 *
-	 * @complexity At most linear in the size of the @ref dynamic_bitset.
+	 * @complexity At most linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	constexpr void reserve(size_type num_bits);
 
@@ -1006,27 +1014,29 @@ public:
 	 * @brief      Requests the removal of unused capacity.
 	 *
 	 * @details    It is a non-binding request to reduce the capacity to the size. It depends on the
-	 *             implementation of std\::vector whether the request is fulfilled.\n If reallocation
-	 *             occurs, all @ref reference on bits of the @ref dynamic_bitset are invalidated.
+	 *             implementation of std\::vector whether the request is fulfilled.\n If
+	 *             reallocation occurs, all @ref reference on bits of the @ref sul::dynamic_bitset
+	 *             are invalidated.
 	 *
-	 * @complexity At most linear in the size of the @ref dynamic_bitset.
+	 * @complexity At most linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	constexpr void shrink_to_fit();
 
 	/**
-	 * @brief      Determines if this @ref dynamic_bitset is a subset of @p bitset.
+	 * @brief      Determines if this @ref sul::dynamic_bitset is a subset of @p bitset.
 	 *
-	 * @details    This @ref dynamic_bitset is a subset of @p bitset if, for every bit that is set
-	 *             in this @ref dynamic_bitset, the corresponding bit in @p bitset a is also
-	 *             set.\n\n Less efficient but equivalent way to get this result:
+	 * @details    This @ref sul::dynamic_bitset is a subset of @p bitset if, for every bit that is
+	 *             set in this @ref sul::dynamic_bitset, the corresponding bit in @p bitset a is
+	 *             also set.\n\n Less efficient but equivalent way to get this result:
 	 *             @code
 	 *             res = (this & ~bitset).none();
 	 *             @endcode
 	 *
-	 * @param[in]  bitset  The @ref dynamic_bitset for which to check if this @ref dynamic_bitset is
-	 *                     a subset
+	 * @param[in]  bitset  The @ref sul::dynamic_bitset for which to check if this @ref
+	 *                     sul::dynamic_bitset is a subset
 	 *
-	 * @return     @a true if this @ref dynamic_bitset is a subset of @p bitset, @a false otherwise
+	 * @return     @a true if this @ref sul::dynamic_bitset is a subset of @p bitset, @a false
+	 *             otherwise
 	 *
 	 * @remark     The relation "is a subset of" is not symmetric (A being a subset of B doesn't
 	 *             imply that B is a subset of A) but is antisymmetric (if A is a subset of B and B
@@ -1036,26 +1046,26 @@ public:
 	 *             size() == bitset.size()
 	 *             @endcode
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	[[nodiscard]] constexpr bool is_subset_of(const dynamic_bitset<Block, Allocator>& bitset) const;
 
 	/**
-	 * @brief      Determines if this @ref dynamic_bitset is a proper subset of @p bitset.
+	 * @brief      Determines if this @ref sul::dynamic_bitset is a proper subset of @p bitset.
 	 *
-	 * @details    This @ref dynamic_bitset is a proper subset of @p bitset if, for every bit that
-	 *             is set in this @ref dynamic_bitset, the corresponding bit in @p bitset a is also
-	 *             set and if this @ref dynamic_bitset is different from @p bitset.\n\n Less
-	 *             efficient but equivalent way to get this result:
+	 * @details    This @ref sul::dynamic_bitset is a proper subset of @p bitset if, for every bit
+	 *             that is set in this @ref sul::dynamic_bitset, the corresponding bit in @p bitset
+	 *             a is also set and if this @ref sul::dynamic_bitset is different from @p
+	 *             bitset.\n\n Less efficient but equivalent way to get this result:
 	 *             @code
 	 *             res = ((this != bitset) && (this & ~bitset).none());
 	 *             @endcode
 	 *
-	 * @param[in]  bitset  The @ref dynamic_bitset for which to check if this @ref dynamic_bitset is
-	 *                     a proper subset
+	 * @param[in]  bitset  The @ref sul::dynamic_bitset for which to check if this @ref
+	 *                     sul::dynamic_bitset is a proper subset
 	 *
-	 * @return     @a true if this @ref dynamic_bitset is a proper subset of @p bitset, @a false
-	 *             otherwise
+	 * @return     @a true if this @ref sul::dynamic_bitset is a proper subset of @p bitset, @a
+	 *             false otherwise
 	 *
 	 * @remark     The relation "is a proper subset of" is asymmetric (A being a proper subset of B
 	 *             imply that B is not a proper subset of A).
@@ -1064,55 +1074,56 @@ public:
 	 *             size() == bitset.size()
 	 *             @endcode
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	[[nodiscard]] constexpr bool is_proper_subset_of(
 	  const dynamic_bitset<Block, Allocator>& bitset) const;
 
 	/**
-	 * @brief      Determines if this @ref dynamic_bitset and @p bitset intersect.
+	 * @brief      Determines if this @ref sul::dynamic_bitset and @p bitset intersect.
 	 *
-	 * @details    This @ref dynamic_bitset intersects with @p bitset if for at least one bit set in
-	 *             this @ref dynamic_bitset, the corresponding bit in @p bitset a is also set. In
-	 *             other words two bitsets intersect if they have at least one bit set in
-	 *             common.\n\n Less efficient but equivalent way to get this result:
+	 * @details    This @ref sul::dynamic_bitset intersects with @p bitset if for at least one bit
+	 *             set in this @ref sul::dynamic_bitset, the corresponding bit in @p bitset a is
+	 *             also set. In other words two bitsets intersect if they have at least one bit set
+	 *             in common.\n\n Less efficient but equivalent way to get this result:
 	 *             @code
 	 *             res = (this & bitset).any();
 	 *             @endcode
 	 *
-	 * @param[in]  bitset  The @ref dynamic_bitset for which to check if this @ref dynamic_bitset
-	 *                     intersects
+	 * @param[in]  bitset  The @ref sul::dynamic_bitset for which to check if this @ref
+	 *                     sul::dynamic_bitset intersects
 	 *
-	 * @return     @a true if this @ref dynamic_bitset intersects with @p bitset, @a false otherwise
+	 * @return     @a true if this @ref sul::dynamic_bitset intersects with @p bitset, @a false
+	 *             otherwise
 	 *
 	 * @pre        @code
 	 *             size() == bitset.size()
 	 *             @endcode
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	[[nodiscard]] constexpr bool intersects(const dynamic_bitset<Block, Allocator>& bitset) const;
 
 	/**
-	 * @brief      Find the position of the first bit set in the @ref dynamic_bitset starting from
-	 *             the least-significant bit.
+	 * @brief      Find the position of the first bit set in the @ref sul::dynamic_bitset starting
+	 *             from the least-significant bit.
 	 *
-	 * @details    Give the lowest index of the @ref dynamic_bitset with a bit set, or @ref npos if
-	 *             no bits are set.
+	 * @details    Give the lowest index of the @ref sul::dynamic_bitset with a bit set, or @ref
+	 *             npos if no bits are set.
 	 *
 	 * @return     The position of the first bit set, or @ref npos if no bits are set
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	[[nodiscard]] constexpr size_type find_first() const;
 
 	/**
 	 * @brief      Find the position of the first bit set in the range \[@p prev + 1, @ref size()\[
-	 *             of the @ref dynamic_bitset starting from the position @p prev + 1.
+	 *             of the @ref sul::dynamic_bitset starting from the position @p prev + 1.
 	 *
-	 * @details    Give the lowest index superior to @p prev of the @ref dynamic_bitset with a bit
-	 *             set, or @ref npos if no bits are set after the index @p prev.\n If @p prev + 1
-	 *             \>= @ref size(), return @ref npos.
+	 * @details    Give the lowest index superior to @p prev of the @ref sul::dynamic_bitset with a
+	 *             bit set, or @ref npos if no bits are set after the index @p prev.\n If @p prev +
+	 *             1 \>= @ref size(), return @ref npos.
 	 *
 	 * @param[in]  prev  Position of the bit preceding the search range
 	 *
@@ -1124,11 +1135,11 @@ public:
 	[[nodiscard]] constexpr size_type find_next(size_type prev) const;
 
 	/**
-	 * @brief      Exchanges the bits of this @ref dynamic_bitset with those of @p other.
+	 * @brief      Exchanges the bits of this @ref sul::dynamic_bitset with those of @p other.
 	 *
-	 * @details    All @ref reference on bits of the @ref dynamic_bitset are invalidated.
+	 * @details    All @ref reference on bits of the @ref sul::dynamic_bitset are invalidated.
 	 *
-	 * @param      other  @ref dynamic_bitset to exchange bits with
+	 * @param      other  @ref sul::dynamic_bitset to exchange bits with
 	 *
 	 * @complexity Constant.
 	 */
@@ -1144,7 +1155,7 @@ public:
 	[[nodiscard]] constexpr allocator_type get_allocator() const;
 
 	/**
-	 * @brief      Generate a string representation of the @ref dynamic_bitset.
+	 * @brief      Generate a string representation of the @ref sul::dynamic_bitset.
 	 *
 	 * @details    Uses @p zero to represent bits with value of @a false and @p one to represent
 	 *             bits with value of @a true. The resulting string contains @ref size() characters
@@ -1159,9 +1170,9 @@ public:
 	 *                      string
 	 * @tparam     _Alloc   Allocator type used to allocate internal storage of the string
 	 *
-	 * @return     The string representing the @ref dynamic_bitset content
+	 * @return     The string representing the @ref sul::dynamic_bitset content
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	template<typename _CharT = char,
 	         typename _Traits = std::char_traits<_CharT>,
@@ -1171,8 +1182,8 @@ public:
 	  _CharT one = _CharT('1')) const;
 
 	/**
-	 * @brief      Iterate on the @ref dynamic_bitset and call @p function with the position of the
-	 *             bits on.
+	 * @brief      Iterate on the @ref sul::dynamic_bitset and call @p function with the position of
+	 *             the bits on.
 	 *
 	 * @details    For each set bit, @p function is called as follow:
 	 *             @code
@@ -1193,23 +1204,23 @@ public:
 	 *                         Parameters as next arguments
 	 * @tparam     Parameters  Type of @p parameters
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	template<typename Function, typename... Parameters>
 	constexpr void iterate_bits_on(Function&& function, Parameters&&... parameters) const;
 
 	/**
-	 * @brief      Test if two @ref dynamic_bitset have the same content.
+	 * @brief      Test if two @ref sul::dynamic_bitset have the same content.
 	 *
-	 * @param[in]  lhs         The left hand side @ref dynamic_bitset of the operator
-	 * @param[in]  rhs         The right hand side @ref dynamic_bitset of the operator
+	 * @param[in]  lhs         The left hand side @ref sul::dynamic_bitset of the operator
+	 * @param[in]  rhs         The right hand side @ref sul::dynamic_bitset of the operator
 	 *
 	 * @tparam     Block_      Block type used by @p lhs and @p rhs for storing the bits
 	 * @tparam     Allocator_  Allocator type used by @p lhs and @p rhs for memory management
 	 *
 	 * @return     @a true if they contain the same bits, @a false otherwise
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	template<typename Block_, typename Allocator_>
 	friend constexpr bool operator==(const dynamic_bitset<Block_, Allocator_>& lhs,
@@ -1223,17 +1234,18 @@ public:
 	 * @details    The size comparison is necessary for the comparison operators to keep their
 	 *             properties. For example without the size comparison the "<=" operator (defined
 	 *             for "A <= B" by "!(B < A)") would no longer be antisymmetric (if A \<= B and B
-	 *             \<= A, then A == B) because @ref operator==() compare the @ref dynamic_bitset as
-	 *             a container and not a number. For example with bitsets A(0011) and B(011),
-	 *             without the size comparison B \< A would be @a false, A \<= B would be @a true, B
-	 *             \<= A would be @a true, but A == B would be @a false, breaking the antisymmetric
-	 *             property of the operator. Thus, to respect the properties of the operators, the
-	 *             size is used as a secondary criteria for the comparison of @ref dynamic_bitset
-	 *             which content represent the same number. Therefore, for the previous example with
-	 *             bitsets A(0011) and B(011), B \< A is @a true, A \<= B is @a false, B \<= A is @a
-	 *             true and A == B is @a false.\n\n If comparing bitsets @a A and @a B with the
-	 *             content of @a A representing the number @a a, and the content of @a B
-	 *             representing the number @a b, this operator would work as follow:
+	 *             \<= A, then A == B) because @ref operator==() compare the @ref
+	 *             sul::dynamic_bitset as a container and not a number. For example with bitsets
+	 *             A(0011) and B(011), without the size comparison B \< A would be @a false, A \<= B
+	 *             would be @a true, B \<= A would be @a true, but A == B would be @a false,
+	 *             breaking the antisymmetric property of the operator. Thus, to respect the
+	 *             properties of the operators, the size is used as a secondary criteria for the
+	 *             comparison of @ref sul::dynamic_bitset which content represent the same number.
+	 *             Therefore, for the previous example with bitsets A(0011) and B(011), B \< A is @a
+	 *             true, A \<= B is @a false, B \<= A is @a true and A == B is @a false.\n\n If
+	 *             comparing bitsets @a A and @a B with the content of @a A representing the number
+	 *             @a a, and the content of @a B representing the number @a b, this operator would
+	 *             work as follow:
 	 *             @code
 	 *             if(a == b)
 	 *             {
@@ -1245,18 +1257,18 @@ public:
 	 *             }
 	 *             @endcode
 	 *
-	 * @remark     The empty @ref dynamic_bitset is the "lowest" of all bitset and for 0-only
+	 * @remark     The empty @ref sul::dynamic_bitset is the "lowest" of all bitset and for 0-only
 	 *             bitsets comparison, the shortest is the lowest.
 	 *
-	 * @param[in]  lhs         The left hand side @ref dynamic_bitset of the operator
-	 * @param[in]  rhs         The right hand side @ref dynamic_bitset of the operator
+	 * @param[in]  lhs         The left hand side @ref sul::dynamic_bitset of the operator
+	 * @param[in]  rhs         The right hand side @ref sul::dynamic_bitset of the operator
 	 *
 	 * @tparam     Block_      Block type used by @p lhs and @p rhs for storing the bits
 	 * @tparam     Allocator_  Allocator type used by @p lhs and @p rhs for memory management
 	 *
 	 * @return     @a true if @p lhs is "less than" @p rhs
 	 *
-	 * @complexity Linear in the size of the @ref dynamic_bitset.
+	 * @complexity Linear in the size of the @ref sul::dynamic_bitset.
 	 */
 	template<typename Block_, typename Allocator_>
 	friend constexpr bool operator<(const dynamic_bitset<Block_, Allocator_>& lhs,
@@ -1332,30 +1344,30 @@ private:
 // Deduction guideline for expressions like "dynamic_bitset a(32);" with an integral type as parameter
 // to use the constructor with the initial size instead of the constructor with the allocator.
 template<typename integral_type, typename = std::enable_if_t<std::is_integral_v<integral_type>>>
-dynamic_bitset(integral_type)->dynamic_bitset<>;
+dynamic_bitset(integral_type) -> dynamic_bitset<>;
 
 //=================================================================================================
 // dynamic_bitset external functions declarations
 //=================================================================================================
 
 /**
- * @brief      Test if two @ref dynamic_bitset content are different.
+ * @brief      Test if two @ref sul::dynamic_bitset content are different.
  *
  * @details    Defined as:
  *             @code
  *             return !(lhs == rhs);
  *             @endcode
- *             see @ref dynamic_bitset::operator==() for more informations.
+ *             see @ref sul::dynamic_bitset::operator==() for more informations.
  *
- * @param[in]  lhs        The left hand side @ref dynamic_bitset of the operator
- * @param[in]  rhs        The right hand side @ref dynamic_bitset of the operator
+ * @param[in]  lhs        The left hand side @ref sul::dynamic_bitset of the operator
+ * @param[in]  rhs        The right hand side @ref sul::dynamic_bitset of the operator
  *
  * @tparam     Block      Block type used by @p lhs and @p rhs for storing the bits
  * @tparam     Allocator  Allocator type used by @p lhs and @p rhs for memory management
  *
  * @return     @a true if they does not contain the same bits, @a false otherwise
  *
- * @complexity Linear in the size of the @ref dynamic_bitset.
+ * @complexity Linear in the size of the @ref sul::dynamic_bitset.
  *
  * @relatesalso dynamic_bitset
  */
@@ -1365,23 +1377,23 @@ constexpr bool operator!=(const dynamic_bitset<Block, Allocator>& lhs,
 
 /**
  * @brief      Test if @p lhs is "less than or equal to" @p rhs. The comparison of the two @ref
- *             dynamic_bitset is first on numbers their content represent and then on their size.
+ *             sul::dynamic_bitset is first on numbers their content represent and then on their size.
  *
  * @details    Defined as:
  *             @code
  *             return !(rhs < lhs);
  *             @endcode
- *             see @ref dynamic_bitset::operator<() for more informations.
+ *             see @ref sul::dynamic_bitset::operator<() for more informations.
  *
- * @param[in]  lhs        The left hand side @ref dynamic_bitset of the operator
- * @param[in]  rhs        The right hand side @ref dynamic_bitset of the operator
+ * @param[in]  lhs        The left hand side @ref sul::dynamic_bitset of the operator
+ * @param[in]  rhs        The right hand side @ref sul::dynamic_bitset of the operator
  *
  * @tparam     Block      Block type used by @p lhs and @p rhs for storing the bits
  * @tparam     Allocator  Allocator type used by @p lhs and @p rhs for memory management
  *
  * @return     @a true if @p lhs is "less than or equal to" @p rhs
  *
- * @complexity Linear in the size of the @ref dynamic_bitset.
+ * @complexity Linear in the size of the @ref sul::dynamic_bitset.
  *
  * @relatesalso dynamic_bitset
  */
@@ -1391,23 +1403,24 @@ constexpr bool operator<=(const dynamic_bitset<Block, Allocator>& lhs,
 
 /**
  * @brief      Test if @p lhs is "greater than" @p rhs. The comparison of the two @ref
- *             dynamic_bitset is first on numbers their content represent and then on their size.
+ *             sul::dynamic_bitset is first on numbers their content represent and then on their
+ *             size.
  *
  * @details    Defined as:
  *             @code
  *             return rhs < lhs;
  *             @endcode
- *             see @ref dynamic_bitset::operator<() for more informations.
+ *             see @ref sul::dynamic_bitset::operator<() for more informations.
  *
- * @param[in]  lhs        The left hand side @ref dynamic_bitset of the operator
- * @param[in]  rhs        The right hand side @ref dynamic_bitset of the operator
+ * @param[in]  lhs        The left hand side @ref sul::dynamic_bitset of the operator
+ * @param[in]  rhs        The right hand side @ref sul::dynamic_bitset of the operator
  *
  * @tparam     Block      Block type used by @p lhs and @p rhs for storing the bits
  * @tparam     Allocator  Allocator type used by @p lhs and @p rhs for memory management
  *
  * @return     @a true if @p lhs is "greater than" @p rhs
  *
- * @complexity Linear in the size of the @ref dynamic_bitset.
+ * @complexity Linear in the size of the @ref sul::dynamic_bitset.
  *
  * @relatesalso dynamic_bitset
  */
@@ -1417,23 +1430,24 @@ constexpr bool operator>(const dynamic_bitset<Block, Allocator>& lhs,
 
 /**
  * @brief      Test if @p lhs is "greater than or equal to" @p rhs. The comparison of the two @ref
- *             dynamic_bitset is first on numbers their content represent and then on their size.
+ *             sul::dynamic_bitset is first on numbers their content represent and then on their
+ *             size.
  *
  * @details    Defined as:
  *             @code
  *             return !(lhs < rhs);
  *             @endcode
- *             see @ref dynamic_bitset::operator<() for more informations.
+ *             see @ref sul::dynamic_bitset::operator<() for more informations.
  *
- * @param[in]  lhs        The left hand side @ref dynamic_bitset of the operator
- * @param[in]  rhs        The right hand side @ref dynamic_bitset of the operator
+ * @param[in]  lhs        The left hand side @ref sul::dynamic_bitset of the operator
+ * @param[in]  rhs        The right hand side @ref sul::dynamic_bitset of the operator
  *
  * @tparam     Block      Block type used by @p lhs and @p rhs for storing the bits
  * @tparam     Allocator  Allocator type used by @p lhs and @p rhs for memory management
  *
  * @return     @a true if @p lhs is "greater than or equal to" @p rhs
  *
- * @complexity Linear in the size of the @ref dynamic_bitset.
+ * @complexity Linear in the size of the @ref sul::dynamic_bitset.
  *
  * @relatesalso dynamic_bitset
  */
@@ -1449,22 +1463,22 @@ constexpr bool operator>=(const dynamic_bitset<Block, Allocator>& lhs,
  *             dynamic_bitset<Block, Allocator> result(lhs);
  *             return result &= rhs;
  *             @endcode
- *             see @ref dynamic_bitset::operator&=() for more informations.
+ *             see @ref sul::dynamic_bitset::operator&=() for more informations.
  *
- * @param[in]  lhs        The left hand side @ref dynamic_bitset of the operator
- * @param[in]  rhs        The right hand side @ref dynamic_bitset of the operator
+ * @param[in]  lhs        The left hand side @ref sul::dynamic_bitset of the operator
+ * @param[in]  rhs        The right hand side @ref sul::dynamic_bitset of the operator
  *
  * @tparam     Block      Block type used by @p lhs and @p rhs for storing the bits
  * @tparam     Allocator  Allocator type used by @p lhs and @p rhs for memory management
  *
- * @return     A @ref dynamic_bitset with each bit being the result of a binary AND between the
+ * @return     A @ref sul::dynamic_bitset with each bit being the result of a binary AND between the
  *             corresponding pair of bits of @p lhs and @p rhs
  *
  * @pre        @code
  *             lhs.size() == rhs.size()
  *             @endcode
  *
- * @complexity Linear in the size of the @ref dynamic_bitset.
+ * @complexity Linear in the size of the @ref sul::dynamic_bitset.
  *
  * @relatesalso dynamic_bitset
  */
@@ -1480,22 +1494,22 @@ constexpr dynamic_bitset<Block, Allocator> operator&(const dynamic_bitset<Block,
  *             dynamic_bitset<Block, Allocator> result(lhs);
  *             return result |= rhs;
  *             @endcode
- *             see @ref dynamic_bitset::operator|=() for more informations.
+ *             see @ref sul::dynamic_bitset::operator|=() for more informations.
  *
- * @param[in]  lhs        The left hand side @ref dynamic_bitset of the operator
- * @param[in]  rhs        The right hand side @ref dynamic_bitset of the operator
+ * @param[in]  lhs        The left hand side @ref sul::dynamic_bitset of the operator
+ * @param[in]  rhs        The right hand side @ref sul::dynamic_bitset of the operator
  *
  * @tparam     Block      Block type used by @p lhs and @p rhs for storing the bits
  * @tparam     Allocator  Allocator type used by @p lhs and @p rhs for memory management
  *
- * @return     A @ref dynamic_bitset with each bit being the result of a binary OR between the
+ * @return     A @ref sul::dynamic_bitset with each bit being the result of a binary OR between the
  *             corresponding pair of bits of @p lhs and @p rhs
  *
  * @pre        @code
  *             lhs.size() == rhs.size()
  *             @endcode
  *
- * @complexity Linear in the size of the @ref dynamic_bitset.
+ * @complexity Linear in the size of the @ref sul::dynamic_bitset.
  *
  * @relatesalso dynamic_bitset
  */
@@ -1511,22 +1525,22 @@ constexpr dynamic_bitset<Block, Allocator> operator|(const dynamic_bitset<Block,
  *             dynamic_bitset<Block, Allocator> result(lhs);
  *             return result ^= rhs;
  *             @endcode
- *             see @ref dynamic_bitset::operator^=() for more informations.
+ *             see @ref sul::dynamic_bitset::operator^=() for more informations.
  *
- * @param[in]  lhs        The left hand side @ref dynamic_bitset of the operator
- * @param[in]  rhs        The right hand side @ref dynamic_bitset of the operator
+ * @param[in]  lhs        The left hand side @ref sul::dynamic_bitset of the operator
+ * @param[in]  rhs        The right hand side @ref sul::dynamic_bitset of the operator
  *
  * @tparam     Block      Block type used by @p lhs and @p rhs for storing the bits
  * @tparam     Allocator  Allocator type used by @p lhs and @p rhs for memory management
  *
- * @return     A @ref dynamic_bitset with each bit being the result of a binary XOR between the
+ * @return     A @ref sul::dynamic_bitset with each bit being the result of a binary XOR between the
  *             corresponding pair of bits of @p lhs and @p rhs
  *
  * @pre        @code
  *             lhs.size() == rhs.size()
  *             @endcode
  *
- * @complexity Linear in the size of the @ref dynamic_bitset.
+ * @complexity Linear in the size of the @ref sul::dynamic_bitset.
  *
  * @relatesalso dynamic_bitset
  */
@@ -1542,22 +1556,22 @@ constexpr dynamic_bitset<Block, Allocator> operator^(const dynamic_bitset<Block,
  *             dynamic_bitset<Block, Allocator> result(lhs);
  *             return result -= rhs;
  *             @endcode
- *             see @ref dynamic_bitset::operator-=() for more informations.
+ *             see @ref sul::dynamic_bitset::operator-=() for more informations.
  *
- * @param[in]  lhs        The left hand side @ref dynamic_bitset of the operator
- * @param[in]  rhs        The right hand side @ref dynamic_bitset of the operator
+ * @param[in]  lhs        The left hand side @ref sul::dynamic_bitset of the operator
+ * @param[in]  rhs        The right hand side @ref sul::dynamic_bitset of the operator
  *
  * @tparam     Block      Block type used by @p lhs and @p rhs for storing the bits
  * @tparam     Allocator  Allocator type used by @p lhs and @p rhs for memory management
  *
- * @return     A @ref dynamic_bitset with each bit being the result of the binary difference between
- *             the corresponding bits of @p lhs and @p rhs
+ * @return     A @ref sul::dynamic_bitset with each bit being the result of the binary difference
+ *             between the corresponding bits of @p lhs and @p rhs
  *
  * @pre        @code
  *             lhs.size() == rhs.size()
  *             @endcode
  *
- * @complexity Linear in the size of the @ref dynamic_bitset.
+ * @complexity Linear in the size of the @ref sul::dynamic_bitset.
  *
  * @relatesalso dynamic_bitset
  */
@@ -1566,14 +1580,15 @@ constexpr dynamic_bitset<Block, Allocator> operator-(const dynamic_bitset<Block,
                                                      const dynamic_bitset<Block, Allocator>& rhs);
 
 /**
- * @brief      Insert a string representation of this @ref dynamic_bitset to a character stream.
+ * @brief      Insert a string representation of this @ref sul::dynamic_bitset to a character
+ *             stream.
  *
  * @details    The string representation written is the same as if generated with @ref
- *             dynamic_bitset::to_string() with default parameter, using '1' for @a true bits and '0'
- *             for @a false bits.
+ *             sul::dynamic_bitset::to_string() with default parameter, using '1' for @a true bits
+ *             and '0' for @a false bits.
  *
  * @param      os         Character stream to write to
- * @param[in]  bitset     @ref dynamic_bitset to write
+ * @param[in]  bitset     @ref sul::dynamic_bitset to write
  *
  * @tparam     _CharT     Character type of the character stream
  * @tparam     _Traits    Traits class specifying the operations on the character type of the
@@ -1583,7 +1598,7 @@ constexpr dynamic_bitset<Block, Allocator> operator-(const dynamic_bitset<Block,
  *
  * @return     @p os
  *
- * @complexity Linear in the size of the @ref dynamic_bitset.
+ * @complexity Linear in the size of the @ref sul::dynamic_bitset.
  *
  * @relatesalso dynamic_bitset
  */
@@ -1593,18 +1608,18 @@ constexpr std::basic_ostream<_CharT, _Traits>& operator<<(
   const dynamic_bitset<Block, Allocator>& bitset);
 
 /**
- * @brief      Extract a @ref dynamic_bitset from a character stream using its string
+ * @brief      Extract a @ref sul::dynamic_bitset from a character stream using its string
  *             representation.
  *
  * @details    The string representation expected is the same as if generated with @ref
- *             dynamic_bitset::to_string() with default parameter, using '1' for @a true bits and '0'
- *             for @a false bits. On success the content of @p bitset is cleared before writing to
- *             it. The extraction starts by skipping leading whitespace then take the characters one
- *             by one and stop if @p is.good() return @a false or the next character is neither
- *             _CharT('0') nor _CharT('1').
+ *             sul::dynamic_bitset::to_string() with default parameter, using '1' for @a true bits
+ *             and '0' for @a false bits. On success the content of @p bitset is cleared before
+ *             writing to it. The extraction starts by skipping leading whitespace then take the
+ *             characters one by one and stop if @p is.good() return @a false or the next character
+ *             is neither _CharT('0') nor _CharT('1').
  *
  * @param      is         Character stream to read from
- * @param      bitset     @ref dynamic_bitset to write to
+ * @param      bitset     @ref sul::dynamic_bitset to write to
  *
  * @tparam     _CharT     Character type of the character stream
  * @tparam     _Traits    Traits class specifying the operations on the character type of the
@@ -1614,7 +1629,7 @@ constexpr std::basic_ostream<_CharT, _Traits>& operator<<(
  *
  * @return     @p is
  *
- * @complexity Linear in the size of the @ref dynamic_bitset.
+ * @complexity Linear in the size of the @ref sul::dynamic_bitset.
  *
  * @relatesalso dynamic_bitset
  */
@@ -1629,10 +1644,10 @@ constexpr std::basic_istream<_CharT, _Traits>& operator>>(std::basic_istream<_Ch
  *             @code
  *             bitset1.swap(bitset2);
  *             @endcode
- *             see @ref dynamic_bitset::swap() for more informations.
+ *             see @ref sul::dynamic_bitset::swap() for more informations.
  *
- * @param      bitset1    @ref dynamic_bitset to be swapped
- * @param      bitset2    @ref dynamic_bitset to be swapped
+ * @param      bitset1    @ref sul::dynamic_bitset to be swapped
+ * @param      bitset2    @ref sul::dynamic_bitset to be swapped
  *
  * @tparam     Block      Block type used by @p bitset for storing the bits
  * @tparam     Allocator  Allocator type used by @p bitset for memory management
@@ -2403,17 +2418,17 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 }
 
 template<typename Block, typename Allocator>
-constexpr
-  typename dynamic_bitset<Block, Allocator>::reference dynamic_bitset<Block, Allocator>::operator[](
-    size_type pos)
+constexpr typename dynamic_bitset<Block, Allocator>::reference dynamic_bitset<Block, Allocator>::
+operator[](size_type pos)
 {
 	assert(pos < size());
 	return dynamic_bitset<Block, Allocator>::reference(*this, pos);
 }
 
 template<typename Block, typename Allocator>
-constexpr typename dynamic_bitset<Block, Allocator>::
-  const_reference dynamic_bitset<Block, Allocator>::operator[](size_type pos) const
+constexpr typename dynamic_bitset<Block, Allocator>::const_reference dynamic_bitset<
+  Block,
+  Allocator>::operator[](size_type pos) const
 {
 	return test(pos);
 }
@@ -3239,5 +3254,9 @@ constexpr void swap(dynamic_bitset<Block, Allocator>& bitset1,
 {
 	bitset1.swap(bitset2);
 }
+
+#ifndef DYNAMIC_BITSET_NO_LIBPOPCNT
+} // namespace sul
+#endif
 
 #endif //DYNAMIC_BITSET_DYNAMIC_BITSET_HPP

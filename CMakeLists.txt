@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.10) # For CXX_STANDARD 17 property on Visual St
 project(
   dynamic_bitset
   VERSION 1.0.0
-  DESCRIPTION "A C++17 header-only dynamic bitset"
+  DESCRIPTION "Simple Useful Libraries: The C++17 header-only dynamic bitset"
   HOMEPAGE_URL "https://github.com/pinam45/dynamic_bitset"
   LANGUAGES CXX
 )
@@ -18,6 +18,7 @@ if (ABSOLUTE_CURRENT_SOURCE_DIR STREQUAL ABSOLUTE_SOURCE_DIR)
 endif()
 
 # Options
+option(DYNAMICBITSET_NO_NAMESPACE "Put the dynamic_bitset class in the global namespace instead of the sul namespace (not recommended)" OFF)
 option(DYNAMICBITSET_USE_LIBPOPCNT "Enable using libpopcnt for bits counting operations" ON)
 option(DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE "Enable adding libpopcnt submodule to include paths (disable if your project already include libpopcnt)" ON)
 option(DYNAMICBITSET_BUILD_EXAMPLE "Enable building example for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
@@ -28,7 +29,7 @@ option(DYNAMICBITSET_HEADERS_TARGET_IDE "Enable generating a target with headers
 
 # Declare dynamic_bitset
 add_library(dynamic_bitset INTERFACE)
-add_library(dynamic_bitset::dynamic_bitset ALIAS dynamic_bitset)
+add_library(sul::dynamic_bitset ALIAS dynamic_bitset)
 
 # If used via add_subdirectory, disable warnings on headers
 set(MAYBE_SYSTEM)
@@ -41,6 +42,11 @@ target_include_directories(
   dynamic_bitset ${MAYBE_SYSTEM} INTERFACE
   "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
+
+# Add definitions
+if(DYNAMICBITSET_NO_NAMESPACE)
+	target_compile_definitions(dynamic_bitset INTERFACE DYNAMIC_BITSET_NO_NAMESPACE)
+endif()
 
 # Configure libpopcnt
 if(DYNAMICBITSET_USE_LIBPOPCNT)

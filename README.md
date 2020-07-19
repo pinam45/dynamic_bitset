@@ -7,11 +7,11 @@
 [![codecov](https://codecov.io/gh/pinam45/dynamic_bitset/branch/master/graph/badge.svg)](https://codecov.io/gh/pinam45/dynamic_bitset)
 [![license](https://img.shields.io/github/license/pinam45/dynamic_bitset.svg)](http://opensource.org/licenses/MIT)
 
-A C++17 header-only dynamic bitset
+Simple Useful Libraries: The C++17 header-only dynamic bitset
 
 ## Requirements
 
-To use this *dynamic_bitset*, you will need a **C++17 compliant compiler**. If you use CMake and want to use the *dynamic_bitset* as a subproject, you will need **CMake 3.10 or later**.
+To use this *dynamic bitset*, you will need a **C++17 compliant compiler**. If you use CMake and want to use the *dynamic bitset* as a subproject, you will need **CMake 3.10 or later**.
 
 ## Usage sample
 
@@ -23,13 +23,13 @@ To use this *dynamic_bitset*, you will need a **C++17 compliant compiler**. If y
 int main()
 {
 	// predefined bitset
-	dynamic_bitset<> bitset1(12, 0b0100010110111);
+	sul::dynamic_bitset<> bitset1(12, 0b0100010110111);
 	std::cout << "bitset1     = " << bitset1 << std::endl;
 
 	// random bitset
 	std::minstd_rand rand(std::random_device{}());
 	std::bernoulli_distribution dist;
-	dynamic_bitset<> bitset2;
+	sul::dynamic_bitset<> bitset2;
 	for(size_t i = 0; i < 12; ++i)
 	{
 		bitset2.push_back(dist(rand));
@@ -47,7 +47,7 @@ Possible output:
     bitset2     = 001011011011
     common bits = 000010010011
 
-Test it on [godbolt.org](https://godbolt.org/z/eUAVDm).
+Test it on [godbolt.org](https://godbolt.org/z/6d7P3r).
 
 ## Optional dependency
 
@@ -55,17 +55,17 @@ Optionally, [libpopcnt](https://github.com/kimwalisch/libpopcnt) will be used op
 
 ## Integration
 
-As it is a header-only library, the easiest way to integrate the *dynamic_bitset* class in your project is to just copy *dynamic_bitset.hpp* in your project sources. Optionally, if you also copy *libpopcnt.h* from [libpopcnt](https://github.com/kimwalisch/libpopcnt), it will be used by default if it is available.
+As it is a header-only library, the easiest way to integrate the *sul::dynamic_bitset* class in your project is to just copy *dynamic_bitset.hpp* in your project sources. Optionally, if you also copy *libpopcnt.h* from [libpopcnt](https://github.com/kimwalisch/libpopcnt), it will be used by default if it is available.
 
 ## CMake integration
 
-If you use CMake and want to use the *dynamic_bitset* as a subproject, clone the repository (or add it as a git submodule) in a sub-folder of your project. Then, in your *CMakeLists.txt* add:
+If you use CMake and want to use the *dynamic bitset* as a subproject, clone the repository (or add it as a git submodule) in a sub-folder of your project. Then, in your *CMakeLists.txt* add:
 ```CMake
 add_subdirectory(<path_to_dynamic_bitset_folder>)
 ```
-It will define the *dynamic_bitset* target and the alias target *dynamic_bitset::dynamic_bitset* that you can use to add the folder containing *dynamic_bitset.hpp* to your project header folders. To do so, in your *CMakeLists.txt* add:
+It will define the *dynamic_bitset* target and the alias target *sul::dynamic_bitset* that you can use to add the folder containing *dynamic_bitset.hpp* to your project header folders. To do so, in your *CMakeLists.txt* add:
 ```CMake
-target_link_libraries(<your_project_target> PRIVATE dynamic_bitset)
+target_link_libraries(<your_project_target> PRIVATE sul::dynamic_bitset)
 ```
 
 For example, a simple project with the repository as a git submodule in the *extlibs* folder, could have a *CMakeLists.txt* similar to this:
@@ -76,15 +76,16 @@ project(CoolProject LANGUAGES CXX)
 add_executable(CoolProject main.cpp)
 
 add_subdirectory(extlibs/dynamic_bitset)
-target_link_libraries(CoolProject PRIVATE dynamic_bitset)
+target_link_libraries(CoolProject PRIVATE sul::dynamic_bitset)
 ```
 
-If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the *dynamic_bitset* CMake options ``DYNAMICBITSET_USE_LIBPOPCNT`` and ``DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE`` to ``ON``(default values), the folder containing *libpopcnt.h* will also be added to the headers paths and libpopcnt will be used.
+If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the *dynamic bitset* CMake options ``DYNAMICBITSET_USE_LIBPOPCNT`` and ``DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE`` to ``ON``(default values), the folder containing *libpopcnt.h* will also be added to the headers paths and libpopcnt will be used.
 
 ## CMake options
 
 ### Descriptions
 
+- ``DYNAMICBITSET_NO_NAMESPACE``: Put the dynamic_bitset class in the global namespace instead of the sul namespace (not recommended)
 - ``DYNAMICBITSET_USE_LIBPOPCNT``: Enable using libpopcnt for bits counting operations
 - ``DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE``: Enable adding libpopcnt submodule to include paths (disable if your project already include libpopcnt)
 - ``DYNAMICBITSET_BUILD_EXAMPLE``: Enable building example for dynamic_bitset
@@ -97,6 +98,7 @@ If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the *d
 
 | Option                                | Default value as master project | Default value as subdirectory |
 | ------------------------------------- | :-----------------------------: | :---------------------------: |
+| DYNAMICBITSET_NO_NAMESPACE            | OFF                             | OFF                           |
 | DYNAMICBITSET_USE_LIBPOPCNT           | ON                              | ON                            |
 | DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE | ON                              | ON                            |
 | DYNAMICBITSET_BUILD_EXAMPLE           | ON                              | OFF                           |

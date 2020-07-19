@@ -14,22 +14,23 @@
 #include <random>
 
 template<typename Block>
-constexpr Catch::Generators::GeneratorWrapper<dynamic_bitset<Block>> randomDynamicBitset(
+constexpr Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>> randomDynamicBitset(
   std::minstd_rand::result_type seed =
     static_cast<std::minstd_rand::result_type>(std::random_device{}()));
 
 template<typename Block>
-constexpr Catch::Generators::GeneratorWrapper<dynamic_bitset<Block>> randomDynamicBitset(
-  typename dynamic_bitset<Block>::size_type min_size,
-  typename dynamic_bitset<Block>::size_type max_size,
+constexpr Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>> randomDynamicBitset(
+  typename sul::dynamic_bitset<Block>::size_type min_size,
+  typename sul::dynamic_bitset<Block>::size_type max_size,
   std::minstd_rand::result_type seed =
     static_cast<std::minstd_rand::result_type>(std::random_device{}()));
 
 template<typename Block>
-class RandomDynamicBitsetGenerator : public Catch::Generators::IGenerator<dynamic_bitset<Block>>
+class RandomDynamicBitsetGenerator
+  : public Catch::Generators::IGenerator<sul::dynamic_bitset<Block>>
 {
 public:
-	typedef typename dynamic_bitset<Block>::size_type size_type;
+	typedef typename sul::dynamic_bitset<Block>::size_type size_type;
 	static constexpr size_type default_min_size = 1;
 	static constexpr size_type default_max_size = 8 * std::numeric_limits<Block>::digits;
 
@@ -42,14 +43,14 @@ public:
 	  std::minstd_rand::result_type seed =
 	    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
 
-	constexpr const dynamic_bitset<Block>& get() const override;
+	constexpr const sul::dynamic_bitset<Block>& get() const override;
 	constexpr bool next() override;
 
 private:
 	std::minstd_rand m_rand;
 	std::uniform_int_distribution<size_type> m_size_dist;
 	std::uniform_int_distribution<Block> m_block_dist;
-	dynamic_bitset<Block> m_current_bitset;
+	sul::dynamic_bitset<Block> m_current_bitset;
 };
 
 template<typename Block>
@@ -74,7 +75,7 @@ constexpr RandomDynamicBitsetGenerator<Block>::RandomDynamicBitsetGenerator(
 }
 
 template<typename Block>
-constexpr const dynamic_bitset<Block>& RandomDynamicBitsetGenerator<Block>::get() const
+constexpr const sul::dynamic_bitset<Block>& RandomDynamicBitsetGenerator<Block>::get() const
 {
 	return m_current_bitset;
 }
@@ -93,20 +94,20 @@ constexpr bool RandomDynamicBitsetGenerator<Block>::next()
 }
 
 template<typename Block>
-constexpr Catch::Generators::GeneratorWrapper<dynamic_bitset<Block>> randomDynamicBitset(
+constexpr Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>> randomDynamicBitset(
   std::minstd_rand::result_type seed)
 {
-	return Catch::Generators::GeneratorWrapper<dynamic_bitset<Block>>(
+	return Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>>(
 	  std::make_unique<RandomDynamicBitsetGenerator<Block>>(seed));
 }
 
 template<typename Block>
-constexpr Catch::Generators::GeneratorWrapper<dynamic_bitset<Block>> randomDynamicBitset(
-  typename dynamic_bitset<Block>::size_type min_size,
-  typename dynamic_bitset<Block>::size_type max_size,
+constexpr Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>> randomDynamicBitset(
+  typename sul::dynamic_bitset<Block>::size_type min_size,
+  typename sul::dynamic_bitset<Block>::size_type max_size,
   std::minstd_rand::result_type seed)
 {
-	return Catch::Generators::GeneratorWrapper<dynamic_bitset<Block>>(
+	return Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>>(
 	  std::make_unique<RandomDynamicBitsetGenerator<Block>>(min_size, max_size, seed));
 }
 

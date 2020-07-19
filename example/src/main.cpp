@@ -14,7 +14,7 @@ int main()
 	std::cout << std::boolalpha;
 
 	// declare bitset with 12 bits from a value
-	dynamic_bitset<uint32_t> a(12, 0b0100010110111);
+	sul::dynamic_bitset<uint32_t> a(12, 0b0100010110111);
 
 	// remove all bits, resize to 0
 	a.clear();
@@ -137,10 +137,10 @@ int main()
 	a.shrink_to_fit();
 
 	// get allocator
-	const dynamic_bitset<uint32_t>::allocator_type allocator = a.get_allocator();
+	const sul::dynamic_bitset<uint32_t>::allocator_type allocator = a.get_allocator();
 
 	// declare bitset from string
-	dynamic_bitset<uint32_t> b("011001010101");
+	sul::dynamic_bitset<uint32_t> b("011001010101");
 	std::cout << "b = " << b << std::endl;
 
 	// determine if a bitset is a subset of another bitset

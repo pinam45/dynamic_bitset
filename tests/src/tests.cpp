@@ -42,7 +42,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 	SECTION("default constructor")
 	{
-		dynamic_bitset<TestType> bitset;
+		sul::dynamic_bitset<TestType> bitset;
 
 		REQUIRE(bitset.empty());
 		REQUIRE(bitset.size() == 0);
@@ -60,7 +60,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 		const size_t bits_to_take = std::get<1>(values);
 		CAPTURE(value, bits_to_take);
 
-		dynamic_bitset<TestType> bitset(bits_to_take, value);
+		sul::dynamic_bitset<TestType> bitset(bits_to_take, value);
 		CAPTURE(bitset);
 
 		// check init value bits
@@ -77,7 +77,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 		{
 			const TestType init_value =
 			  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomInt<TestType>(SEED)));
-			const dynamic_bitset<TestType> bitset = {init_value};
+			const sul::dynamic_bitset<TestType> bitset = {init_value};
 			CAPTURE(init_value, bitset);
 
 			// check bits
@@ -94,7 +94,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 			  RANDOM_VECTORS_TO_TEST, randomInt<TestType>(SEED), randomInt<TestType>(SEED + 1)));
 			std::initializer_list<TestType> init_values_list = {std::get<0>(init_values),
 			                                                    std::get<1>(init_values)};
-			const dynamic_bitset<TestType> bitset = init_values_list;
+			const sul::dynamic_bitset<TestType> bitset = init_values_list;
 			CAPTURE(bitset, init_values_list);
 
 			// check bits
@@ -137,7 +137,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 		{
 			SECTION("std::string_view")
 			{
-				const dynamic_bitset<TestType> bitset(std::string_view{str});
+				const sul::dynamic_bitset<TestType> bitset(std::string_view{str});
 				CAPTURE(bitset);
 
 				for(size_t i = 0; i < bits_to_take; ++i)
@@ -151,7 +151,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 			SECTION("std::string")
 			{
-				const dynamic_bitset<TestType> bitset(str);
+				const sul::dynamic_bitset<TestType> bitset(str);
 				CAPTURE(bitset);
 
 				for(size_t i = 0; i < bits_to_take; ++i)
@@ -165,7 +165,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 			SECTION("const char*")
 			{
-				const dynamic_bitset<TestType> bitset(str.c_str());
+				const sul::dynamic_bitset<TestType> bitset(str.c_str());
 				CAPTURE(bitset);
 
 				for(size_t i = 0; i < bits_to_take; ++i)
@@ -189,7 +189,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 			SECTION("std::string_view")
 			{
-				const dynamic_bitset<TestType> bitset(std::string_view{str}, pos, n);
+				const sul::dynamic_bitset<TestType> bitset(std::string_view{str}, pos, n);
 				CAPTURE(bitset);
 
 				for(size_t i = 0; i < n; ++i)
@@ -201,7 +201,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 			SECTION("std::string")
 			{
-				const dynamic_bitset<TestType> bitset(str, pos, n);
+				const sul::dynamic_bitset<TestType> bitset(str, pos, n);
 				CAPTURE(bitset);
 
 				for(size_t i = 0; i < n; ++i)
@@ -213,7 +213,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 			SECTION("const char*")
 			{
-				const dynamic_bitset<TestType> bitset(str.c_str(), pos, n);
+				const sul::dynamic_bitset<TestType> bitset(str.c_str(), pos, n);
 				CAPTURE(bitset);
 
 				for(size_t i = 0; i < n; ++i)
@@ -229,7 +229,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	dynamic_bitset<TestType> bitset =
+	sul::dynamic_bitset<TestType> bitset =
 	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
 	CAPTURE(bitset);
 
@@ -256,7 +256,7 @@ TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 		SECTION("incrementing size")
 		{
-			const dynamic_bitset<TestType> bitset_copy = bitset;
+			const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 			const size_t new_size = bitset.size() + size_change;
 			bitset.resize(new_size, new_values);
 			REQUIRE(bitset.size() == new_size);
@@ -275,7 +275,7 @@ TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 		SECTION("decrementing size")
 		{
-			const dynamic_bitset<TestType> bitset_copy = bitset;
+			const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 			const size_t new_size = size_change > bitset.size() ? 0 : size_change;
 			bitset.resize(new_size, new_values);
 			REQUIRE(bitset.size() == new_size);
@@ -292,7 +292,7 @@ TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 TEMPLATE_TEST_CASE("clear", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	dynamic_bitset<TestType> bitset =
+	sul::dynamic_bitset<TestType> bitset =
 	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
 	CAPTURE(bitset);
 
@@ -304,15 +304,15 @@ TEMPLATE_TEST_CASE("clear", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 TEMPLATE_TEST_CASE("push_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	std::tuple<dynamic_bitset<TestType>, dynamic_bitset<TestType>> values =
+	std::tuple<sul::dynamic_bitset<TestType>, sul::dynamic_bitset<TestType>> values =
 	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
 	                     randomDynamicBitset<TestType>(SEED),
 	                     randomDynamicBitset<TestType>(1, 2 * bits_number<TestType>, SEED + 1)));
-	dynamic_bitset<TestType>& bitset = std::get<0>(values);
-	dynamic_bitset<TestType>& to_push = std::get<1>(values);
+	sul::dynamic_bitset<TestType>& bitset = std::get<0>(values);
+	sul::dynamic_bitset<TestType>& to_push = std::get<1>(values);
 	CAPTURE(bitset, to_push);
 
-	const dynamic_bitset<TestType> bitset_copy = bitset;
+	const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 	size_t size = bitset.size();
 
 	// new bits added
@@ -339,7 +339,7 @@ TEMPLATE_TEST_CASE("pop_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 	SECTION("empty bitset")
 	{
-		dynamic_bitset<TestType> bitset;
+		sul::dynamic_bitset<TestType> bitset;
 
 		bitset.pop_back();
 		REQUIRE(bitset.empty());
@@ -347,15 +347,15 @@ TEMPLATE_TEST_CASE("pop_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 	SECTION("non-empty bitset")
 	{
-		std::tuple<dynamic_bitset<TestType>, size_t> values =
+		std::tuple<sul::dynamic_bitset<TestType>, size_t> values =
 		  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
 		                     randomDynamicBitset<TestType>(SEED),
 		                     randomInt<TestType>(1, 2 * bits_number<TestType>, SEED + 1)));
-		dynamic_bitset<TestType>& bitset = std::get<0>(values);
+		sul::dynamic_bitset<TestType>& bitset = std::get<0>(values);
 		size_t to_pop = std::min(bitset.size(), std::get<1>(values));
 		CAPTURE(bitset, to_pop);
 
-		const dynamic_bitset<TestType> bitset_copy = bitset;
+		const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 		size_t size = bitset.size();
 
 		// bits removed
@@ -379,10 +379,10 @@ TEMPLATE_TEST_CASE("pop_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	dynamic_bitset<TestType> bitset =
+	sul::dynamic_bitset<TestType> bitset =
 	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
 	CAPTURE(bitset);
-	const dynamic_bitset<TestType> bitset_copy = bitset;
+	const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 
 	SECTION("one value")
 	{
@@ -531,8 +531,8 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 	const size_t bits_to_take = std::get<2>(values);
 	CAPTURE(value1, value2, bits_to_take);
 
-	dynamic_bitset<TestType> bitset1(bits_to_take, value1);
-	const dynamic_bitset<TestType> bitset2(bits_to_take, value2);
+	sul::dynamic_bitset<TestType> bitset1(bits_to_take, value1);
+	const sul::dynamic_bitset<TestType> bitset2(bits_to_take, value2);
 	CAPTURE(bitset1, bitset2);
 
 	SECTION("assignement operators")
@@ -594,7 +594,7 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 	{
 		SECTION("operator&")
 		{
-			const dynamic_bitset<TestType> bitset = bitset1 & bitset2;
+			const sul::dynamic_bitset<TestType> bitset = bitset1 & bitset2;
 			const unsigned long long value = value1 & value2;
 
 			// check bits
@@ -607,7 +607,7 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 
 		SECTION("operator|")
 		{
-			const dynamic_bitset<TestType> bitset = bitset1 | bitset2;
+			const sul::dynamic_bitset<TestType> bitset = bitset1 | bitset2;
 			const unsigned long long value = value1 | value2;
 
 			// check bits
@@ -620,7 +620,7 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 
 		SECTION("operator^")
 		{
-			const dynamic_bitset<TestType> bitset = bitset1 ^ bitset2;
+			const sul::dynamic_bitset<TestType> bitset = bitset1 ^ bitset2;
 			const unsigned long long value = value1 ^ value2;
 
 			// check bits
@@ -633,7 +633,7 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 
 		SECTION("operator-")
 		{
-			const dynamic_bitset<TestType> bitset = bitset1 - bitset2;
+			const sul::dynamic_bitset<TestType> bitset = bitset1 - bitset2;
 			const unsigned long long value = value1 & ~value2;
 
 			// check bits
@@ -652,11 +652,11 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 
 	SECTION("null shifts")
 	{
-		dynamic_bitset<TestType> bitset =
+		sul::dynamic_bitset<TestType> bitset =
 		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
 		CAPTURE(bitset);
 
-		dynamic_bitset<TestType> bitset_copy = bitset;
+		sul::dynamic_bitset<TestType> bitset_copy = bitset;
 
 		SECTION("assignement operators")
 		{
@@ -668,7 +668,7 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 
 		SECTION("binary operators")
 		{
-			dynamic_bitset<TestType> result = bitset << 0;
+			sul::dynamic_bitset<TestType> result = bitset << 0;
 			REQUIRE(bitset == bitset_copy);
 			result = bitset >> 0;
 			REQUIRE(bitset == bitset_copy);
@@ -687,7 +687,7 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 		const size_t shift = std::get<2>(values);
 		CAPTURE(value, bits_to_take, shift);
 
-		dynamic_bitset<TestType> bitset(bits_to_take, value);
+		sul::dynamic_bitset<TestType> bitset(bits_to_take, value);
 		CAPTURE(bitset);
 
 		SECTION("assignement operators")
@@ -726,7 +726,7 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 		{
 			SECTION("operator<<")
 			{
-				const dynamic_bitset<TestType> shifted_bitset = bitset << shift;
+				const sul::dynamic_bitset<TestType> shifted_bitset = bitset << shift;
 				const unsigned long long shifted_value = value << shift;
 
 				// check bits
@@ -739,7 +739,7 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 
 			SECTION("operator>>")
 			{
-				const dynamic_bitset<TestType> shifted_bitset = bitset >> shift;
+				const sul::dynamic_bitset<TestType> shifted_bitset = bitset >> shift;
 				const unsigned long long shifted_value =
 				  (value
 				   & (~static_cast<unsigned long long>(0)
@@ -768,7 +768,7 @@ TEMPLATE_TEST_CASE("operator~", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 	const size_t bits_to_take = std::get<1>(values);
 	CAPTURE(value, bits_to_take);
 
-	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	sul::dynamic_bitset<TestType> bitset(bits_to_take, value);
 	CAPTURE(bitset);
 
 	// operator~
@@ -786,7 +786,7 @@ TEMPLATE_TEST_CASE("operator~", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	dynamic_bitset<TestType> bitset = GENERATE(take(
+	sul::dynamic_bitset<TestType> bitset = GENERATE(take(
 	  RANDOM_VECTORS_TO_TEST,
 	  randomDynamicBitset<TestType>(3 * bits_number<TestType>, 8 * bits_number<TestType>, SEED)));
 	CAPTURE(bitset);
@@ -799,7 +799,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 		const size_t len = std::get<1>(values) % (bitset.size() - pos);
 		CAPTURE(pos, len);
 
-		const dynamic_bitset<TestType> bitset_copy = bitset;
+		const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 
 		SECTION("set")
 		{
@@ -895,7 +895,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1))) % bitset.size();
 		CAPTURE(pos);
 
-		const dynamic_bitset<TestType> bitset_copy = bitset;
+		const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 
 		SECTION("set")
 		{
@@ -974,7 +974,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 
 		SECTION("flip")
 		{
-			const dynamic_bitset<TestType> bitset_copy = bitset;
+			const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 			bitset.flip();
 
 			// check bits
@@ -998,7 +998,7 @@ TEMPLATE_TEST_CASE("test", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 	const size_t bits_to_take = std::get<1>(values);
 	CAPTURE(value, bits_to_take);
 
-	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	sul::dynamic_bitset<TestType> bitset(bits_to_take, value);
 	CAPTURE(bitset);
 
 	// check
@@ -1021,7 +1021,7 @@ TEMPLATE_TEST_CASE("test_set", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 	const bool set_to = GENERATE(true, false);
 	CAPTURE(value, bits_to_take, set_to);
 
-	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	sul::dynamic_bitset<TestType> bitset(bits_to_take, value);
 	CAPTURE(bitset);
 
 	// check
@@ -1037,7 +1037,7 @@ TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 {
 	SECTION("empty bitset")
 	{
-		dynamic_bitset<TestType> bitset;
+		sul::dynamic_bitset<TestType> bitset;
 		CAPTURE(bitset);
 
 		REQUIRE(bitset.all());
@@ -1053,7 +1053,7 @@ TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 		       randomInt<size_t>(3 * bits_number<TestType>, 8 * bits_number<TestType>, SEED)));
 		CAPTURE(bitset_size);
 
-		dynamic_bitset<TestType> bitset(bitset_size);
+		sul::dynamic_bitset<TestType> bitset(bitset_size);
 		CAPTURE(bitset);
 
 		SECTION("all bits on")
@@ -1092,14 +1092,14 @@ TEMPLATE_TEST_CASE("count", "[dynamic_bitset][libpopcnt][builtin]", uint16_t, ui
 
 	SECTION("empty bitset")
 	{
-		dynamic_bitset<TestType> bitset;
+		sul::dynamic_bitset<TestType> bitset;
 
 		REQUIRE(bitset.count() == 0);
 	}
 
 	SECTION("non-empty bitset")
 	{
-		dynamic_bitset<TestType> bitset =
+		sul::dynamic_bitset<TestType> bitset =
 		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
 		CAPTURE(bitset);
 
@@ -1124,7 +1124,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 	const size_t bits_to_take = std::get<1>(values);
 	CAPTURE(value, bits_to_take);
 
-	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	sul::dynamic_bitset<TestType> bitset(bits_to_take, value);
 	CAPTURE(bitset);
 
 	SECTION("access")
@@ -1140,7 +1140,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 	{
 		const unsigned long long other_value =
 		  GENERATE(take(1, randomInt<unsigned long long>(SEED + 2)));
-		dynamic_bitset<TestType> other_bitset(bits_to_take, other_value);
+		sul::dynamic_bitset<TestType> other_bitset(bits_to_take, other_value);
 		CAPTURE(other_bitset);
 
 		SECTION("with bool")
@@ -1166,10 +1166,10 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 	{
 		const unsigned long long other_value =
 		  GENERATE(take(1, randomInt<unsigned long long>(SEED + 2)));
-		dynamic_bitset<TestType> other_bitset(bits_to_take, other_value);
+		sul::dynamic_bitset<TestType> other_bitset(bits_to_take, other_value);
 		CAPTURE(other_bitset);
 
-		dynamic_bitset<TestType> bitset_copy = bitset;
+		sul::dynamic_bitset<TestType> bitset_copy = bitset;
 
 		SECTION("operator&=")
 		{
@@ -1274,7 +1274,7 @@ TEMPLATE_TEST_CASE("size num_blocks empty capacity",
 	const size_t bits_to_take = std::get<1>(values);
 	CAPTURE(value, bits_to_take);
 
-	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	sul::dynamic_bitset<TestType> bitset(bits_to_take, value);
 	CAPTURE(bitset);
 
 	// size
@@ -1283,7 +1283,7 @@ TEMPLATE_TEST_CASE("size num_blocks empty capacity",
 	// num_blocks
 	const size_t num_blocks =
 	  bits_to_take
-	    / bits_number<TestType> + static_cast<size_t>(bits_to_take % bits_number<TestType>> 0);
+	    / bits_number<TestType> + static_cast<size_t>(bits_to_take % bits_number<TestType> > 0);
 	REQUIRE(bitset.num_blocks() == num_blocks);
 
 	const size_t old_capacity = bitset.capacity();
@@ -1300,7 +1300,7 @@ TEMPLATE_TEST_CASE("reserve shrink_to_fit", "[dynamic_bitset]", uint16_t, uint32
 	  take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(1, 8 * bits_number<TestType>, SEED)));
 	CAPTURE(size);
 
-	dynamic_bitset<TestType> bitset;
+	sul::dynamic_bitset<TestType> bitset;
 	bitset.reserve(size);
 
 	REQUIRE(bitset.capacity() > 0);
@@ -1315,11 +1315,11 @@ TEMPLATE_TEST_CASE("is_subset_of is_proper_subset_of",
                    uint64_t)
 {
 	CAPTURE(SEED);
-	dynamic_bitset<TestType> bitset =
+	sul::dynamic_bitset<TestType> bitset =
 	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
 	CAPTURE(bitset);
 
-	const dynamic_bitset<TestType> bitset_copy = bitset;
+	const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 
 	SECTION("subset")
 	{
@@ -1350,7 +1350,7 @@ TEMPLATE_TEST_CASE("is_subset_of is_proper_subset_of",
 	{
 		if(!bitset.all())
 		{
-			const dynamic_bitset<TestType> not_bitset = ~bitset;
+			const sul::dynamic_bitset<TestType> not_bitset = ~bitset;
 			const size_t bit_to_set =
 			  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1)))
 			  % not_bitset.count();
@@ -1370,7 +1370,7 @@ TEMPLATE_TEST_CASE("is_subset_of is_proper_subset_of",
 TEMPLATE_TEST_CASE("intersects", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	dynamic_bitset<TestType> bitset =
+	sul::dynamic_bitset<TestType> bitset =
 	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
 	CAPTURE(bitset);
 
@@ -1380,7 +1380,7 @@ TEMPLATE_TEST_CASE("intersects", "[dynamic_bitset]", uint16_t, uint32_t, uint64_
 		bitset.push_back(true);
 	}
 
-	const dynamic_bitset<TestType> bitset_copy = bitset;
+	const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 
 	REQUIRE(bitset.intersects(bitset_copy));
 
@@ -1414,7 +1414,7 @@ TEMPLATE_TEST_CASE("find_first find_next",
 
 	SECTION("empty-bitset")
 	{
-		dynamic_bitset<TestType> bitset;
+		sul::dynamic_bitset<TestType> bitset;
 
 		REQUIRE(bitset.find_first() == bitset.npos);
 		REQUIRE(bitset.find_next(0) == bitset.npos);
@@ -1430,7 +1430,7 @@ TEMPLATE_TEST_CASE("find_first find_next",
 		const size_t second_bit_pos = first_bit_pos + 1 + std::get<1>(values);
 		CAPTURE(first_bit_pos, second_bit_pos);
 
-		dynamic_bitset<TestType> bitset(second_bit_pos + 12);
+		sul::dynamic_bitset<TestType> bitset(second_bit_pos + 12);
 		REQUIRE(bitset.find_first() == bitset.npos);
 		bitset.set(first_bit_pos);
 		bitset.set(second_bit_pos);
@@ -1444,18 +1444,18 @@ TEMPLATE_TEST_CASE("find_first find_next",
 TEMPLATE_TEST_CASE("swap", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	const std::tuple<dynamic_bitset<TestType>, dynamic_bitset<TestType>> bitsets =
+	const std::tuple<sul::dynamic_bitset<TestType>, sul::dynamic_bitset<TestType>> bitsets =
 	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
 	                     randomDynamicBitset<TestType>(SEED),
 	                     randomDynamicBitset<TestType>(SEED + 1)));
-	dynamic_bitset<TestType> bitset1 = std::get<0>(bitsets);
-	dynamic_bitset<TestType> bitset2 = std::get<1>(bitsets);
+	sul::dynamic_bitset<TestType> bitset1 = std::get<0>(bitsets);
+	sul::dynamic_bitset<TestType> bitset2 = std::get<1>(bitsets);
 	CAPTURE(bitset1, bitset2);
 
 	SECTION("member function")
 	{
-		const dynamic_bitset<TestType> bitset1_copy = bitset1;
-		const dynamic_bitset<TestType> bitset2_copy = bitset2;
+		const sul::dynamic_bitset<TestType> bitset1_copy = bitset1;
+		const sul::dynamic_bitset<TestType> bitset2_copy = bitset2;
 		bitset1.swap(bitset2);
 		REQUIRE(bitset1 == bitset2_copy);
 		REQUIRE(bitset2 == bitset1_copy);
@@ -1463,8 +1463,8 @@ TEMPLATE_TEST_CASE("swap", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 	SECTION("external function")
 	{
-		const dynamic_bitset<TestType> bitset1_copy = bitset1;
-		const dynamic_bitset<TestType> bitset2_copy = bitset2;
+		const sul::dynamic_bitset<TestType> bitset1_copy = bitset1;
+		const sul::dynamic_bitset<TestType> bitset2_copy = bitset2;
 		swap(bitset1, bitset2);
 		REQUIRE(bitset1 == bitset2_copy);
 		REQUIRE(bitset2 == bitset1_copy);
@@ -1473,7 +1473,7 @@ TEMPLATE_TEST_CASE("swap", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 TEMPLATE_TEST_CASE("get_allocator", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	dynamic_bitset<TestType> bitset;
+	sul::dynamic_bitset<TestType> bitset;
 	static_cast<void>(bitset.get_allocator()); // avoid unused warnings
 }
 
@@ -1488,7 +1488,7 @@ TEMPLATE_TEST_CASE("to_string", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 	const size_t bits_to_take = std::get<1>(values);
 	CAPTURE(value, bits_to_take);
 
-	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	sul::dynamic_bitset<TestType> bitset(bits_to_take, value);
 	CAPTURE(bitset);
 
 	std::string string;
@@ -1513,7 +1513,7 @@ TEMPLATE_TEST_CASE("iterate_bits_on", "[dynamic_bitset]", uint16_t, uint32_t, ui
 	const size_t bits_to_take = std::get<1>(values);
 	CAPTURE(value, bits_to_take);
 
-	dynamic_bitset<TestType> bitset(bits_to_take, value);
+	sul::dynamic_bitset<TestType> bitset(bits_to_take, value);
 	CAPTURE(bitset);
 
 	SECTION("return void")
@@ -1538,9 +1538,9 @@ TEMPLATE_TEST_CASE("iterate_bits_on", "[dynamic_bitset]", uint16_t, uint32_t, ui
 
 		SECTION("parameters")
 		{
-			dynamic_bitset<TestType> check_bitset(bits_to_take);
+			sul::dynamic_bitset<TestType> check_bitset(bits_to_take);
 			bitset.iterate_bits_on(
-			  [](size_t bit_pos, dynamic_bitset<TestType>& check_bitset_) {
+			  [](size_t bit_pos, sul::dynamic_bitset<TestType>& check_bitset_) {
 				  check_bitset_[bit_pos] = true;
 			  },
 			  check_bitset);
@@ -1581,10 +1581,10 @@ TEMPLATE_TEST_CASE("iterate_bits_on", "[dynamic_bitset]", uint16_t, uint32_t, ui
 		{
 			size_t bit_count = 0;
 			size_t last_bit_pos = 0;
-			dynamic_bitset<TestType> check_bitset(bitset.size());
+			sul::dynamic_bitset<TestType> check_bitset(bitset.size());
 			bitset.iterate_bits_on(
 			  [](size_t bit_pos,
-			     dynamic_bitset<TestType>& check_bitset_,
+			     sul::dynamic_bitset<TestType>& check_bitset_,
 			     size_t& bit_count_,
 			     size_t& last_bit_pos_,
 			     const size_t stop_at_bit_) {
@@ -1610,20 +1610,20 @@ TEMPLATE_TEST_CASE("iterate_bits_on", "[dynamic_bitset]", uint16_t, uint32_t, ui
 TEMPLATE_TEST_CASE("operator== operator!=", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	dynamic_bitset<TestType> bitset =
+	sul::dynamic_bitset<TestType> bitset =
 	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
 	CAPTURE(bitset);
 
 	SECTION("same")
 	{
-		const dynamic_bitset<TestType> bitset_copy = bitset;
+		const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 		REQUIRE(bitset == bitset_copy);
 		REQUIRE_FALSE(bitset != bitset_copy);
 	}
 
 	SECTION("different size and same bits")
 	{
-		const dynamic_bitset<TestType> bitset_copy = bitset;
+		const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 		bitset.push_back(true);
 		REQUIRE_FALSE(bitset == bitset_copy);
 		REQUIRE_FALSE(bitset_copy == bitset);
@@ -1637,7 +1637,7 @@ TEMPLATE_TEST_CASE("operator== operator!=", "[dynamic_bitset]", uint16_t, uint32
 		{
 			bitset.push_back(true);
 		}
-		const dynamic_bitset<TestType> bitset_copy = bitset;
+		const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 
 		size_t pos =
 		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1))) % bitset.size();
@@ -1660,8 +1660,8 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 
 	SECTION("2 empty bitsets")
 	{
-		const dynamic_bitset<TestType> bitset1;
-		const dynamic_bitset<TestType> bitset2;
+		const sul::dynamic_bitset<TestType> bitset1;
+		const sul::dynamic_bitset<TestType> bitset2;
 
 		REQUIRE_FALSE(bitset1 < bitset2);
 		REQUIRE_FALSE(bitset2 < bitset1);
@@ -1676,9 +1676,9 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 
 	SECTION("1 empty bitset")
 	{
-		const dynamic_bitset<TestType> bitset =
+		const sul::dynamic_bitset<TestType> bitset =
 		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
-		const dynamic_bitset<TestType> empty_bitset;
+		const sul::dynamic_bitset<TestType> empty_bitset;
 		CAPTURE(bitset);
 
 		REQUIRE(empty_bitset < bitset);
@@ -1705,8 +1705,8 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 
 		SECTION("same")
 		{
-			const dynamic_bitset<TestType> bitset1(bits_to_take, value1);
-			const dynamic_bitset<TestType> bitset2(bits_to_take, value1);
+			const sul::dynamic_bitset<TestType> bitset1(bits_to_take, value1);
+			const sul::dynamic_bitset<TestType> bitset2(bits_to_take, value1);
 
 			REQUIRE_FALSE(bitset1 < bitset2);
 			REQUIRE_FALSE(bitset2 < bitset1);
@@ -1721,8 +1721,8 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 
 		SECTION("different size and same bits")
 		{
-			const dynamic_bitset<TestType> bitset1(bits_to_take, value1);
-			dynamic_bitset<TestType> bitset2(bits_to_take, value1);
+			const sul::dynamic_bitset<TestType> bitset1(bits_to_take, value1);
+			sul::dynamic_bitset<TestType> bitset2(bits_to_take, value1);
 			const bool added_value = GENERATE(true, false);
 			CAPTURE(added_value);
 			bitset2.push_back(added_value);
@@ -1740,8 +1740,8 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 
 		SECTION("same size and different bits")
 		{
-			const dynamic_bitset<TestType> bitset1(bits_to_take, value1);
-			const dynamic_bitset<TestType> bitset2(bits_to_take, value2);
+			const sul::dynamic_bitset<TestType> bitset1(bits_to_take, value1);
+			const sul::dynamic_bitset<TestType> bitset2(bits_to_take, value2);
 			if(value1 < value2)
 			{
 				REQUIRE(bitset1 < bitset2);
@@ -1772,8 +1772,8 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 		{
 			SECTION("difference in common blocks")
 			{
-				dynamic_bitset<TestType> bitset1(bits_to_take, value1);
-				dynamic_bitset<TestType> bitset2(bits_to_take, value1);
+				sul::dynamic_bitset<TestType> bitset1(bits_to_take, value1);
+				sul::dynamic_bitset<TestType> bitset2(bits_to_take, value1);
 
 				// make bitset1 < bitset2
 				const size_t bit_pos =
@@ -1796,7 +1796,7 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 				const bool bitset_to_add = GENERATE(true, false);
 				CAPTURE(bits_to_add, bitset_to_add);
 
-				dynamic_bitset<TestType>& longest_bitset = bitset_to_add ? bitset1 : bitset2;
+				sul::dynamic_bitset<TestType>& longest_bitset = bitset_to_add ? bitset1 : bitset2;
 				for(size_t i = 0; i < bits_to_add; ++i)
 				{
 					longest_bitset.push_back(false);
@@ -1815,10 +1815,10 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 
 			SECTION("difference in extra blocks")
 			{
-				dynamic_bitset<TestType> longest_bitset(bits_to_take, value1);
-				dynamic_bitset<TestType> bitset(bits_to_take, value1);
+				sul::dynamic_bitset<TestType> longest_bitset(bits_to_take, value1);
+				sul::dynamic_bitset<TestType> bitset(bits_to_take, value1);
 
-				dynamic_bitset<TestType> bits_to_add =
+				sul::dynamic_bitset<TestType> bits_to_add =
 				  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
 				                randomDynamicBitset<TestType>(1, 2 * bits_number<TestType>, SEED)));
 				CAPTURE(bits_to_add);
@@ -1848,7 +1848,7 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 TEMPLATE_TEST_CASE("ostream operator<<", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
-	dynamic_bitset<TestType> bitset =
+	sul::dynamic_bitset<TestType> bitset =
 	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
 	CAPTURE(bitset);
 
@@ -1879,7 +1879,7 @@ TEMPLATE_TEST_CASE("istream operator>>", "[dynamic_bitset]", uint16_t, uint32_t,
 	SECTION("invalid stream")
 	{
 		std::stringstream sstream;
-		dynamic_bitset<TestType> bitset;
+		sul::dynamic_bitset<TestType> bitset;
 		sstream >> bitset;
 		REQUIRE(bitset.empty());
 	}
@@ -1893,7 +1893,7 @@ TEMPLATE_TEST_CASE("istream operator>>", "[dynamic_bitset]", uint16_t, uint32_t,
 
 			std::stringstream sstream;
 			sstream.str(str);
-			dynamic_bitset<TestType> bitset;
+			sul::dynamic_bitset<TestType> bitset;
 			sstream >> bitset;
 			CAPTURE(bitset);
 
@@ -1921,7 +1921,7 @@ TEMPLATE_TEST_CASE("istream operator>>", "[dynamic_bitset]", uint16_t, uint32_t,
 			std::stringstream sstream;
 			sstream << str;
 			sstream << 'E';
-			dynamic_bitset<TestType> bitset;
+			sul::dynamic_bitset<TestType> bitset;
 			sstream >> bitset;
 			CAPTURE(bitset);
 
