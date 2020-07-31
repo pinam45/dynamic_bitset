@@ -63,7 +63,7 @@
 #	endif
 #endif
 
-#ifndef DYNAMIC_BITSET_NO_LIBPOPCNT
+#ifndef DYNAMIC_BITSET_NO_NAMESPACE
 /**
  * @brief      Simple Useful Libraries.
  */
@@ -3255,7 +3255,7 @@ constexpr void swap(dynamic_bitset<Block, Allocator>& bitset1,
 	bitset1.swap(bitset2);
 }
 
-#ifndef DYNAMIC_BITSET_NO_LIBPOPCNT
+#ifndef DYNAMIC_BITSET_NO_NAMESPACE
 } // namespace sul
 #endif
 
