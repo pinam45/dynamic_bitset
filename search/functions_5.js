@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['get_5fallocator_79',['get_allocator',['../classdynamic__bitset.html#aafb32ac305c7176e65fe9556396783d9',1,'dynamic_bitset']]]
+  ['get_5fallocator_81',['get_allocator',['../classsul_1_1dynamic__bitset.html#adf1f4bb9b0b56e87bab0ea0f279c1da2',1,'sul::dynamic_bitset']]]
 ];

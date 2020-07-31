@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['npos_124',['npos',['../classdynamic__bitset.html#a114fe123146295c0088abeca92d32c41',1,'dynamic_bitset']]]
+  ['npos_126',['npos',['../classsul_1_1dynamic__bitset.html#ae4364198f3e8e99f20a77d3bd504e77f',1,'sul::dynamic_bitset']]]
 ];

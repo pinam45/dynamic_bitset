@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['size_5ftype_128',['size_type',['../classdynamic__bitset.html#a3d0cbc967d8bceb7b3a8398d7cedcb4c',1,'dynamic_bitset']]]
+  ['size_5ftype_130',['size_type',['../classsul_1_1dynamic__bitset.html#a5959b3611fa6890de62e45acb30de65e',1,'sul::dynamic_bitset']]]
 ];

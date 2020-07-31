@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['find_5ffirst_15',['find_first',['../classdynamic__bitset.html#a22095c28668073bd69f94cc7d2829e9f',1,'dynamic_bitset']]],
-  ['find_5fnext_16',['find_next',['../classdynamic__bitset.html#a6f26cd9e2a307b95cd6bdc44e646b91e',1,'dynamic_bitset']]],
-  ['flip_17',['flip',['../classdynamic__bitset_1_1reference.html#a504f56987568978c5c2747c6dff1d5ee',1,'dynamic_bitset::reference::flip()'],['../classdynamic__bitset.html#aa6ccc2f43f590b260412310378183656',1,'dynamic_bitset::flip(size_type pos, size_type len)'],['../classdynamic__bitset.html#a794f07947d3a46371d321c85a4c706bc',1,'dynamic_bitset::flip(size_type pos)'],['../classdynamic__bitset.html#a4cb27ec51aea872e1d47f21ad1f392cd',1,'dynamic_bitset::flip()']]]
+  ['find_5ffirst_15',['find_first',['../classsul_1_1dynamic__bitset.html#aba7e714f3df741106cd860b6f90b782a',1,'sul::dynamic_bitset']]],
+  ['find_5fnext_16',['find_next',['../classsul_1_1dynamic__bitset.html#aa972905d35657d1aaf8514a3a06fb2ae',1,'sul::dynamic_bitset']]],
+  ['flip_17',['flip',['../classsul_1_1dynamic__bitset_1_1reference.html#acd36ecda4a65d8eb1b54d030a4c0e82f',1,'sul::dynamic_bitset::reference::flip()'],['../classsul_1_1dynamic__bitset.html#ae211a3734be27dd6ba3494c303515d09',1,'sul::dynamic_bitset::flip(size_type pos, size_type len)'],['../classsul_1_1dynamic__bitset.html#a23bfacc1621fdbcfb9aaf5f10af74d53',1,'sul::dynamic_bitset::flip(size_type pos)'],['../classsul_1_1dynamic__bitset.html#aa90d70ce348ccc4cdd796ca267f7f654',1,'sul::dynamic_bitset::flip()']]]
 ];

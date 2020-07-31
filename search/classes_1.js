@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['reference_65',['reference',['../classdynamic__bitset_1_1reference.html',1,'dynamic_bitset']]]
+  ['reference_66',['reference',['../classsul_1_1dynamic__bitset_1_1reference.html',1,'sul::dynamic_bitset']]]
 ];

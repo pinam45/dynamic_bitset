@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dynamic_5fbitset_64',['dynamic_bitset',['../classdynamic__bitset.html',1,'']]]
+  ['dynamic_5fbitset_65',['dynamic_bitset',['../classsul_1_1dynamic__bitset.html',1,'sul']]]
 ];

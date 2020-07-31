@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['allocator_5ftype_125',['allocator_type',['../classdynamic__bitset.html#ad2ff2ed02e5436c9dba3cc72f052e0fb',1,'dynamic_bitset']]]
+  ['allocator_5ftype_127',['allocator_type',['../classsul_1_1dynamic__bitset.html#a6566a8c2aceaab46d48e7abf2230111d',1,'sul::dynamic_bitset']]]
 ];

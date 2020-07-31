@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['bits_5fper_5fblock_5',['bits_per_block',['../classdynamic__bitset.html#a272d65656987ec16c8a440511210ff71',1,'dynamic_bitset']]],
-  ['block_5ftype_6',['block_type',['../classdynamic__bitset.html#a094e16e6f8b0c222050abac49a921b01',1,'dynamic_bitset']]]
+  ['bits_5fper_5fblock_5',['bits_per_block',['../classsul_1_1dynamic__bitset.html#ac9ec4543df9a63ecaf932cab778d523b',1,'sul::dynamic_bitset']]],
+  ['block_5ftype_6',['block_type',['../classsul_1_1dynamic__bitset.html#a36722ee70729db138fd825f0f2d12a52',1,'sul::dynamic_bitset']]]
 ];
