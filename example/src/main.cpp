@@ -5,7 +5,7 @@
 // See accompanying file LICENSE or copy at
 // https://opensource.org/licenses/MIT
 //
-#include <dynamic_bitset.hpp>
+#include <sul/dynamic_bitset.hpp>
 
 #include <iostream>
 

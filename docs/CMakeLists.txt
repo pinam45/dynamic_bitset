@@ -22,6 +22,7 @@ set(DOXYGEN_GENERATE_LATEX NO)
 set(DOXYGEN_GENERATE_XML NO)
 set(DOXYGEN_FULL_PATH_NAMES YES)
 set(DOXYGEN_STRIP_FROM_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../include")
+set(DOXYGEN_STRIP_FROM_INC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../include")
 set(DOXYGEN_ALIASES "\"complexity=@par Complexity^^\"")
 set(DOXYGEN_OUTPUT_LANGUAGE "English")
 set(DOXYGEN_MARKDOWN_SUPPORT YES)
@@ -29,7 +30,7 @@ set(DOXYGEN_MARKDOWN_SUPPORT YES)
 # Set files and generate target
 set(DOXYGEN_USE_MDFILE_AS_MAINPAGE README.md)
 doxygen_add_docs(dynamic_bitset_docs
-	"${CMAKE_CURRENT_SOURCE_DIR}/../include/dynamic_bitset.hpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/../include/sul/dynamic_bitset.hpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/../README.md"
 	COMMENT "Generate dynamic_bitset docs"
 )

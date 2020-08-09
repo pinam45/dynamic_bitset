@@ -16,7 +16,7 @@ To use this *dynamic bitset*, you will need a **C++17 compliant compiler**. If y
 ## Usage sample
 
 ```cpp
-#include <dynamic_bitset.hpp>
+#include <sul/dynamic_bitset.hpp>
 #include <iostream>
 #include <random>
 
@@ -47,7 +47,7 @@ Possible output:
     bitset2     = 001011011011
     common bits = 000010010011
 
-Test it on [godbolt.org](https://godbolt.org/z/6d7P3r).
+Test it on [godbolt.org](https://godbolt.org/z/qoETqY).
 
 ## Optional dependency
 
@@ -55,7 +55,7 @@ Optionally, [libpopcnt](https://github.com/kimwalisch/libpopcnt) will be used op
 
 ## Integration
 
-As it is a header-only library, the easiest way to integrate the *sul::dynamic_bitset* class in your project is to just copy *dynamic_bitset.hpp* in your project sources. Optionally, if you also copy *libpopcnt.h* from [libpopcnt](https://github.com/kimwalisch/libpopcnt), it will be used by default if it is available.
+As it is a header-only library, the easiest way to integrate the *sul::dynamic_bitset* class in your project is to just copy the [sul](include/sul) folder in your project sources. Optionally, if you also copy *libpopcnt.h* from [libpopcnt](https://github.com/kimwalisch/libpopcnt), it will be used by default if it is available.
 
 ## CMake integration
 

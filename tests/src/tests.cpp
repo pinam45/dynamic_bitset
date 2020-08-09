@@ -12,7 +12,7 @@
 #include "MultiTakeGenerator.hpp"
 
 #include <catch2/catch.hpp>
-#include <dynamic_bitset.hpp>
+#include <sul/dynamic_bitset.hpp>
 
 #include <algorithm>
 #include <vector>

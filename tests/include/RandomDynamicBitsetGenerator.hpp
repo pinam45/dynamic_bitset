@@ -9,7 +9,7 @@
 #define DYNAMIC_BITSET_RANDOMDYNAMICBITSETGENERATOR_HPP
 
 #include <catch2/catch.hpp>
-#include <dynamic_bitset.hpp>
+#include <sul/dynamic_bitset.hpp>
 
 #include <random>
 
