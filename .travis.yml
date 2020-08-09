@@ -10,7 +10,8 @@ matrix:
   include:
 
     # Coverage
-    - os: linux
+    - name: Coverage (linux - GCC 7)
+      os: linux
       compiler: gcc
       addons:
         apt:
@@ -35,7 +36,8 @@ matrix:
         - bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage reports"
 
     # Linux / GCC
-    - os: linux
+    - name: Linux - GCC 7
+      os: linux
       compiler: gcc
       addons:
         apt:
@@ -47,7 +49,8 @@ matrix:
       env:
         - COMPILER=g++-7
 
-    - os: linux
+    - name: Linux - GCC 8
+      os: linux
       compiler: gcc
       addons:
         apt:
@@ -59,7 +62,8 @@ matrix:
       env:
         - COMPILER=g++-8
 
-    - os: linux
+    - name: Linux - GCC 9
+      os: linux
       compiler: gcc
       addons:
         apt:
@@ -71,20 +75,22 @@ matrix:
       env:
         - COMPILER=g++-9
 
-#    - os: linux
-#      compiler: gcc
-#      addons:
-#        apt:
-#          sources:
-#            - ubuntu-toolchain-r-test
-#          packages:
-#            - g++-10
-#            - ninja-build
-#      env:
-#        - COMPILER=g++-10
+    - name: Linux - GCC 10
+      os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-10
+            - ninja-build
+      env:
+        - COMPILER=g++-10
 
     # Linux / Clang
-    - os: linux
+    - name: Linux - Clang 5
+      os: linux
       compiler: clang
       addons:
         apt:
@@ -98,7 +104,8 @@ matrix:
       env:
         - COMPILER=clang++-5.0
 
-    - os: linux
+    - name: Linux - Clang 6
+      os: linux
       compiler: clang
       addons:
         apt:
@@ -112,7 +119,8 @@ matrix:
       env:
         - COMPILER=clang++-6.0
 
-    - os: linux
+    - name: Linux - Clang 7
+      os: linux
       compiler: clang
       addons:
         apt:
@@ -126,7 +134,8 @@ matrix:
       env:
         - COMPILER=clang++-7
 
-    - os: linux
+    - name: Linux - Clang 8
+      os: linux
       compiler: clang
       addons:
         apt:
@@ -140,7 +149,8 @@ matrix:
       env:
         - COMPILER=clang++-8
 
-    - os: linux
+    - name: Linux - Clang 9
+      os: linux
       compiler: clang
       addons:
         apt:
@@ -154,21 +164,69 @@ matrix:
       env:
         - COMPILER=clang++-9
 
-      # OSX / Clang
-    - os: osx
+    - name: Linux - Clang 10
+      os: linux
+      compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-bionic-10
+          packages:
+            - clang-10
+            - g++-10
+            - ninja-build
+      env:
+        - COMPILER=clang++-10
+
+    # OSX / Xcode
+    - name: OSX - Xcode 10
+      os: osx
       osx_image: xcode10
 
-    - os: osx
+    - name: OSX - Xcode 10.1
+      os: osx
       osx_image: xcode10.1
 
-    - os: osx
+    - name: OSX - Xcode 10.2
+      os: osx
       osx_image: xcode10.2
 
-    - os: osx
+    - name: OSX - Xcode 10.3
+      os: osx
+      osx_image: xcode10.3
+
+    - name: OSX - Xcode 11
+      os: osx
+      osx_image: xcode11
+
+    - name: OSX - Xcode 11.1
+      os: osx
+      osx_image: xcode11.1
+
+    - name: OSX - Xcode 11.2
+      os: osx
       osx_image: xcode11.2
 
-    - os: osx
+    - name: OSX - Xcode 11.3
+      os: osx
       osx_image: xcode11.3
+
+    - name: OSX - Xcode 11.4
+      os: osx
+      osx_image: xcode11.4
+
+    - name: OSX - Xcode 11.5
+      os: osx
+      osx_image: xcode11.5
+
+    - name: OSX - Xcode 11.6
+      os: osx
+      osx_image: xcode11.6
+
+    - name: OSX - Xcode 12
+      os: osx
+      osx_image: xcode12
 
 script:
   - |
