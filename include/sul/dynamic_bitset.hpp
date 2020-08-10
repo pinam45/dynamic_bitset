@@ -5,8 +5,23 @@
 // See accompanying file LICENSE or copy at
 // https://opensource.org/licenses/MIT
 //
-#ifndef DYNAMIC_BITSET_DYNAMIC_BITSET_HPP
-#define DYNAMIC_BITSET_DYNAMIC_BITSET_HPP
+#ifndef SUL_DYNAMIC_BITSET_HPP
+#define SUL_DYNAMIC_BITSET_HPP
+
+/**
+ * @brief      @ref sul::dynamic_bitset version major.
+ */
+#define SUL_DYNAMIC_BITSET_VERSION_MAJOR 1
+
+/**
+ * @brief      @ref sul::dynamic_bitset version minor.
+ */
+#define SUL_DYNAMIC_BITSET_VERSION_MINOR 1
+
+/**
+ * @brief      @ref sul::dynamic_bitset version patch.
+ */
+#define SUL_DYNAMIC_BITSET_VERSION_PATCH 0
 
 /** @file
  * @brief      @ref sul::dynamic_bitset declaration and implementation.
@@ -3259,4 +3274,4 @@ constexpr void swap(dynamic_bitset<Block, Allocator>& bitset1,
 } // namespace sul
 #endif
 
-#endif //DYNAMIC_BITSET_DYNAMIC_BITSET_HPP
+#endif //SUL_DYNAMIC_BITSET_HPP
