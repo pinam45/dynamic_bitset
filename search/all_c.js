@@ -5,5 +5,8 @@ var searchData=
   ['size_56',['size',['../classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6',1,'sul::dynamic_bitset']]],
   ['size_5ftype_57',['size_type',['../classsul_1_1dynamic__bitset.html#a5959b3611fa6890de62e45acb30de65e',1,'sul::dynamic_bitset']]],
   ['sul_58',['sul',['../namespacesul.html',1,'']]],
-  ['swap_59',['swap',['../classsul_1_1dynamic__bitset.html#a7daf1c2c30ea9e5c888f288aec4e2ff3',1,'sul::dynamic_bitset::swap(dynamic_bitset&lt; Block, Allocator &gt; &amp;other)'],['../classsul_1_1dynamic__bitset.html#a5d89a65b063651ec9e2102c01f4ca24a',1,'sul::dynamic_bitset::swap(dynamic_bitset&lt; Block, Allocator &gt; &amp;bitset1, dynamic_bitset&lt; Block, Allocator &gt; &amp;bitset2)'],['../namespacesul.html#ab45bac1934592e5c646b0727d8d91923',1,'sul::swap()']]]
+  ['sul_5fdynamic_5fbitset_5fversion_5fmajor_59',['SUL_DYNAMIC_BITSET_VERSION_MAJOR',['../dynamic__bitset_8hpp.html#a7e5ee1d5e07a46b32bcf61d0dba5d026',1,'dynamic_bitset.hpp']]],
+  ['sul_5fdynamic_5fbitset_5fversion_5fminor_60',['SUL_DYNAMIC_BITSET_VERSION_MINOR',['../dynamic__bitset_8hpp.html#a448442dcfc71c220781987abb8886f9a',1,'dynamic_bitset.hpp']]],
+  ['sul_5fdynamic_5fbitset_5fversion_5fpatch_61',['SUL_DYNAMIC_BITSET_VERSION_PATCH',['../dynamic__bitset_8hpp.html#afa48b302d77cec0b253a37bff7951a0d',1,'dynamic_bitset.hpp']]],
+  ['swap_62',['swap',['../classsul_1_1dynamic__bitset.html#a7daf1c2c30ea9e5c888f288aec4e2ff3',1,'sul::dynamic_bitset::swap(dynamic_bitset&lt; Block, Allocator &gt; &amp;other)'],['../classsul_1_1dynamic__bitset.html#a5d89a65b063651ec9e2102c01f4ca24a',1,'sul::dynamic_bitset::swap(dynamic_bitset&lt; Block, Allocator &gt; &amp;bitset1, dynamic_bitset&lt; Block, Allocator &gt; &amp;bitset2)'],['../namespacesul.html#ab45bac1934592e5c646b0727d8d91923',1,'sul::swap()']]]
 ];

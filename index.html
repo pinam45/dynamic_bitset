@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">dynamic_bitset
-   &#160;<span id="projectnumber">1.0.0</span>
+   &#160;<span id="projectnumber">1.1.0</span>
    </div>
    <div id="projectbrief">Simple Useful Libraries: The C++17 header-only dynamic bitset</div>
   </td>
@@ -98,7 +98,7 @@ Requirements</h1>
 <p>To use this <em>dynamic bitset</em>, you will need a <b>C++17 compliant compiler</b>. If you use CMake and want to use the <em>dynamic bitset</em> as a subproject, you will need <b>CMake 3.10 or later</b>.</p>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Usage sample</h1>
-<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="dynamic__bitset_8hpp.html">dynamic_bitset.hpp</a>&gt;</span></div>
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="dynamic__bitset_8hpp.html">sul/dynamic_bitset.hpp</a>&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;random&gt;</span></div>
 <div class="line"> </div>
@@ -124,13 +124,13 @@ Usage sample</h1>
 </div><!-- fragment --><p>Possible output: </p><pre class="fragment">bitset1     = 100010110111
 bitset2     = 001011011011
 common bits = 000010010011
-</pre><p>Test it on <a href="https://godbolt.org/z/6d7P3r">godbolt.org</a>.</p>
+</pre><p>Test it on <a href="https://godbolt.org/z/qoETqY">godbolt.org</a>.</p>
 <h1><a class="anchor" id="autotoc_md3"></a>
 Optional dependency</h1>
 <p>Optionally, <a href="https://github.com/kimwalisch/libpopcnt">libpopcnt</a> will be used optimize the bits counting operations, if the header is available (<code>__has_include(&lt;libpopcnt.h&gt;)</code>) and <code>DYNAMIC_BITSET_NO_LIBPOPCNT</code> is not defined.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Integration</h1>
-<p>As it is a header-only library, the easiest way to integrate the <em><a class="el" href="classsul_1_1dynamic__bitset.html" title="Dynamic bitset.">sul::dynamic_bitset</a></em> class in your project is to just copy <em><a class="el" href="dynamic__bitset_8hpp.html" title="sul::dynamic_bitset declaration and implementation.">dynamic_bitset.hpp</a></em> in your project sources. Optionally, if you also copy <em>libpopcnt.h</em> from <a href="https://github.com/kimwalisch/libpopcnt">libpopcnt</a>, it will be used by default if it is available.</p>
+<p>As it is a header-only library, the easiest way to integrate the <em><a class="el" href="classsul_1_1dynamic__bitset.html" title="Dynamic bitset.">sul::dynamic_bitset</a></em> class in your project is to just copy the <a href="include/sul">sul</a> folder in your project sources. Optionally, if you also copy <em>libpopcnt.h</em> from <a href="https://github.com/kimwalisch/libpopcnt">libpopcnt</a>, it will be used by default if it is available.</p>
 <h1><a class="anchor" id="autotoc_md5"></a>
 CMake integration</h1>
 <p>If you use CMake and want to use the <em>dynamic bitset</em> as a subproject, clone the repository (or add it as a git submodule) in a sub-folder of your project. Then, in your <em>CMakeLists.txt</em> add: </p><div class="fragment"><div class="line">add_subdirectory(&lt;path_to_dynamic_bitset_folder&gt;)</div>
@@ -203,8 +203,8 @@ License</h1>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_a133b525f7a7bdee3a082be852d38822b"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#a133b525f7a7bdee3a082be852d38822b">sul::dynamic_bitset::push_back</a></div><div class="ttdeci">constexpr void push_back(bool value)</div><div class="ttdoc">Add a new bit with the value value at the end of the sul::dynamic_bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:1923</div></div>
-<div class="ttc" id="aclasssul_1_1dynamic__bitset_html"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a></div><div class="ttdoc">Dynamic bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:92</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_a133b525f7a7bdee3a082be852d38822b"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#a133b525f7a7bdee3a082be852d38822b">sul::dynamic_bitset::push_back</a></div><div class="ttdeci">constexpr void push_back(bool value)</div><div class="ttdoc">Add a new bit with the value value at the end of the sul::dynamic_bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:1938</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a></div><div class="ttdoc">Dynamic bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:107</div></div>
 <div class="ttc" id="adynamic__bitset_8hpp_html"><div class="ttname"><a href="dynamic__bitset_8hpp.html">dynamic_bitset.hpp</a></div><div class="ttdoc">sul::dynamic_bitset declaration and implementation.</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

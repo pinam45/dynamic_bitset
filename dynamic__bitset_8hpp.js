@@ -2,6 +2,9 @@ var dynamic__bitset_8hpp =
 [
     [ "dynamic_bitset", "classsul_1_1dynamic__bitset.html", "classsul_1_1dynamic__bitset" ],
     [ "reference", "classsul_1_1dynamic__bitset_1_1reference.html", "classsul_1_1dynamic__bitset_1_1reference" ],
+    [ "SUL_DYNAMIC_BITSET_VERSION_MAJOR", "dynamic__bitset_8hpp.html#a7e5ee1d5e07a46b32bcf61d0dba5d026", null ],
+    [ "SUL_DYNAMIC_BITSET_VERSION_MINOR", "dynamic__bitset_8hpp.html#a448442dcfc71c220781987abb8886f9a", null ],
+    [ "SUL_DYNAMIC_BITSET_VERSION_PATCH", "dynamic__bitset_8hpp.html#afa48b302d77cec0b253a37bff7951a0d", null ],
     [ "dynamic_bitset", "dynamic__bitset_8hpp.html#abaffd182ab6fdaddda7d549dd479a4cb", null ],
     [ "operator!=", "dynamic__bitset_8hpp.html#ad2d5ef9bea6555e3e2d3bb9692148e7d", null ],
     [ "operator&", "dynamic__bitset_8hpp.html#a724248cb7b68c989b01dc4b1d436200f", null ],
