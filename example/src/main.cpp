@@ -139,6 +139,10 @@ int main()
 	// get allocator
 	const sul::dynamic_bitset<uint32_t>::allocator_type allocator = a.get_allocator();
 
+	// get pointer to the underlying array of blocks
+	const uint32_t* data = a.data();
+	std::cout << "address of the underlying array of blocks: " << data << std::endl;
+
 	// declare bitset from string
 	sul::dynamic_bitset<uint32_t> b("011001010101");
 	std::cout << "b = " << b << std::endl;

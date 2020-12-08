@@ -1225,6 +1225,74 @@ public:
 	constexpr void iterate_bits_on(Function&& function, Parameters&&... parameters) const;
 
 	/**
+	 * @brief      Return a pointer to the underlying array serving as blocks storage.
+	 *
+	 * @details    The pointer is such that range [@ref data(); @ref data() + @ref num_blocks()) is
+	 *             always a valid range, even if the container is empty (@ref data() is not
+	 *             dereferenceable in that case).
+	 *
+	 *
+	 * @post       The bits past the end of the @ref sul::dynamic_bitset in the last block are
+	 *             guaranteed to be 0s, example:
+	 *             @code
+	 *             // random bitset of size 11
+	 *             std::minstd_rand rand(std::random_device{}());
+	 *             std::bernoulli_distribution dist;
+	 *             sul::dynamic_bitset<uint8_t> bitset;
+	 *             for(size_t i = 0; i < 11; ++i)
+	 *             {
+	 *                 bitset.push_back(dist(rand));
+	 *             }
+	 *
+	 *             // the bitset use 2 blocks of 8 bits
+	 *             // check that unused bits are set to 0
+	 *             assert(*(bitset.data() + 1) >> 3 == 0);
+	 *             @endcode
+	 *
+	 * @remark     If the @ref sul::dynamic_bitset is empty, this function may or may not return a
+	 *             null pointer.
+	 *
+	 * @return     A pointer to the underlying array serving as blocks storage
+	 *
+	 * @complexity Constant.
+	 */
+	[[nodiscard]] constexpr block_type* data() noexcept;
+
+	/**
+	 * @brief      Return a pointer to the underlying array serving as blocks storage.
+	 *
+	 * @details    The pointer is such that range [@ref data(); @ref data() + @ref num_blocks()) is
+	 *             always a valid range, even if the container is empty (@ref data() is not
+	 *             dereferenceable in that case).
+	 *
+	 *
+	 * @post       The bits past the end of the @ref sul::dynamic_bitset in the last block are
+	 *             guaranteed to be 0s, example:
+	 *             @code
+	 *             // random bitset of size 11
+	 *             std::minstd_rand rand(std::random_device{}());
+	 *             std::bernoulli_distribution dist;
+	 *             sul::dynamic_bitset<uint8_t> bitset;
+	 *             for(size_t i = 0; i < 11; ++i)
+	 *             {
+	 *                 bitset.push_back(dist(rand));
+	 *             }
+	 *
+	 *             // the bitset use 2 blocks of 8 bits
+	 *             // check that unused bits are set to 0
+	 *             assert(*(bitset.data() + 1) >> 3 == 0);
+	 *             @endcode
+	 *
+	 * @remark     If the @ref sul::dynamic_bitset is empty, this function may or may not return a
+	 *             null pointer.
+	 *
+	 * @return     A pointer to the underlying array serving as blocks storage
+	 *
+	 * @complexity Constant.
+	 */
+	[[nodiscard]] constexpr const block_type* data() const noexcept;
+
+	/**
 	 * @brief      Test if two @ref sul::dynamic_bitset have the same content.
 	 *
 	 * @param[in]  lhs         The left hand side @ref sul::dynamic_bitset of the operator
@@ -2671,6 +2739,21 @@ constexpr void dynamic_bitset<Block, Allocator>::iterate_bits_on(Function&& func
 		static_assert(dependent_false<Function>::value, "Function have invalid return type");
 		// return type should be void, or convertible to bool
 	}
+}
+
+template<typename Block, typename Allocator>
+constexpr typename dynamic_bitset<Block, Allocator>::block_type* dynamic_bitset<Block, Allocator>::
+  data() noexcept
+{
+	return m_blocks.data();
+}
+
+template<typename Block, typename Allocator>
+constexpr const typename dynamic_bitset<Block, Allocator>::block_type* dynamic_bitset<
+  Block,
+  Allocator>::data() const noexcept
+{
+	return m_blocks.data();
 }
 
 template<typename Block_, typename Allocator_>

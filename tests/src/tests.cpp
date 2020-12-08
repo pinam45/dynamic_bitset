@@ -29,11 +29,46 @@ template<typename T>
 constexpr size_t bits_number = std::numeric_limits<T>::digits;
 
 template<typename T>
-constexpr bool bit_value(T value, size_t bit_pos)
+static constexpr T zero_block = T(0);
+
+template<typename T>
+static constexpr T one_block = T(~zero_block<T>);
+
+template<typename T>
+constexpr bool bit_value(T value, size_t bit_pos) noexcept
 {
 	static_assert(std::is_unsigned<T>::value, "T is not an unsigned integral type");
 	assert(bit_pos < bits_number<T>);
 	return (value & (T(1) << bit_pos)) != T(0);
+}
+
+template<typename T>
+constexpr bool check_unused_bits(const sul::dynamic_bitset<T>& bitset) noexcept
+{
+	const size_t extra_bits = bitset.size() % sul::dynamic_bitset<T>::bits_per_block;
+	if(extra_bits > 0)
+	{
+		assert(bitset.data() != nullptr);
+		assert(bitset.num_blocks() > 0);
+		return (*(bitset.data() + bitset.num_blocks() - 1) & (one_block<T> << extra_bits))
+		       == zero_block<T>;
+	}
+	return true;
+}
+
+template<typename T>
+constexpr bool check_size(const sul::dynamic_bitset<T>& bitset) noexcept
+{
+	const size_t blocks_required =
+	  bitset.size() / sul::dynamic_bitset<T>::bits_per_block
+	  + static_cast<size_t>(bitset.size() % sul::dynamic_bitset<T>::bits_per_block > 0);
+	return blocks_required == bitset.num_blocks();
+}
+
+template<typename T>
+constexpr bool check_consistency(const sul::dynamic_bitset<T>& bitset) noexcept
+{
+	return check_unused_bits(bitset) && check_size(bitset);
 }
 
 TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
@@ -47,6 +82,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 		REQUIRE(bitset.empty());
 		REQUIRE(bitset.size() == 0);
 		REQUIRE(bitset.capacity() == 0);
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("nbits and init_val constructor")
@@ -69,6 +105,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 			CAPTURE(i);
 			REQUIRE(bitset[i] == bit_value(value, i));
 		}
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("initializer_list constructor")
@@ -86,6 +123,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 				CAPTURE(i);
 				REQUIRE(bitset[i] == bit_value(init_value, i));
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("two values")
@@ -109,6 +147,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 				}
 				++value_i;
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 	}
 
@@ -147,6 +186,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 				}
 
 				REQUIRE(bitset.to_string() == str);
+				REQUIRE(check_consistency(bitset));
 			}
 
 			SECTION("std::string")
@@ -161,6 +201,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 				}
 
 				REQUIRE(bitset.to_string() == str);
+				REQUIRE(check_consistency(bitset));
 			}
 
 			SECTION("const char*")
@@ -175,6 +216,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 				}
 
 				REQUIRE(bitset.to_string() == str);
+				REQUIRE(check_consistency(bitset));
 			}
 		}
 
@@ -197,6 +239,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 					CAPTURE(i);
 					REQUIRE(bitset[i] == bit_value(value, pos + i));
 				}
+				REQUIRE(check_consistency(bitset));
 			}
 
 			SECTION("std::string")
@@ -209,6 +252,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 					CAPTURE(i);
 					REQUIRE(bitset[i] == bit_value(value, pos + i));
 				}
+				REQUIRE(check_consistency(bitset));
 			}
 
 			SECTION("const char*")
@@ -221,6 +265,7 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 					CAPTURE(i);
 					REQUIRE(bitset[i] == bit_value(value, pos + i));
 				}
+				REQUIRE(check_consistency(bitset));
 			}
 		}
 	}
@@ -238,6 +283,7 @@ TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 		bitset.resize(0);
 		REQUIRE(bitset.empty());
 		REQUIRE(bitset.size() == 0);
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("resizing to the same size")
@@ -245,6 +291,7 @@ TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 		const size_t size_save = bitset.size();
 		bitset.resize(bitset.size());
 		REQUIRE(bitset.size() == size_save);
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("changing size")
@@ -271,6 +318,7 @@ TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 				CAPTURE(i);
 				REQUIRE(bitset[i] == new_values);
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("decrementing size")
@@ -285,6 +333,7 @@ TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 				CAPTURE(i);
 				REQUIRE(bitset[i] == bitset_copy[i]);
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 	}
 }
@@ -299,6 +348,7 @@ TEMPLATE_TEST_CASE("clear", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 	bitset.clear();
 	REQUIRE(bitset.empty());
 	REQUIRE(bitset.size() == 0);
+	REQUIRE(check_consistency(bitset));
 }
 
 TEMPLATE_TEST_CASE("push_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
@@ -331,6 +381,7 @@ TEMPLATE_TEST_CASE("push_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 		CAPTURE(i);
 		REQUIRE(bitset[i] == bitset_copy[i]);
 	}
+	REQUIRE(check_consistency(bitset));
 }
 
 TEMPLATE_TEST_CASE("pop_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
@@ -343,6 +394,7 @@ TEMPLATE_TEST_CASE("pop_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 		bitset.pop_back();
 		REQUIRE(bitset.empty());
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("non-empty bitset")
@@ -373,6 +425,7 @@ TEMPLATE_TEST_CASE("pop_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 			CAPTURE(i);
 			REQUIRE(bitset[i] == bitset_copy[i]);
 		}
+		REQUIRE(check_consistency(bitset));
 	}
 }
 
@@ -406,12 +459,14 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 			CAPTURE(i);
 			REQUIRE(bitset[i] == bitset_copy[i]);
 		}
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("empty initializer_list")
 	{
 		bitset.append({});
 		REQUIRE(bitset.size() == bitset_copy.size());
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("two values initializer_list")
@@ -444,6 +499,7 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 			CAPTURE(i);
 			REQUIRE(bitset[i] == bitset_copy[i]);
 		}
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("same iterators")
@@ -452,6 +508,7 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 		bitset.append(std::cbegin(values), std::cend(values));
 		REQUIRE(bitset.size() == bitset_copy.size());
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("random access iterators")
@@ -483,6 +540,7 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 			CAPTURE(i);
 			REQUIRE(bitset[i] == bitset_copy[i]);
 		}
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("bidirectional iterators")
@@ -515,6 +573,7 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 			CAPTURE(i);
 			REQUIRE(bitset[i] == bitset_copy[i]);
 		}
+		REQUIRE(check_consistency(bitset));
 	}
 }
 
@@ -548,6 +607,8 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 				CAPTURE(i);
 				REQUIRE(bitset1[i] == bit_value(value1, i));
 			}
+			REQUIRE(check_consistency(bitset1));
+			REQUIRE(check_consistency(bitset2));
 		}
 
 		SECTION("operator|=")
@@ -561,6 +622,8 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 				CAPTURE(i);
 				REQUIRE(bitset1[i] == bit_value(value1, i));
 			}
+			REQUIRE(check_consistency(bitset1));
+			REQUIRE(check_consistency(bitset2));
 		}
 
 		SECTION("operator^=")
@@ -574,6 +637,8 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 				CAPTURE(i);
 				REQUIRE(bitset1[i] == bit_value(value1, i));
 			}
+			REQUIRE(check_consistency(bitset1));
+			REQUIRE(check_consistency(bitset2));
 		}
 
 		SECTION("operator-=")
@@ -587,6 +652,8 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 				CAPTURE(i);
 				REQUIRE(bitset1[i] == bit_value(value1, i));
 			}
+			REQUIRE(check_consistency(bitset1));
+			REQUIRE(check_consistency(bitset2));
 		}
 	}
 
@@ -603,6 +670,7 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 				CAPTURE(i);
 				REQUIRE(bitset[i] == bit_value(value, i));
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("operator|")
@@ -616,6 +684,7 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 				CAPTURE(i);
 				REQUIRE(bitset[i] == bit_value(value, i));
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("operator^")
@@ -629,6 +698,7 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 				CAPTURE(i);
 				REQUIRE(bitset[i] == bit_value(value, i));
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("operator-")
@@ -642,6 +712,7 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 				CAPTURE(i);
 				REQUIRE(bitset[i] == bit_value(value, i));
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 	}
 }
@@ -664,6 +735,7 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 			REQUIRE(bitset == bitset_copy);
 			bitset >>= 0;
 			REQUIRE(bitset == bitset_copy);
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("binary operators")
@@ -672,6 +744,7 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 			REQUIRE(bitset == bitset_copy);
 			result = bitset >> 0;
 			REQUIRE(bitset == bitset_copy);
+			REQUIRE(check_consistency(bitset));
 		}
 	}
 
@@ -703,6 +776,7 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 					CAPTURE(i);
 					REQUIRE(bitset[i] == bit_value(value, i));
 				}
+				REQUIRE(check_consistency(bitset));
 			}
 
 			SECTION("operator>>=")
@@ -719,6 +793,7 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 					CAPTURE(i);
 					REQUIRE(bitset[i] == bit_value(value, i));
 				}
+				REQUIRE(check_consistency(bitset));
 			}
 		}
 
@@ -735,6 +810,7 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 					CAPTURE(i);
 					REQUIRE(shifted_bitset[i] == bit_value(shifted_value, i));
 				}
+				REQUIRE(check_consistency(bitset));
 			}
 
 			SECTION("operator>>")
@@ -752,6 +828,7 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 					CAPTURE(i);
 					REQUIRE(shifted_bitset[i] == bit_value(shifted_value, i));
 				}
+				REQUIRE(check_consistency(bitset));
 			}
 		}
 	}
@@ -781,6 +858,7 @@ TEMPLATE_TEST_CASE("operator~", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 		CAPTURE(i);
 		REQUIRE(bitset[i] == bit_value(value, i));
 	}
+	REQUIRE(check_consistency(bitset));
 }
 
 TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
@@ -830,6 +908,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 				CAPTURE(i);
 				REQUIRE(bitset[i] == bitset_copy[i]);
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("reset")
@@ -858,6 +937,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 				CAPTURE(i);
 				REQUIRE(bitset[i] == bitset_copy[i]);
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("flip")
@@ -886,6 +966,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 				CAPTURE(i);
 				REQUIRE(bitset[i] == bitset_copy[i]);
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 	}
 
@@ -915,6 +996,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 				CAPTURE(i);
 				REQUIRE(bitset[i] == bitset_copy[i]);
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("reset")
@@ -933,6 +1015,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 				CAPTURE(i);
 				REQUIRE(bitset[i] == bitset_copy[i]);
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("flip")
@@ -951,6 +1034,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 				CAPTURE(i);
 				REQUIRE(bitset[i] == bitset_copy[i]);
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 	}
 
@@ -962,6 +1046,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 
 			// check bits
 			REQUIRE(bitset.all());
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("reset")
@@ -970,6 +1055,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 
 			// check bits
 			REQUIRE(bitset.none());
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("flip")
@@ -983,6 +1069,7 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 				CAPTURE(i);
 				REQUIRE(bitset[i] != bitset_copy[i]);
 			}
+			REQUIRE(check_consistency(bitset));
 		}
 	}
 }
@@ -1031,6 +1118,7 @@ TEMPLATE_TEST_CASE("test_set", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 		REQUIRE(bitset.test_set(i, set_to) == bit_value(value, i));
 		REQUIRE(bitset[i] == set_to);
 	}
+	REQUIRE(check_consistency(bitset));
 }
 
 TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
@@ -1134,6 +1222,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 			CAPTURE(i);
 			REQUIRE(bitset[i] == bit_value(value, i));
 		}
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("reference operator=")
@@ -1150,6 +1239,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 				bitset[i] = other_bitset.test(i);
 			}
 			REQUIRE(bitset == other_bitset);
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("with reference")
@@ -1159,6 +1249,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 				bitset[i] = other_bitset[i];
 			}
 			REQUIRE(bitset == other_bitset);
+			REQUIRE(check_consistency(bitset));
 		}
 	}
 
@@ -1180,6 +1271,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 
 			bitset_copy &= other_bitset;
 			REQUIRE(bitset == bitset_copy);
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("operator|=")
@@ -1191,6 +1283,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 
 			bitset_copy |= other_bitset;
 			REQUIRE(bitset == bitset_copy);
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("operator^=")
@@ -1202,6 +1295,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 
 			bitset_copy ^= other_bitset;
 			REQUIRE(bitset == bitset_copy);
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("operator-=")
@@ -1213,6 +1307,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 
 			bitset_copy -= other_bitset;
 			REQUIRE(bitset == bitset_copy);
+			REQUIRE(check_consistency(bitset));
 		}
 	}
 
@@ -1223,6 +1318,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 			CAPTURE(i);
 			REQUIRE(~bitset[i] == !bit_value(value, i));
 		}
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("set reset flip assign")
@@ -1235,18 +1331,21 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 		{
 			bitset[pos].set();
 			REQUIRE(bitset[pos] == true);
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("reset")
 		{
 			bitset[pos].reset();
 			REQUIRE(bitset[pos] == false);
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("flip")
 		{
 			bitset[pos].flip();
 			REQUIRE(bitset[pos] == !bit_value(value, pos));
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("assign")
@@ -1255,6 +1354,7 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 			CAPTURE(new_value);
 			bitset[pos].assign(new_value);
 			REQUIRE(bitset[pos] == new_value);
+			REQUIRE(check_consistency(bitset));
 		}
 	}
 }
@@ -1306,6 +1406,7 @@ TEMPLATE_TEST_CASE("reserve shrink_to_fit", "[dynamic_bitset]", uint16_t, uint32
 	REQUIRE(bitset.capacity() > 0);
 
 	bitset.shrink_to_fit();
+	REQUIRE(check_consistency(bitset));
 }
 
 TEMPLATE_TEST_CASE("is_subset_of is_proper_subset_of",
@@ -1459,6 +1560,8 @@ TEMPLATE_TEST_CASE("swap", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 		bitset1.swap(bitset2);
 		REQUIRE(bitset1 == bitset2_copy);
 		REQUIRE(bitset2 == bitset1_copy);
+		REQUIRE(check_consistency(bitset1));
+		REQUIRE(check_consistency(bitset2));
 	}
 
 	SECTION("external function")
@@ -1468,6 +1571,8 @@ TEMPLATE_TEST_CASE("swap", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 		swap(bitset1, bitset2);
 		REQUIRE(bitset1 == bitset2_copy);
 		REQUIRE(bitset2 == bitset1_copy);
+		REQUIRE(check_consistency(bitset1));
+		REQUIRE(check_consistency(bitset2));
 	}
 }
 
@@ -1604,6 +1709,37 @@ TEMPLATE_TEST_CASE("iterate_bits_on", "[dynamic_bitset]", uint16_t, uint32_t, ui
 			bitset.resize(last_bit_pos);
 			REQUIRE(check_bitset == bitset);
 		}
+	}
+}
+
+TEMPLATE_TEST_CASE("data", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+
+	SECTION("const")
+	{
+		const sul::dynamic_bitset<TestType> bitset =
+		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+		CAPTURE(bitset);
+
+		if(!bitset.empty())
+		{
+			REQUIRE(bitset.data() != nullptr);
+		}
+		REQUIRE(check_consistency(bitset));
+	}
+
+	SECTION("non-const")
+	{
+		sul::dynamic_bitset<TestType> bitset =
+		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+		CAPTURE(bitset);
+
+		if(!bitset.empty())
+		{
+			REQUIRE(bitset.data() != nullptr);
+		}
+		REQUIRE(check_consistency(bitset));
 	}
 }
 
@@ -1882,6 +2018,7 @@ TEMPLATE_TEST_CASE("istream operator>>", "[dynamic_bitset]", uint16_t, uint32_t,
 		sul::dynamic_bitset<TestType> bitset;
 		sstream >> bitset;
 		REQUIRE(bitset.empty());
+		REQUIRE(check_consistency(bitset));
 	}
 
 	SECTION("valid stream")
@@ -1911,6 +2048,7 @@ TEMPLATE_TEST_CASE("istream operator>>", "[dynamic_bitset]", uint16_t, uint32_t,
 				}
 			}
 			REQUIRE(sstream.eof());
+			REQUIRE(check_consistency(bitset));
 		}
 
 		SECTION("with invalid characters")
@@ -1943,6 +2081,7 @@ TEMPLATE_TEST_CASE("istream operator>>", "[dynamic_bitset]", uint16_t, uint32_t,
 			REQUIRE(E == 'E');
 			sstream >> E;
 			REQUIRE(sstream.eof());
+			REQUIRE(check_consistency(bitset));
 		}
 	}
 }
