@@ -376,36 +376,6 @@ matrix:
 
 # OSX
 ## Xcode
-### Xcode 10
-    - name: OSX - Xcode 10 - Debug
-      arch: amd64
-      os: osx
-      osx_image: xcode10
-      env:
-        - BUILD_TYPE=Debug
-
-    - name: OSX - Xcode 10 - Release
-      arch: amd64
-      os: osx
-      osx_image: xcode10
-      env:
-        - BUILD_TYPE=Release
-
-### Xcode 10.1
-    - name: OSX - Xcode 10.1 - Debug
-      arch: amd64
-      os: osx
-      osx_image: xcode10.1
-      env:
-        - BUILD_TYPE=Debug
-
-    - name: OSX - Xcode 10.1 - Release
-      arch: amd64
-      os: osx
-      osx_image: xcode10.1
-      env:
-        - BUILD_TYPE=Release
-
 ### Xcode 10.2
     - name: OSX - Xcode 10.2 - Debug
       arch: amd64
