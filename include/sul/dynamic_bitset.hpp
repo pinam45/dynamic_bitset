@@ -16,7 +16,7 @@
 /**
  * @brief      @ref sul::dynamic_bitset version minor.
  */
-#define SUL_DYNAMIC_BITSET_VERSION_MINOR 1
+#define SUL_DYNAMIC_BITSET_VERSION_MINOR 2
 
 /**
  * @brief      @ref sul::dynamic_bitset version patch.
