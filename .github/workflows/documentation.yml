@@ -21,7 +21,7 @@ jobs:
         submodules: true
 
     - name: Download Doxygen
-      id: doxygen
+      id: download
       shell: cmake -P {0}
       run: |
         set(doxygen_version $ENV{DOXYGEN_VERSION})
@@ -30,19 +30,22 @@ jobs:
         file(DOWNLOAD "${doxygen_url}" ./doxygen.tar.gz SHOW_PROGRESS)
         execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./doxygen.tar.gz)
         file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/${doxygen_dir}" doxygen_dir)
-        message("::set-env name=DOXYGEN_DIR::${doxygen_dir}")
+        message("::set-output name=doxygen_dir::${doxygen_dir}")
     - name: Configure
+      id: configure
       run: |
         set -eu
-        PATH=${DOXYGEN_DIR}:${PATH}
+        PATH=${{ steps.download.outputs.doxygen_dir }}:${PATH}
         cmake -S . -B build
     - name: Build
+      id: build
       run: |
         set -eu
-        PATH=${DOXYGEN_DIR}:${PATH}
+        PATH=${{ steps.download.outputs.doxygen_dir }}:${PATH}
         cmake --build build --target dynamic_bitset_docs
-        echo "::set-env name=HTML_DOC_DIR::${GITHUB_WORKSPACE}/build/docs/html"
+        echo "::set-output name=html_doc_dir::${GITHUB_WORKSPACE}/build/docs/html"
     - name: Deploy
+      id: deploy
       run: |
         set -eu
         mkdir tmp-git
@@ -54,7 +57,7 @@ jobs:
         git fetch origin
         git checkout -t origin/gh-pages
         rm -rf ./*
-        cp -r "${HTML_DOC_DIR}/." .
+        cp -r "${{ steps.build.outputs.html_doc_dir }}/." .
         git add -A .
         if git commit -m "Update"; then
             git push
