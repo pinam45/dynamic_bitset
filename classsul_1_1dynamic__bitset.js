@@ -22,6 +22,8 @@ var classsul_1_1dynamic__bitset =
     [ "capacity", "classsul_1_1dynamic__bitset.html#a96020c8c84552c34f12714ac609c6656", null ],
     [ "clear", "classsul_1_1dynamic__bitset.html#a51a67c072c98cc50d0ab2cf0b9caa7f5", null ],
     [ "count", "classsul_1_1dynamic__bitset.html#a7dc98753a007bee0d6f015602470f01c", null ],
+    [ "data", "classsul_1_1dynamic__bitset.html#ad67d6b126707fecda32e4f363dc08394", null ],
+    [ "data", "classsul_1_1dynamic__bitset.html#adfe46260b7caff45a27990b37b771a98", null ],
     [ "empty", "classsul_1_1dynamic__bitset.html#a31c7985b0bc700044393c4e6d3f54236", null ],
     [ "find_first", "classsul_1_1dynamic__bitset.html#aba7e714f3df741106cd860b6f90b782a", null ],
     [ "find_next", "classsul_1_1dynamic__bitset.html#aa972905d35657d1aaf8514a3a06fb2ae", null ],

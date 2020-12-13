@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['empty_80',['empty',['../classsul_1_1dynamic__bitset.html#a31c7985b0bc700044393c4e6d3f54236',1,'sul::dynamic_bitset']]]
+  ['empty_82',['empty',['../classsul_1_1dynamic__bitset.html#a31c7985b0bc700044393c4e6d3f54236',1,'sul::dynamic_bitset']]]
 ];

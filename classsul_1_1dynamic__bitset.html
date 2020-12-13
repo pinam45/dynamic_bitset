@@ -320,6 +320,12 @@ constexpr <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</
 <tr class="memitem:a2e89268b876b1cd8a450c76a1c5b6e39"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classsul_1_1dynamic__bitset.html#a2e89268b876b1cd8a450c76a1c5b6e39">iterate_bits_on</a> (Function &amp;&amp;function, Parameters &amp;&amp;... parameters) const</td></tr>
 <tr class="memdesc:a2e89268b876b1cd8a450c76a1c5b6e39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Iterate on the <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> and call <code>function</code> with the position of the bits on.  <a href="classsul_1_1dynamic__bitset.html#a2e89268b876b1cd8a450c76a1c5b6e39">More...</a><br /></td></tr>
 <tr class="separator:a2e89268b876b1cd8a450c76a1c5b6e39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfe46260b7caff45a27990b37b771a98"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classsul_1_1dynamic__bitset.html#a36722ee70729db138fd825f0f2d12a52">block_type</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsul_1_1dynamic__bitset.html#adfe46260b7caff45a27990b37b771a98">data</a> () noexcept</td></tr>
+<tr class="memdesc:adfe46260b7caff45a27990b37b771a98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a pointer to the underlying array serving as blocks storage.  <a href="classsul_1_1dynamic__bitset.html#adfe46260b7caff45a27990b37b771a98">More...</a><br /></td></tr>
+<tr class="separator:adfe46260b7caff45a27990b37b771a98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad67d6b126707fecda32e4f363dc08394"><td class="memItemLeft" align="right" valign="top">constexpr const <a class="el" href="classsul_1_1dynamic__bitset.html#a36722ee70729db138fd825f0f2d12a52">block_type</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsul_1_1dynamic__bitset.html#ad67d6b126707fecda32e4f363dc08394">data</a> () const noexcept</td></tr>
+<tr class="memdesc:ad67d6b126707fecda32e4f363dc08394"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a pointer to the underlying array serving as blocks storage.  <a href="classsul_1_1dynamic__bitset.html#ad67d6b126707fecda32e4f363dc08394">More...</a><br /></td></tr>
+<tr class="separator:ad67d6b126707fecda32e4f363dc08394"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -1106,6 +1112,98 @@ template&lt;typename Block , typename Allocator &gt; </div>
 
 </div>
 </div>
+<a id="ad67d6b126707fecda32e4f363dc08394"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad67d6b126707fecda32e4f363dc08394">&#9670;&nbsp;</a></span>data() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Block , typename Allocator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt;::<a class="el" href="classsul_1_1dynamic__bitset.html#a36722ee70729db138fd825f0f2d12a52">block_type</a> * <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::data </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return a pointer to the underlying array serving as blocks storage. </p>
+<p>The pointer is such that range [<a class="el" href="classsul_1_1dynamic__bitset.html#adfe46260b7caff45a27990b37b771a98">data()</a>; <a class="el" href="classsul_1_1dynamic__bitset.html#adfe46260b7caff45a27990b37b771a98">data()</a> + <a class="el" href="classsul_1_1dynamic__bitset.html#a56765dccd08aef00f5670e6e08f9656c">num_blocks()</a>) is always a valid range, even if the container is empty (<a class="el" href="classsul_1_1dynamic__bitset.html#adfe46260b7caff45a27990b37b771a98">data()</a> is not dereferenceable in that case).</p>
+<dl class="section post"><dt>Postcondition</dt><dd>The bits past the end of the <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> in the last block are guaranteed to be 0s, example: <div class="fragment"><div class="line"><span class="comment">// random bitset of size 11</span></div>
+<div class="line">std::minstd_rand rand(std::random_device{}());</div>
+<div class="line">std::bernoulli_distribution dist;</div>
+<div class="line"><a class="code" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset&lt;uint8_t&gt;</a> bitset;</div>
+<div class="line"><span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i = 0; i &lt; 11; ++i)</div>
+<div class="line">{</div>
+<div class="line">    bitset.<a class="code" href="classsul_1_1dynamic__bitset.html#a133b525f7a7bdee3a082be852d38822b">push_back</a>(dist(rand));</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// the bitset use 2 blocks of 8 bits</span></div>
+<div class="line"><span class="comment">// check that unused bits are set to 0</span></div>
+<div class="line">assert(*(bitset.<a class="code" href="classsul_1_1dynamic__bitset.html#adfe46260b7caff45a27990b37b771a98">data</a>() + 1) &gt;&gt; 3 == 0);</div>
+</div><!-- fragment --></dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>If the <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> is empty, this function may or may not return a null pointer.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the underlying array serving as blocks storage</dd></dl>
+<dl class="section user"><dt>Complexity</dt><dd>Constant. </dd></dl>
+
+</div>
+</div>
+<a id="adfe46260b7caff45a27990b37b771a98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfe46260b7caff45a27990b37b771a98">&#9670;&nbsp;</a></span>data() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Block , typename Allocator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt;::<a class="el" href="classsul_1_1dynamic__bitset.html#a36722ee70729db138fd825f0f2d12a52">block_type</a> * <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::data </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return a pointer to the underlying array serving as blocks storage. </p>
+<p>The pointer is such that range [<a class="el" href="classsul_1_1dynamic__bitset.html#adfe46260b7caff45a27990b37b771a98">data()</a>; <a class="el" href="classsul_1_1dynamic__bitset.html#adfe46260b7caff45a27990b37b771a98">data()</a> + <a class="el" href="classsul_1_1dynamic__bitset.html#a56765dccd08aef00f5670e6e08f9656c">num_blocks()</a>) is always a valid range, even if the container is empty (<a class="el" href="classsul_1_1dynamic__bitset.html#adfe46260b7caff45a27990b37b771a98">data()</a> is not dereferenceable in that case).</p>
+<dl class="section post"><dt>Postcondition</dt><dd>The bits past the end of the <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> in the last block are guaranteed to be 0s, example: <div class="fragment"><div class="line"><span class="comment">// random bitset of size 11</span></div>
+<div class="line">std::minstd_rand rand(std::random_device{}());</div>
+<div class="line">std::bernoulli_distribution dist;</div>
+<div class="line"><a class="code" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset&lt;uint8_t&gt;</a> bitset;</div>
+<div class="line"><span class="keywordflow">for</span>(<span class="keywordtype">size_t</span> i = 0; i &lt; 11; ++i)</div>
+<div class="line">{</div>
+<div class="line">    bitset.<a class="code" href="classsul_1_1dynamic__bitset.html#a133b525f7a7bdee3a082be852d38822b">push_back</a>(dist(rand));</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// the bitset use 2 blocks of 8 bits</span></div>
+<div class="line"><span class="comment">// check that unused bits are set to 0</span></div>
+<div class="line">assert(*(bitset.<a class="code" href="classsul_1_1dynamic__bitset.html#adfe46260b7caff45a27990b37b771a98">data</a>() + 1) &gt;&gt; 3 == 0);</div>
+</div><!-- fragment --></dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>If the <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> is empty, this function may or may not return a null pointer.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the underlying array serving as blocks storage</dd></dl>
+<dl class="section user"><dt>Complexity</dt><dd>Constant. </dd></dl>
+
+</div>
+</div>
 <a id="a31c7985b0bc700044393c4e6d3f54236"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a31c7985b0bc700044393c4e6d3f54236">&#9670;&nbsp;</a></span>empty()</h2>
 
@@ -1400,7 +1498,7 @@ template&lt;typename Block , typename Allocator &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><em>true</em> if this <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> intersects with <code>bitset</code>, <em>false</em> otherwise</dd></dl>
-<dl class="section pre"><dt>Precondition</dt><dd><div class="fragment"><div class="line"><a class="code" href="classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>() == bitset.size()</div>
+<dl class="section pre"><dt>Precondition</dt><dd><div class="fragment"><div class="line"><a class="code" href="classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>() == bitset.<a class="code" href="classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>()</div>
 </div><!-- fragment --></dd></dl>
 <dl class="section user"><dt>Complexity</dt><dd>Linear in the size of the <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>. </dd></dl>
 
@@ -1444,7 +1542,7 @@ template&lt;typename Block , typename Allocator &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><em>true</em> if this <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> is a proper subset of <code>bitset</code>, <em>false</em> otherwise</dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>The relation "is a proper subset of" is asymmetric (A being a proper subset of B imply that B is not a proper subset of A).</dd></dl>
-<dl class="section pre"><dt>Precondition</dt><dd><div class="fragment"><div class="line"><a class="code" href="classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>() == bitset.size()</div>
+<dl class="section pre"><dt>Precondition</dt><dd><div class="fragment"><div class="line"><a class="code" href="classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>() == bitset.<a class="code" href="classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>()</div>
 </div><!-- fragment --></dd></dl>
 <dl class="section user"><dt>Complexity</dt><dd>Linear in the size of the <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>. </dd></dl>
 
@@ -1488,7 +1586,7 @@ template&lt;typename Block , typename Allocator &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><em>true</em> if this <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> is a subset of <code>bitset</code>, <em>false</em> otherwise</dd></dl>
 <dl class="section remark"><dt>Remarks</dt><dd>The relation "is a subset of" is not symmetric (A being a subset of B doesn't imply that B is a subset of A) but is antisymmetric (if A is a subset of B and B is a subset of A, then A == B).</dd></dl>
-<dl class="section pre"><dt>Precondition</dt><dd><div class="fragment"><div class="line"><a class="code" href="classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>() == bitset.size()</div>
+<dl class="section pre"><dt>Precondition</dt><dd><div class="fragment"><div class="line"><a class="code" href="classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>() == bitset.<a class="code" href="classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>()</div>
 </div><!-- fragment --></dd></dl>
 <dl class="section user"><dt>Complexity</dt><dd>Linear in the size of the <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>. </dd></dl>
 
@@ -2046,7 +2144,7 @@ template&lt;typename Block , typename Allocator &gt; </div>
 
 <p>Performs a unary NOT on all bits. </p>
 <p>Equivalent to: </p><div class="fragment"><div class="line">dynamic_bitset&lt;Block, Allocator&gt; bitset(*<span class="keyword">this</span>);</div>
-<div class="line">bitset.flip();</div>
+<div class="line">bitset.<a class="code" href="classsul_1_1dynamic__bitset.html#ae211a3734be27dd6ba3494c303515d09">flip</a>();</div>
 </div><!-- fragment --><dl class="section return"><dt>Returns</dt><dd>A copy of *this with all bits flipped</dd></dl>
 <dl class="section user"><dt>Complexity</dt><dd>Linear in the size of the <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>. </dd></dl>
 
@@ -3506,10 +3604,14 @@ template&lt;typename Block , typename Allocator &gt; </div>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_a3e8a6dcfb8e1392b650024f74568f2a1"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#a3e8a6dcfb8e1392b650024f74568f2a1">sul::dynamic_bitset::any</a></div><div class="ttdeci">constexpr bool any() const</div><div class="ttdoc">Checks if any bits are set to true.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:2377</div></div>
-<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_ab97410278e56dc157c7e15044f5598b5"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#ab97410278e56dc157c7e15044f5598b5">sul::dynamic_bitset::none</a></div><div class="ttdeci">constexpr bool none() const</div><div class="ttdoc">Checks if none of the bits are set to true.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:2390</div></div>
-<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_aeaff9346a99a8404178335043a724ee2"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#aeaff9346a99a8404178335043a724ee2">sul::dynamic_bitset::resize</a></div><div class="ttdeci">constexpr void resize(size_type nbits, bool value=false)</div><div class="ttdoc">Resize the sul::dynamic_bitset to contain nbits bits.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:1899</div></div>
-<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_a0b58f8123f5b249fc4b5ab021d162ba6"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6">sul::dynamic_bitset::size</a></div><div class="ttdeci">constexpr size_type size() const noexcept</div><div class="ttdoc">Give the number of bits of the sul::dynamic_bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:2453</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_a133b525f7a7bdee3a082be852d38822b"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#a133b525f7a7bdee3a082be852d38822b">sul::dynamic_bitset::push_back</a></div><div class="ttdeci">constexpr void push_back(bool value)</div><div class="ttdoc">Add a new bit with the value value at the end of the sul::dynamic_bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:2006</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_a3e8a6dcfb8e1392b650024f74568f2a1"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#a3e8a6dcfb8e1392b650024f74568f2a1">sul::dynamic_bitset::any</a></div><div class="ttdeci">constexpr bool any() const</div><div class="ttdoc">Checks if any bits are set to true.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:2445</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a></div><div class="ttdoc">Dynamic bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:107</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_adfe46260b7caff45a27990b37b771a98"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#adfe46260b7caff45a27990b37b771a98">sul::dynamic_bitset::data</a></div><div class="ttdeci">constexpr block_type * data() noexcept</div><div class="ttdoc">Return a pointer to the underlying array serving as blocks storage.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:2746</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_ab97410278e56dc157c7e15044f5598b5"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#ab97410278e56dc157c7e15044f5598b5">sul::dynamic_bitset::none</a></div><div class="ttdeci">constexpr bool none() const</div><div class="ttdoc">Checks if none of the bits are set to true.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:2458</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_ae211a3734be27dd6ba3494c303515d09"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#ae211a3734be27dd6ba3494c303515d09">sul::dynamic_bitset::flip</a></div><div class="ttdeci">constexpr dynamic_bitset&lt; Block, Allocator &gt; &amp; flip(size_type pos, size_type len)</div><div class="ttdoc">Flip the bits of the range [pos, pos + len[.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:2328</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_aeaff9346a99a8404178335043a724ee2"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#aeaff9346a99a8404178335043a724ee2">sul::dynamic_bitset::resize</a></div><div class="ttdeci">constexpr void resize(size_type nbits, bool value=false)</div><div class="ttdoc">Resize the sul::dynamic_bitset to contain nbits bits.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:1967</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_a0b58f8123f5b249fc4b5ab021d162ba6"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6">sul::dynamic_bitset::size</a></div><div class="ttdeci">constexpr size_type size() const noexcept</div><div class="ttdoc">Give the number of bits of the sul::dynamic_bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:2521</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
