@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/pinam45/dynamic_bitset/branch/master/graph/badge.svg)](https://codecov.io/gh/pinam45/dynamic_bitset)
 [![license](https://img.shields.io/github/license/pinam45/dynamic_bitset.svg)](http://opensource.org/licenses/MIT)
 
-Simple Useful Libraries: The C++17 header-only dynamic bitset
+Simple Useful Libraries: C++17 header-only dynamic bitset
 
 ## Requirements
 
@@ -51,7 +51,7 @@ Test it on [godbolt.org](https://godbolt.org/z/qoETqY).
 
 ## Optional dependency
 
-Optionally, [libpopcnt](https://github.com/kimwalisch/libpopcnt) will be used optimize the bits counting operations, if the header is available (``__has_include(<libpopcnt.h>)``) and ``DYNAMIC_BITSET_NO_LIBPOPCNT`` is not defined.
+Optionally, [libpopcnt](https://github.com/kimwalisch/libpopcnt) will be used to optimize the bits counting operations, if the header is available (``__has_include(<libpopcnt.h>)``) and ``DYNAMIC_BITSET_NO_LIBPOPCNT`` is not defined.
 
 ## Integration
 
