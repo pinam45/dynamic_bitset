@@ -48,6 +48,9 @@ if(DYNAMICBITSET_NO_NAMESPACE)
 	target_compile_definitions(dynamic_bitset INTERFACE DYNAMIC_BITSET_NO_NAMESPACE)
 endif()
 
+# Set minimum required standard
+target_compile_features(dynamic_bitset INTERFACE cxx_std_17)
+
 # Configure libpopcnt
 if(DYNAMICBITSET_USE_LIBPOPCNT)
 	message(STATUS "dynamic_bitset: libpopcnt usage enabled")
