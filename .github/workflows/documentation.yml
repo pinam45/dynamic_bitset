@@ -8,8 +8,6 @@ on:
 
 env:
   DOXYGEN_VERSION: 1.8.16
-  GITHUB_TOKEN: ${{ secrets.github_token }}
-  DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
 
 jobs:
   build:
@@ -53,7 +51,7 @@ jobs:
         git init
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@bots.github.com"
-        git remote add origin "https://x-access-token:${DEPLOY_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+        git remote add origin "https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
         git fetch origin
         git checkout -t origin/gh-pages
         rm -rf ./*
