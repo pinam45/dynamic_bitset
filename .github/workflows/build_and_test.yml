@@ -1,4 +1,4 @@
-# Mostly come from https://cristianadam.eu/20191222/using-github-actions-with-c-plus-plus-and-cmake/
+# Inspired by https://github.com/cristianadam/HelloWorld/
 name: build and test
 
 on:
@@ -6,10 +6,9 @@ on:
   - pull_request
 
 env:
-  CMAKE_VERSION: 3.17.0
-  NINJA_VERSION: 1.10.0
-  CCACHE_VERSION: 3.7.7
-  BUILD_TYPE: Debug
+  CMAKE_VERSION: 3.19.7
+  NINJA_VERSION: 1.10.2
+  CCACHE_VERSION: 4.2.1
 
 jobs:
   build:
@@ -19,84 +18,150 @@ jobs:
       fail-fast: false
       matrix:
         config:
-        - {
-            name: "Windows Latest - MSVC",
+          - {
+            name: "Windows Latest - MSVC - Debug",
             os: windows-latest,
             cc: "cl",
             cxx: "cl",
-            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
+            build_type: Debug
           }
-        - {
-            name: "Windows Latest - MinGW",
+          - {
+            name: "Windows Latest - MSVC - Release",
+            os: windows-latest,
+            cc: "cl",
+            cxx: "cl",
+            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
+            build_type: Release
+          }
+          - {
+            name: "Windows Latest - MinGW - Debug",
             os: windows-latest,
             cc: "gcc",
-            cxx: "g++"
+            cxx: "g++",
+            build_type: Debug
           }
-        - {
-            name: "Ubuntu Latest - GCC",
+          - {
+            name: "Windows Latest - MinGW - Release",
+            os: windows-latest,
+            cc: "gcc",
+            cxx: "g++",
+            build_type: Release
+          }
+          - {
+            name: "Ubuntu Latest - GCC - Debug",
             os: ubuntu-latest,
             cc: "gcc",
-            cxx: "g++"
+            cxx: "g++",
+            build_type: Debug
           }
-        - {
-            name: "Ubuntu Latest - Clang",
+          - {
+            name: "Ubuntu Latest - GCC - Release",
+            os: ubuntu-latest,
+            cc: "gcc",
+            cxx: "g++",
+            build_type: Release
+          }
+          - {
+            name: "Ubuntu Latest - Clang - Debug",
             os: ubuntu-latest,
             cc: "clang",
-            cxx: "clang++"
+            cxx: "clang++",
+            build_type: Debug
           }
-        - {
-            name: "macOS Latest - GCC",
+          - {
+            name: "Ubuntu Latest - Clang - Release",
+            os: ubuntu-latest,
+            cc: "clang",
+            cxx: "clang++",
+            build_type: Release
+          }
+          - {
+            name: "macOS Latest - GCC - Debug",
             os: macos-latest,
             cc: "gcc",
-            cxx: "g++"
+            cxx: "g++",
+            build_type: Debug
           }
-        - {
-            name: "macOS Latest - Clang",
+          - {
+            name: "macOS Latest - GCC - Release",
+            os: macos-latest,
+            cc: "gcc",
+            cxx: "g++",
+            build_type: Release
+          }
+          - {
+            name: "macOS Latest - Clang - Debug",
             os: macos-latest,
             cc: "clang",
-            cxx: "clang++"
+            cxx: "clang++",
+            build_type: Debug
+          }
+          - {
+            name: "macOS Latest - Clang - Release",
+            os: macos-latest,
+            cc: "clang",
+            cxx: "clang++",
+            build_type: Release
           }
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout dynamic_bitset
+      uses: actions/checkout@v2
       with:
-        submodules: true
+        submodules: recursive
+        path: dynamic_bitset
 
-    - name: Download Ninja and CMake
-      id: cmake_and_ninja
+    - name: Download CMake
+      id: cmake
       shell: cmake -P {0}
       run: |
         set(cmake_version $ENV{CMAKE_VERSION})
+        message(STATUS "Using host CMake version: ${CMAKE_VERSION}")
+        if ("${{ runner.os }}" STREQUAL "Windows")
+          set(cmake_suffix "win64-x64.zip")
+          set(cmake_dir "cmake-${cmake_version}-win64-x64/bin")
+        elseif ("${{ runner.os }}" STREQUAL "Linux")
+          set(cmake_suffix "Linux-x86_64.tar.gz")
+          set(cmake_dir "cmake-${cmake_version}-Linux-x86_64/bin")
+        elseif ("${{ runner.os }}" STREQUAL "macOS")
+          set(cmake_suffix "macos-universal.tar.gz")
+          set(cmake_dir "cmake-${cmake_version}-macos-universal/CMake.app/Contents/bin")
+        endif()
+        set(cmake_url "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-${cmake_suffix}")
+        file(DOWNLOAD "${cmake_url}" ./cmake.zip SHOW_PROGRESS)
+        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./cmake.zip)
+        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/${cmake_dir}/cmake" cmake_binary)
+        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/${cmake_dir}/ctest" ctest_binary)
+        if (NOT "${{ runner.os }}" STREQUAL "Windows")
+          execute_process(COMMAND chmod +x ${cmake_binary})
+          execute_process(COMMAND chmod +x ${ctest_binary})
+        endif()
+        message("::set-output name=cmake_binary::${cmake_binary}")
+        message("::set-output name=ctest_binary::${ctest_binary}")
+
+    - name: Download Ninja
+      id: ninja
+      shell: cmake -P {0}
+      run: |
         set(ninja_version $ENV{NINJA_VERSION})
         message(STATUS "Using host CMake version: ${CMAKE_VERSION}")
         if ("${{ runner.os }}" STREQUAL "Windows")
           set(ninja_suffix "win.zip")
-          set(cmake_suffix "win64-x64.zip")
-          set(cmake_dir "cmake-${cmake_version}-win64-x64/bin")
         elseif ("${{ runner.os }}" STREQUAL "Linux")
           set(ninja_suffix "linux.zip")
-          set(cmake_suffix "Linux-x86_64.tar.gz")
-          set(cmake_dir "cmake-${cmake_version}-Linux-x86_64/bin")
         elseif ("${{ runner.os }}" STREQUAL "macOS")
           set(ninja_suffix "mac.zip")
-          set(cmake_suffix "Darwin-x86_64.tar.gz")
-          set(cmake_dir "cmake-${cmake_version}-Darwin-x86_64/CMake.app/Contents/bin")
         endif()
         set(ninja_url "https://github.com/ninja-build/ninja/releases/download/v${ninja_version}/ninja-${ninja_suffix}")
         file(DOWNLOAD "${ninja_url}" ./ninja.zip SHOW_PROGRESS)
         execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./ninja.zip)
-        set(cmake_url "https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}-${cmake_suffix}")
-        file(DOWNLOAD "${cmake_url}" ./cmake.zip SHOW_PROGRESS)
-        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./cmake.zip)
-        # Save the path for other steps
-        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/${cmake_dir}" cmake_dir)
-        message("::set-output name=cmake_dir::${cmake_dir}")
+        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/ninja" ninja_binary)
         if (NOT "${{ runner.os }}" STREQUAL "Windows")
-          execute_process(
-            COMMAND chmod +x ninja
-            COMMAND chmod +x ${cmake_dir}/cmake
-          )
+          execute_process(COMMAND chmod +x ${ninja_binary})
         endif()
+        message("::set-output name=ninja_binary::${ninja_binary}")
+
     - name: Download ccache
       id: ccache
       shell: cmake -P {0}
@@ -104,59 +169,51 @@ jobs:
         set(ccache_url "https://github.com/cristianadam/ccache/releases/download/v$ENV{CCACHE_VERSION}/${{ runner.os }}.tar.xz")
         file(DOWNLOAD "${ccache_url}" ./ccache.tar.xz SHOW_PROGRESS)
         execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./ccache.tar.xz)
-    - name: Prepare ccache timestamp
-      id: ccache_cache_timestamp
+        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/ccache" ccache_binary)
+        if (NOT "${{ runner.os }}" STREQUAL "Windows")
+          execute_process(COMMAND chmod +x ${ccache_binary})
+        endif()
+        message("::set-output name=ccache_binary::${ccache_binary}")
+
+    - name: Configure ccache
+      id: configure_ccache
       shell: cmake -P {0}
       run: |
+        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
+        file(APPEND "$ENV{GITHUB_ENV}" "CCACHE_BASEDIR=${ccache_basedir}\n")
+        file(APPEND "$ENV{GITHUB_ENV}" "CCACHE_DIR=${ccache_basedir}/.ccache\n")
+        file(APPEND "$ENV{GITHUB_ENV}" "CCACHE_COMPRESS=true\n")
+        file(APPEND "$ENV{GITHUB_ENV}" "CCACHE_COMPRESSLEVEL=6\n")
+        file(APPEND "$ENV{GITHUB_ENV}" "CCACHE_MAXSIZE=400M\n")
+        execute_process(COMMAND ${{ steps.ccache.outputs.ccache_binary }} -p)
+        execute_process(COMMAND ${{ steps.ccache.outputs.ccache_binary }} -z)
         string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
         message("::set-output name=timestamp::${current_date}")
-    - name: ccache cache files
-      uses: actions/cache@v1.1.0
+
+    - name: Cache ccache files
+      uses: actions/cache@v2
       with:
         path: .ccache
-        key: ${{ matrix.config.name }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+        key: ${{ matrix.config.name }}-ccache-${{ steps.configure_ccache.outputs.timestamp }}
         restore-keys: |
           ${{ matrix.config.name }}-ccache-
-    - name: Configure
+
+    - name: Prepare build environment
       shell: cmake -P {0}
       run: |
-        set(ENV{CC} ${{ matrix.config.cc }})
-        set(ENV{CXX} ${{ matrix.config.cxx }})
+        file(APPEND "$ENV{GITHUB_ENV}" "CC=${{ matrix.config.cc }}\n")
+        file(APPEND "$ENV{GITHUB_ENV}" "CXX=${{ matrix.config.cxx }}\n")
         if ("${{ runner.os }}" STREQUAL "Windows" AND NOT "x${{ matrix.config.environment_script }}" STREQUAL "x")
           execute_process(
             COMMAND "${{ matrix.config.environment_script }}" && set
             OUTPUT_FILE environment_script_output.txt
           )
-          file(STRINGS environment_script_output.txt output_lines)
-          foreach(line IN LISTS output_lines)
-            if (line MATCHES "^([a-zA-Z0-9_-]+)=(.*)$")
-              set(ENV{${CMAKE_MATCH_1}} "${CMAKE_MATCH_2}")
-            endif()
-          endforeach()
         endif()
-        set(path_separator ":")
-        if ("${{ runner.os }}" STREQUAL "Windows")
-          set(path_separator ";")
-        endif()
-        set(ENV{PATH} "$ENV{GITHUB_WORKSPACE}${path_separator}$ENV{PATH}")
-        execute_process(
-          COMMAND ${{ steps.cmake_and_ninja.outputs.cmake_dir }}/cmake
-            -S .
-            -B build
-            -D CMAKE_BUILD_TYPE=$ENV{BUILD_TYPE}
-            -G Ninja
-            -D CMAKE_MAKE_PROGRAM=ninja
-            -D CMAKE_C_COMPILER_LAUNCHER=ccache
-            -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
-          RESULT_VARIABLE result
-        )
-        if (NOT result EQUAL 0)
-          message(FATAL_ERROR "Bad exit status")
-        endif()
-    - name: Build
+        file(APPEND "$ENV{GITHUB_PATH}" "$ENV{GITHUB_WORKSPACE}\n")
+
+    - name: Configure
       shell: cmake -P {0}
       run: |
-        set(ENV{NINJA_STATUS} "[%f/%t %o/sec] ")
         if ("${{ runner.os }}" STREQUAL "Windows" AND NOT "x${{ matrix.config.environment_script }}" STREQUAL "x")
           file(STRINGS environment_script_output.txt output_lines)
           foreach(line IN LISTS output_lines)
@@ -165,30 +222,44 @@ jobs:
             endif()
           endforeach()
         endif()
-        set(path_separator ":")
-        if ("${{ runner.os }}" STREQUAL "Windows")
-          set(path_separator ";")
-        endif()
-        set(ENV{PATH} "$ENV{GITHUB_WORKSPACE}${path_separator}$ENV{PATH}")
-        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
-        set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
-        set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
-        set(ENV{CCACHE_COMPRESS} "true")
-        set(ENV{CCACHE_COMPRESSLEVEL} "6")
-        set(ENV{CCACHE_MAXSIZE} "400M")
-        if ("${{ matrix.config.cxx }}" STREQUAL "cl")
-          set(ENV{CCACHE_MAXSIZE} "600M")
-        endif()
-        execute_process(COMMAND ccache -p)
-        execute_process(COMMAND ccache -z)
         execute_process(
-          COMMAND ${{ steps.cmake_and_ninja.outputs.cmake_dir }}/cmake --build build
+          COMMAND ${{ steps.cmake.outputs.cmake_binary }}
+            -S $ENV{GITHUB_WORKSPACE}/dynamic_bitset
+            -B $ENV{GITHUB_WORKSPACE}/dynamic_bitset/build
+            -D CMAKE_CONFIGURATION_TYPES=${{ matrix.config.build_type }}
+            -D CMAKE_BUILD_TYPE=${{ matrix.config.build_type }}
+            -G Ninja
+            -D CMAKE_MAKE_PROGRAM=${{ steps.ninja.outputs.ninja_binary }}
+            -D CMAKE_C_COMPILER_LAUNCHER=${{ steps.ccache.outputs.ccache_binary }}
+            -D CMAKE_CXX_COMPILER_LAUNCHER=${{ steps.ccache.outputs.ccache_binary }}
           RESULT_VARIABLE result
         )
         if (NOT result EQUAL 0)
           message(FATAL_ERROR "Bad exit status")
         endif()
-        execute_process(COMMAND ccache -s)
+
+    - name: Build
+      shell: cmake -P {0}
+      run: |
+        if ("${{ runner.os }}" STREQUAL "Windows" AND NOT "x${{ matrix.config.environment_script }}" STREQUAL "x")
+          file(STRINGS environment_script_output.txt output_lines)
+          foreach(line IN LISTS output_lines)
+            if (line MATCHES "^([a-zA-Z0-9_-]+)=(.*)$")
+              set(ENV{${CMAKE_MATCH_1}} "${CMAKE_MATCH_2}")
+            endif()
+          endforeach()
+        endif()
+        execute_process(
+          COMMAND ${{ steps.cmake.outputs.cmake_binary }}
+            --build $ENV{GITHUB_WORKSPACE}/dynamic_bitset/build
+            --config ${BUILD_TYPE}
+          RESULT_VARIABLE result
+        )
+        if (NOT result EQUAL 0)
+          message(FATAL_ERROR "Bad exit status")
+        endif()
+        execute_process(COMMAND ${{ steps.ccache.outputs.ccache_binary }} -s)
+
     - name: Run tests
       shell: cmake -P {0}
       run: |
@@ -196,8 +267,8 @@ jobs:
         ProcessorCount(N)
         set(ENV{CTEST_OUTPUT_ON_FAILURE} "ON")
         execute_process(
-          COMMAND ${{ steps.cmake_and_ninja.outputs.cmake_dir }}/ctest -j ${N}
-          WORKING_DIRECTORY build
+          COMMAND ${{ steps.cmake.outputs.ctest_binary }} --output-on-failure --parallel ${N}
+          WORKING_DIRECTORY $ENV{GITHUB_WORKSPACE}/dynamic_bitset/build
           RESULT_VARIABLE result
         )
         if (NOT result EQUAL 0)
