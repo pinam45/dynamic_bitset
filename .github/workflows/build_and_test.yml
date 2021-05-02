@@ -41,13 +41,14 @@ jobs:
             cxx: "g++",
             build_type: Debug
           }
-          - {
-            name: "Windows Latest - MinGW - Release",
-            os: windows-latest,
-            cc: "gcc",
-            cxx: "g++",
-            build_type: Release
-          }
+# Disabled because of https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65782
+#          - {
+#            name: "Windows Latest - MinGW - Release",
+#            os: windows-latest,
+#            cc: "gcc",
+#            cxx: "g++",
+#            build_type: Release
+#          }
           - {
             name: "Ubuntu Latest - GCC - Debug",
             os: ubuntu-latest,
