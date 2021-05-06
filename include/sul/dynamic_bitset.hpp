@@ -46,36 +46,87 @@
 #include <cmath>
 #include <cassert>
 
-#ifndef DYNAMIC_BITSET_NO_LIBPOPCNT
+// define DYNAMIC_BITSET_CAN_USE_LIBPOPCNT
+#if !defined(DYNAMIC_BITSET_NO_LIBPOPCNT)
+// https://github.com/kimwalisch/libpopcnt
 #	if __has_include(<libpopcnt.h>)
 #		include <libpopcnt.h>
-#		define DYNAMIC_BITSET_USE_LIBPOPCNT
+#		define DYNAMIC_BITSET_CAN_USE_LIBPOPCNT true
 #	endif
 #endif
+#if !defined(DYNAMIC_BITSET_CAN_USE_LIBPOPCNT)
+#	define DYNAMIC_BITSET_CAN_USE_LIBPOPCNT false
+#endif
 
-#if defined(__clang__)
-#	define DYNAMIC_BITSET_CLANG
-#	ifdef __has_builtin
-#		if __has_builtin(__builtin_popcount) && __has_builtin(__builtin_popcountl) \
-		  && __has_builtin(__builtin_popcountll)
-#			define DYNAMIC_BITSET_CLANG_builtin_popcount
-#		endif
-#		if __has_builtin(__builtin_ctz) && __has_builtin(__builtin_ctzl) \
-		  && __has_builtin(__builtin_ctzll)
-#			define DYNAMIC_BITSET_CLANG_builtin_ctz
+// define DYNAMIC_BITSET_CAN_USE_STD_BITOPS
+#if !defined(DYNAMIC_BITSET_NO_STD_BITOPS)
+// https://en.cppreference.com/w/cpp/header/bit
+#	if __has_include(<bit>)
+#		include <bit>
+#		ifdef __cpp_lib_bitops
+#			define DYNAMIC_BITSET_CAN_USE_STD_BITOPS true
 #		endif
 #	endif
-#elif defined(__GNUC__)
-#	define DYNAMIC_BITSET_GCC
-#elif defined(_MSC_VER)
-#	define DYNAMIC_BITSET_MSVC
-#	include <intrin.h>
-#	pragma intrinsic(_BitScanForward)
-#	if defined(_M_X64) || defined(_M_ARM64)
-#		define DYNAMIC_BITSET_MSVC_64
-#		pragma intrinsic(_BitScanForward64)
-#	else
+#endif
+#if !defined(DYNAMIC_BITSET_CAN_USE_STD_BITOPS)
+#	define DYNAMIC_BITSET_CAN_USE_STD_BITOPS false
+#endif
+
+// define DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_POPCOUNT
+// define DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_CTZ
+// define DYNAMIC_BITSET_CAN_USE_GCC_BUILTIN
+// define DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN_BITSCANFORWARD
+// define DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN_BITSCANFORWARD64
+#if !DYNAMIC_BITSET_CAN_USE_STD_BITOPS && !defined(DYNAMIC_BITSET_NO_COMPILER_BUILTIN)
+#	if defined(__clang__)
+// https://clang.llvm.org/docs/LanguageExtensions.html#feature-checking-macros
+// https://clang.llvm.org/docs/LanguageExtensions.html#intrinsics-support-within-constant-expressions
+#		ifdef __has_builtin
+#			if __has_builtin(__builtin_popcount) && __has_builtin(__builtin_popcountl) \
+			  && __has_builtin(__builtin_popcountll)
+#				define DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_POPCOUNT true
+#			endif
+#			if __has_builtin(__builtin_ctz) && __has_builtin(__builtin_ctzl) \
+			  && __has_builtin(__builtin_ctzll)
+#				define DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_CTZ true
+#			endif
+#		endif
+#	elif defined(__GNUC__) // also defined by clang
+// https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
+#		define DYNAMIC_BITSET_CAN_USE_GCC_BUILTIN true
+#	elif defined(_MSC_VER)
+// https://docs.microsoft.com/en-us/cpp/intrinsics/bitscanforward-bitscanforward64
+// __popcnt16, __popcnt, __popcnt64 not used because it require to check the hardware support at runtime
+// (https://docs.microsoft.com/fr-fr/cpp/intrinsics/popcnt16-popcnt-popcnt64?view=msvc-160#remarks)
+#		if defined(_M_IX86) || defined(_M_ARM) || defined(_M_X64) || defined(_M_ARM64)
+#			include <intrin.h>
+#			pragma intrinsic(_BitScanForward)
+#			define DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN_BITSCANFORWARD true
+#		endif
+#		if(defined(_M_X64) || defined(_M_ARM64)) \
+		  && !defined(DYNAMIC_BITSET_NO_MSVC_BUILTIN_BITSCANFORWARD64) // for testing purposes
+#			pragma intrinsic(_BitScanForward64)
+#			define DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN_BITSCANFORWARD64 true
+#		endif
 #	endif
+#endif
+#if !defined(DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_POPCOUNT)
+#	define DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_POPCOUNT false
+#endif
+#if !defined(DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_CTZ)
+#	define DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_CTZ false
+#endif
+#if !defined(DYNAMIC_BITSET_CAN_USE_GCC_BUILTIN)
+#	define DYNAMIC_BITSET_CAN_USE_GCC_BUILTIN false
+#endif
+#if !defined(DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN_BITSCANFORWARD)
+#	define DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN_BITSCANFORWARD false
+#endif
+#if !defined(DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN_BITSCANFORWARD64)
+#	define DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN_BITSCANFORWARD64 false
+#endif
+#if !defined(DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN)
+#	define DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN false
 #endif
 
 #ifndef DYNAMIC_BITSET_NO_NAMESPACE
@@ -1389,7 +1440,7 @@ private:
 	static constexpr size_type block_count(const block_type& block) noexcept;
 	static constexpr size_type block_count(const block_type& block, size_type nbits) noexcept;
 
-	static constexpr size_type first_on(const block_type& block) noexcept;
+	static constexpr size_type count_block_trailing_zero(const block_type& block) noexcept;
 
 	template<typename _CharT, typename _Traits>
 	constexpr void init_from_string(std::basic_string_view<_CharT, _Traits> str,
@@ -1893,7 +1944,8 @@ constexpr dynamic_bitset<Block, Allocator>::dynamic_bitset(size_type nbits,
 		return;
 	}
 
-	constexpr size_type init_val_required_blocks = sizeof(unsigned long long) / sizeof(block_type);
+	constexpr size_t ull_bits_number = std::numeric_limits<unsigned long long>::digits;
+	constexpr size_t init_val_required_blocks = ull_bits_number / bits_per_block;
 	if constexpr(init_val_required_blocks == 1)
 	{
 		m_blocks[0] = init_val;
@@ -1901,8 +1953,8 @@ constexpr dynamic_bitset<Block, Allocator>::dynamic_bitset(size_type nbits,
 	else
 	{
 		const unsigned long long block_mask = static_cast<unsigned long long>(one_block);
-		const size_type blocks_to_init = std::min(m_blocks.size(), init_val_required_blocks);
-		for(size_type i = 0; i < blocks_to_init; ++i)
+		const size_t blocks_to_init = std::min(m_blocks.size(), init_val_required_blocks);
+		for(size_t i = 0; i < blocks_to_init; ++i)
 		{
 			m_blocks[i] = block_type((init_val >> (i * bits_per_block) & block_mask));
 		}
@@ -2470,7 +2522,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 		return 0;
 	}
 
-#ifdef DYNAMIC_BITSET_USE_LIBPOPCNT
+#if DYNAMIC_BITSET_CAN_USE_LIBPOPCNT
 	const size_type count =
 	  static_cast<size_type>(popcnt(m_blocks.data(), m_blocks.size() * sizeof(block_type)));
 #else
@@ -2484,17 +2536,14 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 
 	// last block
 	const block_type& block = last_block();
-	if(block != zero_block)
+	const size_type extra_bits = extra_bits_number();
+	if(extra_bits == 0)
 	{
-		const size_t extra_bits = extra_bits_number();
-		if(extra_bits == 0)
-		{
-			count += block_count(block);
-		}
-		else
-		{
-			count += block_count(block, extra_bits);
-		}
+		count += block_count(block);
+	}
+	else
+	{
+		count += block_count(block, extra_bits);
 	}
 #endif
 	return count;
@@ -2618,7 +2667,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 	{
 		if(m_blocks[i] != zero_block)
 		{
-			return i * bits_per_block + first_on(m_blocks[i]);
+			return i * bits_per_block + count_block_trailing_zero(m_blocks[i]);
 		}
 	}
 	return npos;
@@ -2640,7 +2689,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 
 	if(first_block_shifted != zero_block)
 	{
-		return first_bit + first_on(first_block_shifted);
+		return first_bit + count_block_trailing_zero(first_block_shifted);
 	}
 	else
 	{
@@ -2648,7 +2697,7 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 		{
 			if(m_blocks[i] != zero_block)
 			{
-				return i * bits_per_block + first_on(m_blocks[i]);
+				return i * bits_per_block + count_block_trailing_zero(m_blocks[i]);
 			}
 		}
 	}
@@ -2712,7 +2761,7 @@ constexpr void dynamic_bitset<Block, Allocator>::iterate_bits_on(Function&& func
 
 	if constexpr(std::is_same_v<std::invoke_result_t<Function, size_t, Parameters...>, void>)
 	{
-		size_t i_bit = find_first();
+		size_type i_bit = find_first();
 		while(i_bit != npos)
 		{
 			std::invoke(
@@ -2723,7 +2772,7 @@ constexpr void dynamic_bitset<Block, Allocator>::iterate_bits_on(Function&& func
 	else if constexpr(std::is_convertible_v<std::invoke_result_t<Function, size_t, Parameters...>,
 	                                        bool>)
 	{
-		size_t i_bit = find_first();
+		size_type i_bit = find_first();
 		while(i_bit != npos)
 		{
 			if(!std::invoke(
@@ -2904,35 +2953,41 @@ template<typename Block, typename Allocator>
 constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Block, Allocator>::
   block_count(const block_type& block) noexcept
 {
+#if DYNAMIC_BITSET_CAN_USE_STD_BITOPS
+	return static_cast<size_type>(std::popcount(block));
+#else
 	if(block == zero_block)
 	{
 		return 0;
 	}
 
-#if defined(DYNAMIC_BITSET_GCC) \
-  || (defined(DYNAMIC_BITSET_CLANG) && defined(DYNAMIC_BITSET_CLANG_builtin_popcount))
-	if constexpr(std::is_same_v<block_type, unsigned long long>)
-	{
-		return static_cast<size_type>(__builtin_popcountll(block));
-	}
-	if constexpr(std::is_same_v<block_type, unsigned long>)
-	{
-		return static_cast<size_type>(__builtin_popcountl(block));
-	}
-	if constexpr(sizeof(block_type) <= sizeof(unsigned int))
+#	if DYNAMIC_BITSET_CAN_USE_GCC_BUILTIN || DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_POPCOUNT
+	constexpr size_t u_bits_number = std::numeric_limits<unsigned>::digits;
+	constexpr size_t ul_bits_number = std::numeric_limits<unsigned long>::digits;
+	constexpr size_t ull_bits_number = std::numeric_limits<unsigned long long>::digits;
+	if constexpr(bits_per_block <= u_bits_number)
 	{
 		return static_cast<size_type>(__builtin_popcount(static_cast<unsigned int>(block)));
 	}
-#endif
+	else if constexpr(bits_per_block <= ul_bits_number)
+	{
+		return static_cast<size_type>(__builtin_popcountl(static_cast<unsigned long>(block)));
+	}
+	else if constexpr(bits_per_block <= ull_bits_number)
+	{
+		return static_cast<size_type>(__builtin_popcountll(static_cast<unsigned long long>(block)));
+	}
+#	endif
 
 	size_type count = 0;
 	block_type mask = 1;
 	for(size_type bit_index = 0; bit_index < bits_per_block; ++bit_index)
 	{
-		count += ((block & mask) != zero_block);
+		count += static_cast<size_type>((block & mask) != zero_block);
 		mask <<= 1;
 	}
 	return count;
+#endif
 }
 
 template<typename Block, typename Allocator>
@@ -2940,81 +2995,104 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
   block_count(const block_type& block, size_type nbits) noexcept
 {
 	assert(nbits <= bits_per_block);
-	if(block == zero_block)
+#if DYNAMIC_BITSET_CAN_USE_STD_BITOPS
+	const block_type shifted_block = block_type(block << (bits_per_block - nbits));
+	return static_cast<size_type>(std::popcount(shifted_block));
+#else
+	const block_type shifted_block = block_type(block << (bits_per_block - nbits));
+	if(shifted_block == zero_block)
 	{
 		return 0;
 	}
 
-#if defined(DYNAMIC_BITSET_GCC) \
-  || (defined(DYNAMIC_BITSET_CLANG) && defined(DYNAMIC_BITSET_CLANG_builtin_popcount))
-	const block_type shifted_block = block_type(block << (bits_per_block - nbits));
-	if constexpr(std::is_same_v<block_type, unsigned long long>)
-	{
-		return static_cast<size_type>(__builtin_popcountll(shifted_block));
-	}
-	if constexpr(std::is_same_v<block_type, unsigned long>)
-	{
-		return static_cast<size_type>(__builtin_popcountl(shifted_block));
-	}
-	if constexpr(sizeof(block_type) <= sizeof(unsigned int))
+#	if DYNAMIC_BITSET_CAN_USE_GCC_BUILTIN || DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_POPCOUNT
+	constexpr size_t u_bits_number = std::numeric_limits<unsigned>::digits;
+	constexpr size_t ul_bits_number = std::numeric_limits<unsigned long>::digits;
+	constexpr size_t ull_bits_number = std::numeric_limits<unsigned long long>::digits;
+	if constexpr(bits_per_block <= u_bits_number)
 	{
 		return static_cast<size_type>(__builtin_popcount(static_cast<unsigned int>(shifted_block)));
 	}
-#endif
+	else if constexpr(bits_per_block <= ul_bits_number)
+	{
+		return static_cast<size_type>(
+		  __builtin_popcountl(static_cast<unsigned long>(shifted_block)));
+	}
+	else if constexpr(bits_per_block <= ull_bits_number)
+	{
+		return static_cast<size_type>(
+		  __builtin_popcountll(static_cast<unsigned long long>(shifted_block)));
+	}
+#	endif
 
 	size_type count = 0;
 	block_type mask = 1;
 	for(size_type bit_index = 0; bit_index < nbits; ++bit_index)
 	{
-		count += ((block & mask) != zero_block);
+		count += static_cast<size_type>((block & mask) != zero_block);
 		mask <<= 1;
 	}
 
 	return count;
+#endif
 }
 
 template<typename Block, typename Allocator>
 constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Block, Allocator>::
-  first_on(const block_type& block) noexcept
+  count_block_trailing_zero(const block_type& block) noexcept
 {
 	assert(block != zero_block);
-
-#if defined(DYNAMIC_BITSET_GCC) \
-  || (defined(DYNAMIC_BITSET_CLANG) && defined(DYNAMIC_BITSET_CLANG_builtin_ctz))
-	if constexpr(std::is_same_v<block_type, unsigned long long>)
-	{
-		return static_cast<size_type>(__builtin_ctzll(block));
-	}
-	if constexpr(std::is_same_v<block_type, unsigned long>)
-	{
-		return static_cast<size_type>(__builtin_ctzl(block));
-	}
-	if constexpr(sizeof(block_type) <= sizeof(unsigned int))
+#if DYNAMIC_BITSET_CAN_USE_STD_BITOPS
+	return static_cast<size_type>(std::countr_zero(block));
+#else
+#	if DYNAMIC_BITSET_CAN_USE_GCC_BUILTIN || DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_CTZ
+	constexpr size_t u_bits_number = std::numeric_limits<unsigned>::digits;
+	constexpr size_t ul_bits_number = std::numeric_limits<unsigned long>::digits;
+	constexpr size_t ull_bits_number = std::numeric_limits<unsigned long long>::digits;
+	if constexpr(bits_per_block <= u_bits_number)
 	{
 		return static_cast<size_type>(__builtin_ctz(static_cast<unsigned int>(block)));
 	}
-#elif defined(DYNAMIC_BITSET_MSVC)
-#	if defined(DYNAMIC_BITSET_MSVC_64)
-	if constexpr(std::is_same_v<block_type, unsigned __int64>)
+	else if constexpr(bits_per_block <= ul_bits_number)
 	{
-		unsigned long index = std::numeric_limits<unsigned long>::max();
-		_BitScanForward64(&index, block);
-		return static_cast<size_type>(index);
+		return static_cast<size_type>(__builtin_ctzl(static_cast<unsigned long>(block)));
 	}
-#	endif
-	if constexpr(std::is_same_v<block_type, unsigned long>)
+	else if constexpr(bits_per_block <= ull_bits_number)
 	{
-		unsigned long index = std::numeric_limits<unsigned long>::max();
-		_BitScanForward(&index, block);
-		return static_cast<size_type>(index);
+		return static_cast<size_type>(__builtin_ctzll(static_cast<unsigned long long>(block)));
 	}
-	if constexpr(sizeof(block_type) <= sizeof(unsigned long))
+
+#	elif DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN_BITSCANFORWARD
+	constexpr size_t ul_bits_number = std::numeric_limits<unsigned long>::digits;
+	constexpr size_t ui64_bits_number = std::numeric_limits<unsigned __int64>::digits;
+	if constexpr(bits_per_block <= ul_bits_number)
 	{
 		unsigned long index = std::numeric_limits<unsigned long>::max();
 		_BitScanForward(&index, static_cast<unsigned long>(block));
 		return static_cast<size_type>(index);
 	}
-#endif
+	else if constexpr(bits_per_block <= ui64_bits_number)
+	{
+#		if DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN_BITSCANFORWARD64
+		unsigned long index = std::numeric_limits<unsigned long>::max();
+		_BitScanForward64(&index, static_cast<unsigned __int64>(block));
+		return static_cast<size_type>(index);
+#		else
+		constexpr unsigned long max_ul = std::numeric_limits<unsigned long>::max();
+		unsigned long low = block & max_ul;
+		if(low != 0)
+		{
+			unsigned long index = std::numeric_limits<unsigned long>::max();
+			_BitScanForward(&index, low);
+			return static_cast<size_type>(index);
+		}
+		unsigned long high = block >> ul_bits_number;
+		unsigned long index = std::numeric_limits<unsigned long>::max();
+		_BitScanForward(&index, high);
+		return static_cast<size_type>(ul_bits_number + index);
+#		endif
+	}
+#	endif
 
 	block_type mask = block_type(1);
 	for(size_type i = 0; i < bits_per_block; ++i)
@@ -3025,7 +3103,9 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 		}
 		mask <<= 1;
 	}
-	return npos;
+	assert(false); // LCOV_EXCL_LINE: unreachable
+	return npos; // LCOV_EXCL_LINE: unreachable
+#endif
 }
 
 template<typename Block, typename Allocator>

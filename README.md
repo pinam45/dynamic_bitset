@@ -74,6 +74,7 @@ cmake_minimum_required(VERSION 3.10)
 project(CoolProject LANGUAGES CXX)
 
 add_executable(CoolProject main.cpp)
+target_compile_features(CoolProject PRIVATE cxx_std_20)
 
 add_subdirectory(extlibs/dynamic_bitset)
 target_link_libraries(CoolProject PRIVATE sul::dynamic_bitset)
@@ -88,6 +89,8 @@ If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the *d
 - ``DYNAMICBITSET_NO_NAMESPACE``: Put the dynamic_bitset class in the global namespace instead of the sul namespace (not recommended)
 - ``DYNAMICBITSET_USE_LIBPOPCNT``: Enable using libpopcnt for bits counting operations
 - ``DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE``: Enable adding libpopcnt submodule to include paths (disable if your project already include libpopcnt)
+- ``DYNAMICBITSET_USE_STD_BITOPS``: Enable using (if available) C++20 binary operations from the bit header
+- ``DYNAMICBITSET_USE_COMPILER_BUILTIN``: Enable using (if available) compiler builtins (if using C++20 binary operations is disabled or not possible)
 - ``DYNAMICBITSET_BUILD_EXAMPLE``: Enable building example for dynamic_bitset
 - ``DYNAMICBITSET_BUILD_TESTS``: Enable building tests for dynamic_bitset
 - ``DYNAMICBITSET_BUILD_DOCS``: Enable building documentation for dynamic_bitset
@@ -96,16 +99,18 @@ If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the *d
 
 ### Default values
 
-| Option                                | Default value as master project | Default value as subdirectory |
-| ------------------------------------- | :-----------------------------: | :---------------------------: |
-| DYNAMICBITSET_NO_NAMESPACE            | OFF                             | OFF                           |
-| DYNAMICBITSET_USE_LIBPOPCNT           | ON                              | ON                            |
-| DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE | ON                              | ON                            |
-| DYNAMICBITSET_BUILD_EXAMPLE           | ON                              | OFF                           |
-| DYNAMICBITSET_BUILD_TESTS             | ON                              | OFF                           |
-| DYNAMICBITSET_BUILD_DOCS              | ON                              | OFF                           |
-| DYNAMICBITSET_FORMAT_TARGET           | ON                              | OFF                           |
-| DYNAMICBITSET_HEADERS_TARGET_IDE      | ON                              | OFF                           |
+| Option                                | Default value as top level project | Default value as subdirectory |
+| ------------------------------------- | :--------------------------------: | :---------------------------: |
+| DYNAMICBITSET_NO_NAMESPACE            | OFF                                | OFF                           |
+| DYNAMICBITSET_USE_LIBPOPCNT           | ON                                 | ON                            |
+| DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE | ON                                 | ON                            |
+| DYNAMICBITSET_USE_STD_BITOPS          | ON                                 | ON                            |
+| DYNAMICBITSET_USE_COMPILER_BUILTIN    | ON                                 | ON                            |
+| DYNAMICBITSET_BUILD_EXAMPLE           | ON                                 | OFF                           |
+| DYNAMICBITSET_BUILD_TESTS             | ON                                 | OFF                           |
+| DYNAMICBITSET_BUILD_DOCS              | ON                                 | OFF                           |
+| DYNAMICBITSET_FORMAT_TARGET           | ON                                 | OFF                           |
+| DYNAMICBITSET_HEADERS_TARGET_IDE      | ON                                 | OFF                           |
 
 ## Build tests, example, and documentation
 
@@ -129,7 +134,7 @@ See [Running CMake](https://cmake.org/runningcmake/) and [the ctest documentatio
 	$ cd cmake-build
 	$ cmake ..
 	$ cmake --build .
-	$ ctest
+	$ ctest --output-on-failure
 
 On Windows, there is batch files available to configure a Visual Studio project in the [ide](ide) folder.
 

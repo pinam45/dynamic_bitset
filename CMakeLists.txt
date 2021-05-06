@@ -4,28 +4,73 @@ cmake_minimum_required(VERSION 3.10) # For CXX_STANDARD 17 property on Visual St
 project(
   dynamic_bitset
   VERSION 1.2.0
-  DESCRIPTION "Simple Useful Libraries: The C++17 header-only dynamic bitset"
+  DESCRIPTION "Simple Useful Libraries: C++17/20 header-only dynamic bitset"
   HOMEPAGE_URL "https://github.com/pinam45/dynamic_bitset"
   LANGUAGES CXX
 )
 
 # Check if dynamic_bitset is being used directly or via add_subdirectory
-get_filename_component(ABSOLUTE_CURRENT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} ABSOLUTE)
-get_filename_component(ABSOLUTE_SOURCE_DIR ${CMAKE_SOURCE_DIR} ABSOLUTE)
-set(DYNAMICBITSET_MASTER_PROJECT OFF)
-if (ABSOLUTE_CURRENT_SOURCE_DIR STREQUAL ABSOLUTE_SOURCE_DIR)
-	set(DYNAMICBITSET_MASTER_PROJECT ON)
+get_directory_property(HAS_PARENT PARENT_DIRECTORY)
+if(HAS_PARENT)
+	set(DYNAMICBITSET_TOPLEVEL_PROJECT OFF)
+else()
+	set(DYNAMICBITSET_TOPLEVEL_PROJECT ON)
 endif()
 
 # Options
-option(DYNAMICBITSET_NO_NAMESPACE "Put the dynamic_bitset class in the global namespace instead of the sul namespace (not recommended)" OFF)
-option(DYNAMICBITSET_USE_LIBPOPCNT "Enable using libpopcnt for bits counting operations" ON)
-option(DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE "Enable adding libpopcnt submodule to include paths (disable if your project already include libpopcnt)" ON)
-option(DYNAMICBITSET_BUILD_EXAMPLE "Enable building example for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
-option(DYNAMICBITSET_BUILD_TESTS "Enable building tests for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
-option(DYNAMICBITSET_BUILD_DOCS "Enable building documentation for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
-option(DYNAMICBITSET_FORMAT_TARGET "Enable generating a code formating target for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
-option(DYNAMICBITSET_HEADERS_TARGET_IDE "Enable generating a target with headers for ide for dynamic_bitset" ${DYNAMICBITSET_MASTER_PROJECT})
+include(CMakeDependentOption)
+option(
+  DYNAMICBITSET_NO_NAMESPACE
+  "Put the dynamic_bitset class in the global namespace instead of the sul namespace (not recommended)"
+  OFF
+)
+option(
+  DYNAMICBITSET_USE_LIBPOPCNT
+  "Enable using (if available) libpopcnt for bits counting operations"
+  ON
+)
+cmake_dependent_option(
+  DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE
+  "Enable adding libpopcnt submodule to include paths (disable if your project already include libpopcnt)"
+  ON
+  "DYNAMICBITSET_USE_LIBPOPCNT"
+  OFF
+)
+option(
+  DYNAMICBITSET_USE_STD_BITOPS
+  "Enable using (if available) C++20 binary operations from the bit header"
+  ON
+)
+option(
+  DYNAMICBITSET_USE_COMPILER_BUILTIN
+  "Enable using (if available) compiler builtins (if using C++20 binary operations is disabled or not possible)"
+  ON
+)
+option(
+  DYNAMICBITSET_BUILD_EXAMPLE
+  "Enable building example for dynamic_bitset"
+  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+)
+option(
+  DYNAMICBITSET_BUILD_TESTS
+  "Enable building tests for dynamic_bitset"
+  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+)
+option(
+  DYNAMICBITSET_BUILD_DOCS
+  "Enable building documentation for dynamic_bitset"
+  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+)
+option(
+  DYNAMICBITSET_FORMAT_TARGET
+  "Enable generating a code formating target for dynamic_bitset"
+  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+)
+option(
+  DYNAMICBITSET_HEADERS_TARGET_IDE
+  "Enable generating a target with headers for ide for dynamic_bitset"
+  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+)
 
 # Declare dynamic_bitset
 add_library(dynamic_bitset INTERFACE)
@@ -33,7 +78,7 @@ add_library(sul::dynamic_bitset ALIAS dynamic_bitset)
 
 # If used via add_subdirectory, disable warnings on headers
 set(MAYBE_SYSTEM)
-if(NOT DYNAMICBITSET_MASTER_PROJECT)
+if(NOT DYNAMICBITSET_TOPLEVEL_PROJECT)
 	set(MAYBE_SYSTEM SYSTEM)
 endif()
 
@@ -74,8 +119,22 @@ else()
 	message(STATUS "dynamic_bitset: libpopcnt usage disabled")
 endif()
 
+if(DYNAMICBITSET_USE_STD_BITOPS)
+	message(STATUS "dynamic_bitset: C++20 binary operations usage enabled")
+else()
+	target_compile_definitions(dynamic_bitset INTERFACE DYNAMIC_BITSET_NO_STD_BITOPS)
+	message(STATUS "dynamic_bitset: C++20 binary operations usage disabled")
+endif()
+
+if(DYNAMICBITSET_USE_COMPILER_BUILTIN)
+	message(STATUS "dynamic_bitset: compiler builtins usage enabled")
+else()
+	target_compile_definitions(dynamic_bitset INTERFACE DYNAMIC_BITSET_NO_COMPILER_BUILTIN)
+	message(STATUS "dynamic_bitset: compiler builtins usage disabled")
+endif()
+
 # CMake utilities
-if(DYNAMICBITSET_MASTER_PROJECT
+if(DYNAMICBITSET_TOPLEVEL_PROJECT
 	OR DYNAMICBITSET_BUILD_EXAMPLE
 	OR DYNAMICBITSET_BUILD_TESTS
 	OR DYNAMICBITSET_FORMAT_TARGET
@@ -90,7 +149,7 @@ if(DYNAMICBITSET_MASTER_PROJECT
 endif()
 
 # Global config
-if(DYNAMICBITSET_MASTER_PROJECT)
+if(DYNAMICBITSET_TOPLEVEL_PROJECT)
 	cmutils_disable_in_sources_build()
 	cmutils_enable_ide_folders()
 	cmutils_set_classic_output_folders()
