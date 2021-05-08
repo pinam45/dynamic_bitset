@@ -5,6 +5,8 @@
 // See accompanying file LICENSE or copy at
 // https://opensource.org/licenses/MIT
 //
+#include "config.hpp"
+#include "utils.hpp"
 #include "RandomIntGenerator.hpp"
 #include "RandomDynamicBitsetGenerator.hpp"
 #include "RandomBitsetStringGenerator.hpp"
@@ -19,57 +21,6 @@
 #include <list>
 #include <sstream>
 #include <cstdint>
-
-constexpr size_t RANDOM_VECTORS_TO_TEST = 100;
-constexpr size_t RANDOM_VARIATIONS_TO_TEST = 10;
-constexpr std::minstd_rand::result_type SEED = 314159;
-//const std::minstd_rand::result_type SEED = std::random_device{}();
-
-template<typename T>
-constexpr size_t bits_number = std::numeric_limits<T>::digits;
-
-template<typename T>
-static constexpr T zero_block = T(0);
-
-template<typename T>
-static constexpr T one_block = T(~zero_block<T>);
-
-template<typename T>
-constexpr bool bit_value(T value, size_t bit_pos) noexcept
-{
-	static_assert(std::is_unsigned<T>::value, "T is not an unsigned integral type");
-	assert(bit_pos < bits_number<T>);
-	return (value & (T(1) << bit_pos)) != T(0);
-}
-
-template<typename T>
-constexpr bool check_unused_bits(const sul::dynamic_bitset<T>& bitset) noexcept
-{
-	const size_t extra_bits = bitset.size() % sul::dynamic_bitset<T>::bits_per_block;
-	if(extra_bits > 0)
-	{
-		assert(bitset.data() != nullptr);
-		assert(bitset.num_blocks() > 0);
-		return (*(bitset.data() + bitset.num_blocks() - 1) & (one_block<T> << extra_bits))
-		       == zero_block<T>;
-	}
-	return true;
-}
-
-template<typename T>
-constexpr bool check_size(const sul::dynamic_bitset<T>& bitset) noexcept
-{
-	const size_t blocks_required =
-	  bitset.size() / sul::dynamic_bitset<T>::bits_per_block
-	  + static_cast<size_t>(bitset.size() % sul::dynamic_bitset<T>::bits_per_block > 0);
-	return blocks_required == bitset.num_blocks();
-}
-
-template<typename T>
-constexpr bool check_consistency(const sul::dynamic_bitset<T>& bitset) noexcept
-{
-	return check_unused_bits(bitset) && check_size(bitset);
-}
 
 TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
@@ -1174,33 +1125,6 @@ TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 	}
 }
 
-TEMPLATE_TEST_CASE("count", "[dynamic_bitset][libpopcnt][builtin]", uint16_t, uint32_t, uint64_t)
-{
-	CAPTURE(SEED);
-
-	SECTION("empty bitset")
-	{
-		sul::dynamic_bitset<TestType> bitset;
-
-		REQUIRE(bitset.count() == 0);
-	}
-
-	SECTION("non-empty bitset")
-	{
-		sul::dynamic_bitset<TestType> bitset =
-		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
-		CAPTURE(bitset);
-
-		size_t count = 0;
-		for(size_t i = 0; i < bitset.size(); ++i)
-		{
-			count += static_cast<size_t>(bitset[i]);
-		}
-
-		REQUIRE(bitset.count() == count);
-	}
-}
-
 TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
 	CAPTURE(SEED);
@@ -1503,43 +1427,6 @@ TEMPLATE_TEST_CASE("intersects", "[dynamic_bitset]", uint16_t, uint32_t, uint64_
 	REQUIRE_FALSE(bitset.intersects(bitset_copy));
 	bitset.reset();
 	REQUIRE_FALSE(bitset.intersects(bitset_copy));
-}
-
-TEMPLATE_TEST_CASE("find_first find_next",
-                   "[dynamic_bitset][builtin]",
-                   uint16_t,
-                   uint32_t,
-                   uint64_t)
-{
-	CAPTURE(SEED);
-
-	SECTION("empty-bitset")
-	{
-		sul::dynamic_bitset<TestType> bitset;
-
-		REQUIRE(bitset.find_first() == bitset.npos);
-		REQUIRE(bitset.find_next(0) == bitset.npos);
-	}
-
-	SECTION("non-empty bitset")
-	{
-		const std::tuple<size_t, size_t> values =
-		  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-		                     randomInt<size_t>(0, 5 * bits_number<TestType>, SEED),
-		                     randomInt<size_t>(0, 5 * bits_number<TestType>, SEED + 1)));
-		const size_t first_bit_pos = std::get<0>(values);
-		const size_t second_bit_pos = first_bit_pos + 1 + std::get<1>(values);
-		CAPTURE(first_bit_pos, second_bit_pos);
-
-		sul::dynamic_bitset<TestType> bitset(second_bit_pos + 12);
-		REQUIRE(bitset.find_first() == bitset.npos);
-		bitset.set(first_bit_pos);
-		bitset.set(second_bit_pos);
-		REQUIRE(bitset.find_first() == first_bit_pos);
-		REQUIRE(bitset.find_next(first_bit_pos) == second_bit_pos);
-		REQUIRE(bitset.find_next(second_bit_pos) == bitset.npos);
-		REQUIRE(bitset.find_next(bitset.size()) == bitset.npos);
-	}
 }
 
 TEMPLATE_TEST_CASE("swap", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)

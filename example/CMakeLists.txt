@@ -23,8 +23,12 @@ cmutils_target_configure_compile_options(dynamic_bitset_example)
 # Enable cmutils default warnings
 cmutils_target_enable_warnings(dynamic_bitset_example)
 
-# Build in C++17
-cmutils_target_set_standard(dynamic_bitset_example CXX 17)
+# Require C++17/20
+if(cxx_std_20 IN_LIST CMAKE_CXX_COMPILE_FEATURES)
+	target_compile_features(dynamic_bitset_example PRIVATE cxx_std_20)
+else()
+	target_compile_features(dynamic_bitset_example PRIVATE cxx_std_17)
+endif()
 
 # Enable sanitizers in debug
 #cmutils_target_enable_sanitizers(
