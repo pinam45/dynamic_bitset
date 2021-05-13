@@ -32,7 +32,7 @@
    <div id="projectname">dynamic_bitset
    &#160;<span id="projectnumber">1.2.0</span>
    </div>
-   <div id="projectbrief">Simple Useful Libraries: The C++17 header-only dynamic bitset</div>
+   <div id="projectbrief">Simple Useful Libraries: C++17/20 header-only dynamic bitset</div>
   </td>
  </tr>
  </tbody>
@@ -141,6 +141,30 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dynamic__bitset_8hpp.html#afa48b302d77cec0b253a37bff7951a0d">SUL_DYNAMIC_BITSET_VERSION_PATCH</a>&#160;&#160;&#160;0</td></tr>
 <tr class="memdesc:afa48b302d77cec0b253a37bff7951a0d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> version patch. <br /></td></tr>
 <tr class="separator:afa48b302d77cec0b253a37bff7951a0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91b428f5a0556c3d1aa567298d595c6c"><td class="memItemLeft" align="right" valign="top"><a id="a91b428f5a0556c3d1aa567298d595c6c"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>DYNAMIC_BITSET_CAN_USE_LIBPOPCNT</b>&#160;&#160;&#160;false</td></tr>
+<tr class="separator:a91b428f5a0556c3d1aa567298d595c6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad675a7bce85efed20091072e7c7a8b40"><td class="memItemLeft" align="right" valign="top"><a id="ad675a7bce85efed20091072e7c7a8b40"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>DYNAMIC_BITSET_CAN_USE_STD_BITOPS</b>&#160;&#160;&#160;false</td></tr>
+<tr class="separator:ad675a7bce85efed20091072e7c7a8b40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2a34ef432b812b3ca0fbea1d64a4e96"><td class="memItemLeft" align="right" valign="top"><a id="af2a34ef432b812b3ca0fbea1d64a4e96"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_POPCOUNT</b>&#160;&#160;&#160;false</td></tr>
+<tr class="separator:af2a34ef432b812b3ca0fbea1d64a4e96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9e1d2632eca9ecff1ac5aed2199d752"><td class="memItemLeft" align="right" valign="top"><a id="aa9e1d2632eca9ecff1ac5aed2199d752"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>DYNAMIC_BITSET_CAN_USE_CLANG_BUILTIN_CTZ</b>&#160;&#160;&#160;false</td></tr>
+<tr class="separator:aa9e1d2632eca9ecff1ac5aed2199d752"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae809e0adb55fc35276a3b732162f31d3"><td class="memItemLeft" align="right" valign="top"><a id="ae809e0adb55fc35276a3b732162f31d3"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>DYNAMIC_BITSET_CAN_USE_GCC_BUILTIN</b>&#160;&#160;&#160;false</td></tr>
+<tr class="separator:ae809e0adb55fc35276a3b732162f31d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0eb1ff180d70b76d4e9658ac100b56c6"><td class="memItemLeft" align="right" valign="top"><a id="a0eb1ff180d70b76d4e9658ac100b56c6"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN_BITSCANFORWARD</b>&#160;&#160;&#160;false</td></tr>
+<tr class="separator:a0eb1ff180d70b76d4e9658ac100b56c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29855dd5903c30d5b8dd5936496c0368"><td class="memItemLeft" align="right" valign="top"><a id="a29855dd5903c30d5b8dd5936496c0368"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN_BITSCANFORWARD64</b>&#160;&#160;&#160;false</td></tr>
+<tr class="separator:a29855dd5903c30d5b8dd5936496c0368"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3617c88a1ee945ede94faf0ffd0a8c0e"><td class="memItemLeft" align="right" valign="top"><a id="a3617c88a1ee945ede94faf0ffd0a8c0e"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>DYNAMIC_BITSET_CAN_USE_MSVC_BUILTIN</b>&#160;&#160;&#160;false</td></tr>
+<tr class="separator:a3617c88a1ee945ede94faf0ffd0a8c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
