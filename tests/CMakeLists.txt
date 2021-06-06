@@ -87,6 +87,11 @@ foreach(
 		endif()
 		message(STATUS "${target}: enabled coverage")
 	endif()
+	# Some MinGW workaround for:
+	# "Fatal error: can't write 233 bytes to section .text of tests/CMakeFiles/dynamic_bitset_tests_base.dir/src/main.cpp.obj: 'File too big'"
+	if(MINGW)
+		target_compile_options(${target} PRIVATE "-Wa,-mbig-obj")
+	endif()
 
 	# Enable cmutils default warnings
 	cmutils_target_enable_warnings(${target})
