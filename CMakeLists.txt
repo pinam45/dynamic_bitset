@@ -192,5 +192,7 @@ endif()
 # Generate format target
 if(DYNAMICBITSET_FORMAT_TARGET)
 	cmutils_generate_clang_format(format-dynamic_bitset RECURSE "${CMAKE_CURRENT_SOURCE_DIR}/include")
-	cmutils_target_set_ide_folder(format-dynamic_bitset "dynamic_bitset/format")
+	if(TARGET format-dynamic_bitset)
+		cmutils_target_set_ide_folder(format-dynamic_bitset "dynamic_bitset/format")
+	endif()
 endif()
