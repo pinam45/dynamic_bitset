@@ -34,3 +34,6 @@ doxygen_add_docs(dynamic_bitset_docs
 	"${CMAKE_CURRENT_SOURCE_DIR}/../README.md"
 	COMMENT "Generate dynamic_bitset docs"
 )
+
+# Set target IDE folder
+cmutils_target_set_ide_folder(dynamic_bitset_docs "dynamic_bitset")

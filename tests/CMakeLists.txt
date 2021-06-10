@@ -121,6 +121,7 @@ foreach(
 
 	# Generate format target
 	cmutils_target_generate_clang_format(${target})
+	cmutils_target_set_ide_folder(format-${target} "dynamic_bitset/format")
 
 	# Discover tests
 	catch_discover_tests(${target})

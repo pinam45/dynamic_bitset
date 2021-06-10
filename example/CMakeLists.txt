@@ -55,3 +55,4 @@ cmutils_target_use_ccache(dynamic_bitset_example)
 
 # Generate format target
 cmutils_target_generate_clang_format(dynamic_bitset_example)
+cmutils_target_set_ide_folder(format-dynamic_bitset_example "dynamic_bitset/format")
