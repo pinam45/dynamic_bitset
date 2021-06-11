@@ -7,11 +7,11 @@
 [![codecov](https://codecov.io/gh/pinam45/dynamic_bitset/branch/master/graph/badge.svg)](https://codecov.io/gh/pinam45/dynamic_bitset)
 [![license](https://img.shields.io/github/license/pinam45/dynamic_bitset.svg)](http://opensource.org/licenses/MIT)
 
-Simple Useful Libraries: C++17 header-only dynamic bitset
+Simple Useful Libraries: C++17/20 header-only dynamic bitset
 
 ## Requirements
 
-To use this *dynamic bitset*, you will need a **C++17 compliant compiler**. If you use CMake and want to use the *dynamic bitset* as a subproject, you will need **CMake 3.10 or later**.
+To use this *dynamic bitset*, you will need a **C++17 (or later) compliant compiler**. If you use CMake and want to use the *dynamic bitset* as a subproject, you will need **CMake 3.10 or later**.
 
 ## Usage sample
 
@@ -47,7 +47,7 @@ Possible output:
     bitset2     = 001011011011
     common bits = 000010010011
 
-Test it on [godbolt.org](https://godbolt.org/z/qoETqY).
+Test it on [godbolt.org](https://godbolt.org/z/1veE71rYT).
 
 ## Optional dependency
 
