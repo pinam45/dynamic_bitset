@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">dynamic_bitset
-   &#160;<span id="projectnumber">1.2.0</span>
+   &#160;<span id="projectnumber">1.2.1</span>
    </div>
    <div id="projectbrief">Simple Useful Libraries: C++17/20 header-only dynamic bitset</div>
   </td>
@@ -91,11 +91,11 @@ $(document).ready(function(){initNavTree('index.html','');});
 <div class="title">dynamic_bitset </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a href="https://github.com/pinam45/dynamic_bitset/actions"><img src="https://github.com/pinam45/dynamic_bitset/workflows/build%20and%20test/badge.svg" alt="Actions Status" class="inline"/></a> <a href="https://pinam45.github.io/dynamic_bitset"><img src="https://github.com/pinam45/dynamic_bitset/workflows/documentation/badge.svg" alt="Actions Status" class="inline"/></a> <a href="https://travis-ci.org/pinam45/dynamic_bitset"><img src="https://travis-ci.org/pinam45/dynamic_bitset.svg?branch=master" alt="Build Status" class="inline"/></a> <a href="https://ci.appveyor.com/project/pinam45/dynamic-bitset/branch/master"><img src="https://ci.appveyor.com/api/projects/status/h0vnyjlaunqgbrp4/branch/master?svg=true" alt="Build status" class="inline"/></a> <a href="https://codecov.io/gh/pinam45/dynamic_bitset"><img src="https://codecov.io/gh/pinam45/dynamic_bitset/branch/master/graph/badge.svg" alt="codecov" class="inline"/></a> <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/pinam45/dynamic_bitset.svg" alt="license" class="inline"/></a></p>
-<p>Simple Useful Libraries: C++17 header-only dynamic bitset</p>
+<div class="textblock"><p><a href="https://github.com/pinam45/dynamic_bitset/actions"><img src="https://github.com/pinam45/dynamic_bitset/workflows/build%20and%20test/badge.svg" alt="Actions Status" class="inline"/></a> <a href="https://pinam45.github.io/dynamic_bitset"><img src="https://github.com/pinam45/dynamic_bitset/workflows/documentation/badge.svg" alt="Actions Status" class="inline"/></a> <a href="https://travis-ci.com/pinam45/dynamic_bitset"><img src="https://travis-ci.com/pinam45/dynamic_bitset.svg?branch=master" alt="Build Status" class="inline"/></a> <a href="https://ci.appveyor.com/project/pinam45/dynamic-bitset/branch/master"><img src="https://ci.appveyor.com/api/projects/status/h0vnyjlaunqgbrp4/branch/master?svg=true" alt="Build status" class="inline"/></a> <a href="https://codecov.io/gh/pinam45/dynamic_bitset"><img src="https://codecov.io/gh/pinam45/dynamic_bitset/branch/master/graph/badge.svg" alt="codecov" class="inline"/></a> <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/pinam45/dynamic_bitset.svg" alt="license" class="inline"/></a></p>
+<p>Simple Useful Libraries: C++17/20 header-only dynamic bitset</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Requirements</h1>
-<p>To use this <em>dynamic bitset</em>, you will need a <b>C++17 compliant compiler</b>. If you use CMake and want to use the <em>dynamic bitset</em> as a subproject, you will need <b>CMake 3.10 or later</b>.</p>
+<p>To use this <em>dynamic bitset</em>, you will need a <b>C++17 (or later) compliant compiler</b>. If you use CMake and want to use the <em>dynamic bitset</em> as a subproject, you will need <b>CMake 3.10 or later</b>.</p>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Usage sample</h1>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="dynamic__bitset_8hpp.html">sul/dynamic_bitset.hpp</a>&gt;</span></div>
@@ -124,7 +124,7 @@ Usage sample</h1>
 </div><!-- fragment --><p>Possible output: </p><pre class="fragment">bitset1     = 100010110111
 bitset2     = 001011011011
 common bits = 000010010011
-</pre><p>Test it on <a href="https://godbolt.org/z/qoETqY">godbolt.org</a>.</p>
+</pre><p>Test it on <a href="https://godbolt.org/z/1veE71rYT">godbolt.org</a>.</p>
 <h1><a class="anchor" id="autotoc_md3"></a>
 Optional dependency</h1>
 <p>Optionally, <a href="https://github.com/kimwalisch/libpopcnt">libpopcnt</a> will be used to optimize the bits counting operations, if the header is available (<code>__has_include(&lt;libpopcnt.h&gt;)</code>) and <code>DYNAMIC_BITSET_NO_LIBPOPCNT</code> is not defined.</p>
@@ -210,8 +210,8 @@ License</h1>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_a133b525f7a7bdee3a082be852d38822b"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#a133b525f7a7bdee3a082be852d38822b">sul::dynamic_bitset::push_back</a></div><div class="ttdeci">constexpr void push_back(bool value)</div><div class="ttdoc">Add a new bit with the value value at the end of the sul::dynamic_bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:2058</div></div>
-<div class="ttc" id="aclasssul_1_1dynamic__bitset_html"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a></div><div class="ttdoc">Dynamic bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:158</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_a133b525f7a7bdee3a082be852d38822b"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#a133b525f7a7bdee3a082be852d38822b">sul::dynamic_bitset::push_back</a></div><div class="ttdeci">constexpr void push_back(bool value)</div><div class="ttdoc">Add a new bit with the value value at the end of the sul::dynamic_bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:2270</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a></div><div class="ttdoc">Dynamic bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:170</div></div>
 <div class="ttc" id="adynamic__bitset_8hpp_html"><div class="ttname"><a href="dynamic__bitset_8hpp.html">dynamic_bitset.hpp</a></div><div class="ttdoc">sul::dynamic_bitset declaration and implementation.</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
