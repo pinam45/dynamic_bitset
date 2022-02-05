@@ -137,7 +137,8 @@ int main()
 	a.shrink_to_fit();
 
 	// get allocator
-	const sul::dynamic_bitset<uint32_t>::allocator_type allocator = a.get_allocator();
+	[[maybe_unused]] const sul::dynamic_bitset<uint32_t>::allocator_type allocator =
+	  a.get_allocator();
 
 	// get pointer to the underlying array of blocks
 	const uint32_t* data = a.data();
