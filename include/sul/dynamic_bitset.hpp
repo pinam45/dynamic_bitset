@@ -2108,7 +2108,7 @@ template<typename Block, typename Allocator>
 constexpr typename dynamic_bitset<Block, Allocator>::reference& dynamic_bitset<Block, Allocator>::
   reference::reset()
 {
-	m_block &= ~m_mask;
+	m_block &= static_cast<block_type>(~m_mask);
 	return *this;
 }
 
@@ -2250,7 +2250,7 @@ constexpr void dynamic_bitset<Block, Allocator>::resize(size_type nbits, bool va
 		const size_type extra_bits = extra_bits_number();
 		if(extra_bits > 0)
 		{
-			m_blocks[old_num_blocks - 1] |= (init_value << extra_bits);
+			m_blocks[old_num_blocks - 1] |= static_cast<block_type>(init_value << extra_bits);
 		}
 	}
 
@@ -2317,7 +2317,7 @@ constexpr void dynamic_bitset<Block, Allocator>::append(block_type block)
 	}
 	else
 	{
-		last_block() |= (block << extra_bits);
+		last_block() |= static_cast<block_type>(block << extra_bits);
 		m_blocks.push_back(block_type(block >> (bits_per_block - extra_bits)));
 	}
 
@@ -2366,12 +2366,12 @@ constexpr void dynamic_bitset<Block, Allocator>::append(BlockInputIterator first
 	}
 	else
 	{
-		last_block() |= (*first << extra_bits);
+		last_block() |= static_cast<block_type>(*first << extra_bits);
 		block_type block = block_type(*first >> unused_bits);
 		++first;
 		while(first != last)
 		{
-			block |= (*first << extra_bits);
+			block |= static_cast<block_type>(*first << extra_bits);
 			m_blocks.push_back(block);
 			m_bits_number += bits_per_block;
 			block = block_type(*first >> unused_bits);
@@ -2430,7 +2430,7 @@ constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::op
 	//apply(rhs, [](const block_type& x, const block_type& y) { return (x & ~y); });
 	for(size_type i = 0; i < m_blocks.size(); ++i)
 	{
-		m_blocks[i] &= ~rhs.m_blocks[i];
+		m_blocks[i] &= static_cast<block_type>(~rhs.m_blocks[i]);
 	}
 	return *this;
 }
@@ -2554,7 +2554,7 @@ constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::se
 	}
 	else
 	{
-		m_blocks[block_index(pos)] &= ~bit_mask(pos);
+		m_blocks[block_index(pos)] &= static_cast<block_type>(~bit_mask(pos));
 	}
 
 	return *this;
@@ -2954,7 +2954,8 @@ constexpr std::basic_string<_CharT, _Traits, _Alloc> dynamic_bitset<Block, Alloc
 			{
 				_Traits::assign(str[len - (i_block * bits_per_block + i_bit + 1)], one);
 			}
-			mask <<= 1;
+			// mask <<= 1; not used because it trigger -Wconversion because of integral promotion for block_type smaller than int
+			mask = static_cast<block_type>(mask << 1);
 		}
 	}
 	return str;
@@ -3149,7 +3150,7 @@ constexpr void dynamic_bitset<Block, Allocator>::set_block_bits(block_type& bloc
 	}
 	else
 	{
-		block &= ~bit_mask(first, last);
+		block &= static_cast<block_type>(~bit_mask(first, last));
 	}
 }
 
@@ -3196,7 +3197,8 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 	for(size_type bit_index = 0; bit_index < bits_per_block; ++bit_index)
 	{
 		count += static_cast<size_type>((block & mask) != zero_block);
-		mask <<= 1;
+		// mask <<= 1; not used because it trigger -Wconversion because of integral promotion for block_type smaller than int
+		mask = static_cast<block_type>(mask << 1);
 	}
 	return count;
 #endif
@@ -3242,7 +3244,8 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 	for(size_type bit_index = 0; bit_index < nbits; ++bit_index)
 	{
 		count += static_cast<size_type>((block & mask) != zero_block);
-		mask <<= 1;
+		// mask <<= 1; not used because it trigger -Wconversion because of integral promotion for block_type smaller than int
+		mask = static_cast<block_type>(mask << 1);
 	}
 
 	return count;
@@ -3313,7 +3316,8 @@ constexpr typename dynamic_bitset<Block, Allocator>::size_type dynamic_bitset<Bl
 		{
 			return i;
 		}
-		mask <<= 1;
+		// mask <<= 1; not used because it trigger -Wconversion because of integral promotion for block_type smaller than int
+		mask = static_cast<block_type>(mask << 1);
 	}
 	assert(false); // LCOV_EXCL_LINE: unreachable
 	return npos; // LCOV_EXCL_LINE: unreachable
@@ -3489,7 +3493,7 @@ constexpr void dynamic_bitset<Block, Allocator>::sanitize()
 	size_type shift = m_bits_number % bits_per_block;
 	if(shift > 0)
 	{
-		last_block() &= ~(one_block << shift);
+		last_block() &= static_cast<block_type>(~(one_block << shift));
 	}
 }
 
