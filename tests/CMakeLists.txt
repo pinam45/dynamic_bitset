@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.10) # For CXX_STANDARD 17 property on Visual Studio
+cmake_minimum_required(VERSION 3.18) # For target_link_options
 
 # Options
-option(DYNAMICBITSET_ENABLE_COVERAGE "Enable coverage informations generation" OFF)
+option(DYNAMICBITSET_ENABLE_COVERAGE "Enable coverage information generation" OFF)
 
 # Check dynamic_bitset
 if(NOT TARGET dynamic_bitset)
@@ -23,37 +23,40 @@ add_executable(dynamic_bitset_tests_builtins)
 add_executable(dynamic_bitset_tests_builtins_msvc_32)
 
 # Add sources
-cmutils_target_sources_folders(
+file(GLOB_RECURSE sources "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB_RECURSE includes "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
+target_sources(
   dynamic_bitset_tests_base PRIVATE
-  "${CMAKE_CURRENT_SOURCE_DIR}/src"
-  "${CMAKE_CURRENT_SOURCE_DIR}/include"
+  ${includes}
+  ${sources}
 )
-cmutils_target_sources_folders(
+target_sources(
   dynamic_bitset_tests_libpopcnt PRIVATE
+  ${includes}
   "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/count.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
-cmutils_target_sources_folders(
+target_sources(
   dynamic_bitset_tests_std_bitops PRIVATE
+  ${includes}
   "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/count.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/find_first_find_next.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
-cmutils_target_sources_folders(
+target_sources(
   dynamic_bitset_tests_builtins PRIVATE
+  ${includes}
   "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/count.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/find_first_find_next.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
-cmutils_target_sources_folders(
+target_sources(
   dynamic_bitset_tests_builtins_msvc_32 PRIVATE
+  ${includes}
   "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/find_first_find_next.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${includes} ${sources})
 
 foreach(
   target
@@ -63,6 +66,9 @@ foreach(
   dynamic_bitset_tests_builtins
   dynamic_bitset_tests_builtins_msvc_32
 )
+	# Set target IDE folder
+	set_target_properties(${target} PROPERTIES FOLDER "dynamic_bitset/tests")
+
 	# Add includes
 	target_include_directories(
 	  ${target} PRIVATE
@@ -75,16 +81,10 @@ foreach(
 	# Link Catch2
 	target_link_libraries(${target} PRIVATE Catch2::Catch2)
 
-	# Configure compile options
-	cmutils_target_configure_compile_options(${target})
+	# Enable coverage information generation?
 	if(DYNAMICBITSET_ENABLE_COVERAGE)
 		target_compile_options(${target} PRIVATE "--coverage")
-		if(COMMAND target_link_options)
-			target_link_options(${target} PRIVATE "--coverage")
-		else()
-			# old CMake version: use ugly workaround
-			__cmutils_target_link_flag_property(${target} "--coverage")
-		endif()
+		target_link_options(${target} PRIVATE "--coverage")
 		message(STATUS "${target}: enabled coverage")
 	endif()
 	# Some MinGW workaround for:
@@ -93,36 +93,11 @@ foreach(
 		target_compile_options(${target} PRIVATE "-Wa,-mbig-obj")
 	endif()
 
-	# Enable cmutils default warnings
-	cmutils_target_enable_warnings(${target})
-
 	# Require C++17/20
 	if(cxx_std_20 IN_LIST CMAKE_CXX_COMPILE_FEATURES)
 		target_compile_features(${target} PRIVATE cxx_std_20)
 	else()
 		target_compile_features(${target} PRIVATE cxx_std_17)
-	endif()
-
-	# Enable sanitizers in debug
-	#cmutils_target_enable_sanitizers(
-	#  ${target}
-	#  ADDRESS LEAK MEMORY #UNDEFINED
-	#  DEBUG
-	#)
-
-	# Set target IDE folder
-	cmutils_target_set_ide_folder(${target} "dynamic_bitset")
-
-	# Group sources for IDEs
-	cmutils_target_source_group(${target} "${CMAKE_CURRENT_SOURCE_DIR}")
-
-	# Use ccache
-	cmutils_target_use_ccache(${target})
-
-	# Generate format target
-	cmutils_target_generate_clang_format(${target})
-	if(TARGET format-${target})
-		cmutils_target_set_ide_folder(format-${target} "dynamic_bitset/format")
 	endif()
 
 	# Discover tests
@@ -157,3 +132,14 @@ target_compile_definitions(
   DYNAMIC_BITSET_NO_STD_BITOPS
   DYNAMIC_BITSET_NO_MSVC_BUILTIN_BITSCANFORWARD64
 )
+
+# Generate format target?
+if(DYNAMICBITSET_FORMAT_TARGET)
+	add_custom_target(
+	  format-dynamic_bitset_tests
+	  COMMAND "${CLANG_FORMAT}" -style=file -i ${includes} ${sources}
+	  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+	  VERBATIM
+	)
+	set_target_properties(format-dynamic_bitset_tests PROPERTIES FOLDER "dynamic_bitset/format")
+endif()

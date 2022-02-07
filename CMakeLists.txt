@@ -88,7 +88,7 @@ target_include_directories(
   "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
 
-# Add definitions
+# Put the dynamic_bitset class in the global namespace?
 if(DYNAMICBITSET_NO_NAMESPACE)
 	target_compile_definitions(dynamic_bitset INTERFACE DYNAMIC_BITSET_NO_NAMESPACE)
 endif()
@@ -96,9 +96,11 @@ endif()
 # Set minimum required standard
 target_compile_features(dynamic_bitset INTERFACE cxx_std_17)
 
-# Configure libpopcnt
+# Use libpopcnt?
 if(DYNAMICBITSET_USE_LIBPOPCNT)
 	message(STATUS "dynamic_bitset: libpopcnt usage enabled")
+
+	# Use the submodule of the git repository?
 	if(DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE)
 		get_filename_component(LIBPOPCNT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extlibs/libpopcnt/libpopcnt.h" ABSOLUTE)
 		if(EXISTS "${LIBPOPCNT_PATH}")
@@ -119,6 +121,7 @@ else()
 	message(STATUS "dynamic_bitset: libpopcnt usage disabled")
 endif()
 
+# Use C++20 binary operations?
 if(DYNAMICBITSET_USE_STD_BITOPS)
 	message(STATUS "dynamic_bitset: C++20 binary operations usage enabled")
 else()
@@ -126,6 +129,7 @@ else()
 	message(STATUS "dynamic_bitset: C++20 binary operations usage disabled")
 endif()
 
+# Use compiler builtins?
 if(DYNAMICBITSET_USE_COMPILER_BUILTIN)
 	message(STATUS "dynamic_bitset: compiler builtins usage enabled")
 else()
@@ -133,66 +137,91 @@ else()
 	message(STATUS "dynamic_bitset: compiler builtins usage disabled")
 endif()
 
-# CMake utilities
-if(DYNAMICBITSET_TOPLEVEL_PROJECT
-	OR DYNAMICBITSET_BUILD_EXAMPLE
-	OR DYNAMICBITSET_BUILD_TESTS
-	OR DYNAMICBITSET_FORMAT_TARGET
-	OR DYNAMICBITSET_HEADERS_TARGET_IDE
-  )
-	get_filename_component(CMUTILS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CMutils/cmutils.cmake" ABSOLUTE)
-	if(EXISTS "${CMUTILS_PATH}")
-		include(${CMUTILS_PATH})
+# Global config if top level project
+if(DYNAMICBITSET_TOPLEVEL_PROJECT)
+	# Disable sources modifications
+	set(CMAKE_DISABLE_SOURCE_CHANGES ON)
+	set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
+
+	# Strict C++ standard
+	set(CMAKE_CXX_STANDARD_REQUIRED ON)
+	set(CMAKE_CXX_EXTENSIONS OFF)
+
+	# IDE folders
+	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+	set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")
+endif()
+
+# Create Headers target for IDE?
+if(DYNAMICBITSET_HEADERS_TARGET_IDE)
+	add_custom_target(dynamic_bitset_headers_for_ide SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/include/sul/dynamic_bitset.hpp")
+	source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/sul/dynamic_bitset.hpp")
+	set_target_properties(dynamic_bitset_headers_for_ide PROPERTIES FOLDER "dynamic_bitset")
+endif()
+
+# Generate format target?
+if(DYNAMICBITSET_FORMAT_TARGET)
+	find_program(
+	  CLANG_FORMAT clang-format
+	  NAMES
+	  clang-format-13
+	  clang-format-12
+	  clang-format-11
+	  clang-format-10
+	  clang-format-9
+	  clang-format-8
+	  clang-format-7
+	  clang-format-6
+	)
+	if(${CLANG_FORMAT} STREQUAL CLANG_FORMAT-NOTFOUND)
+		message(WARNING "clang-format not found, format targets not generated")
+		set(DYNAMICBITSET_FORMAT_TARGET OFF)
 	else()
-		message(FATAL_ERROR "CMutils is missing, maybe you didn't pull the git submodules")
+		message(STATUS "clang-format found: ${CLANG_FORMAT}")
+		add_custom_target(
+		  format-dynamic_bitset
+		  COMMAND "${CLANG_FORMAT}" -style=file -i "${CMAKE_CURRENT_SOURCE_DIR}/include/sul/dynamic_bitset.hpp"
+		  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+		  VERBATIM
+		)
+		set_target_properties(format-dynamic_bitset PROPERTIES FOLDER "dynamic_bitset/format")
 	endif()
 endif()
 
-# Global config
-if(DYNAMICBITSET_TOPLEVEL_PROJECT)
-	cmutils_disable_in_sources_build()
-	cmutils_enable_ide_folders()
-	cmutils_set_classic_output_folders()
-endif()
-
-# Headers target for ide
-if(DYNAMICBITSET_HEADERS_TARGET_IDE)
-	cmutils_interface_target_generate_headers_target(dynamic_bitset dynamic_bitset_headers_for_ide)
-	cmutils_target_source_group(dynamic_bitset_headers_for_ide "${CMAKE_CURRENT_SOURCE_DIR}")
-	cmutils_target_set_ide_folder(dynamic_bitset_headers_for_ide "dynamic_bitset")
-endif()
-
-# Example
+# Build example?
 if(DYNAMICBITSET_BUILD_EXAMPLE)
 	add_subdirectory(example)
+
+	# Set example as startup project for Visual Studio
+	set_property(
+	  DIRECTORY
+	  ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY
+	  VS_STARTUP_PROJECT dynamic_bitset_example
+	)
 endif()
 
-# Tests
+# Build tests?
 if(DYNAMICBITSET_BUILD_TESTS)
 	enable_testing()
 
 	# Catch2
-	get_filename_component(CATCH2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extlibs/Catch2 ABSOLUTE)
-	cmutils_directory_is_empty(is_empty "${CATCH2_DIR}")
-	if(is_empty)
+	get_filename_component(CATCH2_CMAKELISTS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extlibs/Catch2/CMakeLists.txt" ABSOLUTE)
+	if(NOT EXISTS "${CATCH2_CMAKELISTS_PATH}")
 		message(FATAL_ERROR "Catch2 dependency is missing, maybe you didn't pull the git submodules")
 	endif()
 	add_subdirectory(extlibs/Catch2)
-	include(${CATCH2_DIR}/contrib/Catch.cmake)
+	include(extlibs/Catch2/contrib/Catch.cmake)
+
+	# Disable warnings on Catch2 headers
+	get_target_property(Catch2_include_directories Catch2 INTERFACE_INCLUDE_DIRECTORIES)
+	set_target_properties(Catch2 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "")
+	target_include_directories(Catch2 SYSTEM INTERFACE ${Catch2_include_directories})
 
 	# Tests
 	add_subdirectory(tests)
 endif()
 
-# Docs
+# Build documentation?
 if(DYNAMICBITSET_BUILD_DOCS)
 	add_subdirectory(docs)
-endif()
-
-# Generate format target
-if(DYNAMICBITSET_FORMAT_TARGET)
-	cmutils_generate_clang_format(format-dynamic_bitset RECURSE "${CMAKE_CURRENT_SOURCE_DIR}/include")
-	if(TARGET format-dynamic_bitset)
-		cmutils_target_set_ide_folder(format-dynamic_bitset "dynamic_bitset/format")
-	endif()
 endif()

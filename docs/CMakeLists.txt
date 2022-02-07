@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.10)
-
 # Check dynamic_bitset
 if(NOT TARGET dynamic_bitset)
 	message(FATAL_ERROR "dynamic_bitset target required for the docs")
@@ -36,4 +34,4 @@ doxygen_add_docs(dynamic_bitset_docs
 )
 
 # Set target IDE folder
-cmutils_target_set_ide_folder(dynamic_bitset_docs "dynamic_bitset")
+set_target_properties(dynamic_bitset_docs PROPERTIES FOLDER "dynamic_bitset")
