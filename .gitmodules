@@ -1,6 +1,3 @@
-[submodule "cmake/CMutils"]
-	path = cmake/CMutils
-	url = https://github.com/pinam45/CMutils
 [submodule "extlibs/Catch2"]
 	path = extlibs/Catch2
 	url = https://github.com/catchorg/Catch2
