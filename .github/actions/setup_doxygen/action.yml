@@ -1,0 +1,66 @@
+name: "Setup Doxygen"
+description: "Setup Doxygen"
+inputs:
+  doxygen_version:
+    description: "Doxygen version"
+    required: true
+  doxygen_libclang_version:
+    description: "libclang version used by Doxygen"
+    required: true
+  used_env:
+    description: "Environment used with runs-on"
+    required: true
+outputs:
+  doxygen_install:
+    value: ${{steps.configure.outputs.doxygen_install}}
+shell: cmake -P {0}
+runs:
+  using: "composite"
+  steps:
+    - name: Cache Doxygen
+      id: cache
+      uses: actions/cache@v2
+      with:
+        path: ${{github.workspace}}/doxygen
+        key: doxygen-${{inputs.doxygen_version}}-${{inputs.used_env}}
+
+    - name: Install dependencies
+      shell: bash
+      run: sudo apt install -y libclang1-${{inputs.doxygen_libclang_version}} libclang-cpp${{inputs.doxygen_libclang_version}}
+
+    - name: Download Doxygen
+      id: download
+      if: ${{steps.cache.outputs.cache-hit != 'true'}}
+      shell: cmake -P {0}
+      run: |
+        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
+        if(NOT "${{runner.os}}" STREQUAL "Linux")
+          message(FATAL_ERROR "Unsupported")
+        endif()
+        set(doxygen_dir "doxygen-${{inputs.doxygen_version}}")
+        set(doxygen_url "https://sourceforge.net/projects/doxygen/files/rel-${{inputs.doxygen_version}}/doxygen-${{inputs.doxygen_version}}.linux.bin.tar.gz/download")
+        message(STATUS "Download from: ${doxygen_url}")
+        file(DOWNLOAD "${doxygen_url}" "${workspace}/doxygen.tar.gz" SHOW_PROGRESS)
+        message(STATUS "Extract")
+        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf "${workspace}/doxygen.tar.gz")
+        file(COPY "${workspace}/${doxygen_dir}" DESTINATION "${workspace}/doxygen")
+
+    - name: Configure Doxygen
+      id: configure
+      shell: cmake -P {0}
+      run: |
+        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
+        if(NOT "${{runner.os}}" STREQUAL "Linux")
+          message(FATAL_ERROR "Unsupported")
+        endif()
+        set(doxygen_dir "doxygen-${{inputs.doxygen_version}}")
+        message("::set-output name=doxygen_install::${workspace}/doxygen/${doxygen_dir}")
+
+    - name: Print version
+      id: print
+      shell: cmake -P {0}
+      run: |
+        execute_process(COMMAND ${{steps.configure.outputs.doxygen_install}}/bin/doxygen --version RESULT_VARIABLE result)
+        if(NOT result EQUAL 0)
+          message(FATAL_ERROR "Bad exit status")
+        endif()

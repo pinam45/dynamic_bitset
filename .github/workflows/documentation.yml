@@ -1,47 +1,71 @@
-name: documentation
+name: Documentation
 
 on:
   push:
     branches:
     - master
 
-
 env:
-  DOXYGEN_VERSION: 1.8.16
+  CMAKE_VERSION: 3.22.2
+  DOXYGEN_VERSION: 1.9.3
+  DOXYGEN_LIBCLANG_VERSION: 9
 
 jobs:
   build:
-    name: documentation
-    runs-on: ubuntu-latest
+    name: ubuntu-20.04 - documentation
+    runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout dynamic_bitset
+      uses: actions/checkout@v2
       with:
-        submodules: true
+        submodules: recursive
+        path: dynamic_bitset
 
-    - name: Download Doxygen
-      id: download
+    - name: Setup CMake
+      id: cmake
+      uses: ./dynamic_bitset/.github/actions/setup_cmake
+      with:
+        cmake_version: ${{env.CMAKE_VERSION}}
+        used_env: ${{matrix.config.os}}
+
+    - name: Setup Doxygen
+      id: doxygen
+      uses: ./dynamic_bitset/.github/actions/setup_doxygen
+      with:
+        doxygen_version: ${{env.DOXYGEN_VERSION}}
+        doxygen_libclang_version: ${{env.DOXYGEN_LIBCLANG_VERSION}}
+        used_env: ubuntu-20.04
+
+    - name: Configure
       shell: cmake -P {0}
       run: |
-        set(doxygen_version $ENV{DOXYGEN_VERSION})
-        set(doxygen_url "https://sourceforge.net/projects/doxygen/files/rel-${doxygen_version}/doxygen-${doxygen_version}.linux.bin.tar.gz/download")
-        set(doxygen_dir "doxygen-${doxygen_version}/bin")
-        file(DOWNLOAD "${doxygen_url}" ./doxygen.tar.gz SHOW_PROGRESS)
-        execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./doxygen.tar.gz)
-        file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/${doxygen_dir}" doxygen_dir)
-        message("::set-output name=doxygen_dir::${doxygen_dir}")
-    - name: Configure
-      id: configure
-      run: |
-        set -eu
-        PATH=${{ steps.download.outputs.doxygen_dir }}:${PATH}
-        cmake -S . -B build
+        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
+        execute_process(
+          COMMAND ${{steps.cmake.outputs.cmake_binary}}
+            -S "${workspace}/dynamic_bitset"
+            -B "${workspace}/dynamic_bitset/build"
+            -D Doxygen_ROOT=${{steps.doxygen.outputs.doxygen_install}}
+            -D CMAKE_POLICY_DEFAULT_CMP0074=NEW
+          RESULT_VARIABLE result
+        )
+        if(NOT result EQUAL 0)
+          message(FATAL_ERROR "Bad exit status")
+        endif()
+
     - name: Build
-      id: build
+      shell: cmake -P {0}
       run: |
-        set -eu
-        PATH=${{ steps.download.outputs.doxygen_dir }}:${PATH}
-        cmake --build build --target dynamic_bitset_docs
-        echo "::set-output name=html_doc_dir::${GITHUB_WORKSPACE}/build/docs/html"
+        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
+        execute_process(
+          COMMAND ${{steps.cmake.outputs.cmake_binary}}
+            --build "${workspace}/dynamic_bitset/build"
+            --target dynamic_bitset_docs
+          RESULT_VARIABLE result
+        )
+        if(NOT result EQUAL 0)
+          message(FATAL_ERROR "Bad exit status")
+        endif()
+
     - name: Deploy
       id: deploy
       run: |
@@ -51,11 +75,11 @@ jobs:
         git init
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@bots.github.com"
-        git remote add origin "https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
+        git remote add origin "https://x-access-token:${{secrets.GITHUB_TOKEN}}@github.com/${GITHUB_REPOSITORY}.git"
         git fetch origin
         git checkout -t origin/gh-pages
         rm -rf ./*
-        cp -r "${{ steps.build.outputs.html_doc_dir }}/." .
+        cp -r "${{github.workspace}}/dynamic_bitset/build/docs/html/." .
         git add -A .
         if git commit -m "Update"; then
             git push
