@@ -12,8 +12,8 @@ inputs:
     required: true
 outputs:
   doxygen_install:
+    description: "Doxygen installation path"
     value: ${{steps.configure.outputs.doxygen_install}}
-shell: cmake -P {0}
 runs:
   using: "composite"
   steps:

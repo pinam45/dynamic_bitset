@@ -12,8 +12,8 @@ inputs:
     required: true
 outputs:
   ccache_binary:
+    description: "ccache binary path"
     value: ${{steps.configure.outputs.ccache_binary}}
-shell: cmake -P {0}
 runs:
   using: "composite"
   steps:

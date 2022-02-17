@@ -9,10 +9,11 @@ inputs:
     required: true
 outputs:
   cmake_binary:
+    description: "CMake binary path"
     value: ${{steps.configure.outputs.cmake_binary}}
   ctest_binary:
+    description: "CTest binary path"
     value: ${{steps.configure.outputs.ctest_binary}}
-shell: cmake -P {0}
 runs:
   using: "composite"
   steps:
