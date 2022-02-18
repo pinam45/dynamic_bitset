@@ -1,9 +1,10 @@
 # dynamic_bitset
 
-[![Actions Status](https://github.com/pinam45/dynamic_bitset/workflows/build%20and%20test/badge.svg)](https://github.com/pinam45/dynamic_bitset/actions)
-[![Actions Status](https://github.com/pinam45/dynamic_bitset/workflows/documentation/badge.svg)](https://pinam45.github.io/dynamic_bitset)
-[![Build Status](https://travis-ci.com/pinam45/dynamic_bitset.svg?branch=master)](https://travis-ci.com/pinam45/dynamic_bitset)
-[![Build status](https://ci.appveyor.com/api/projects/status/h0vnyjlaunqgbrp4/branch/master?svg=true)](https://ci.appveyor.com/project/pinam45/dynamic-bitset/branch/master)
+[![Ubuntu](https://github.com/pinam45/dynamic_bitset/actions/workflows/ubuntu.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/ubuntu.yml)
+[![Windows MinGW](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-mingw.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-mingw.yml)
+[![Windows Visual Studio](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-msvc.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-msvc.yml)
+[![macOS](https://github.com/pinam45/dynamic_bitset/actions/workflows/macos.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/macos.yml)
+[![documentation](https://github.com/pinam45/dynamic_bitset/actions/workflows/documentation.yml/badge.svg?branch=master)](https://pinam45.github.io/dynamic_bitset)
 [![codecov](https://codecov.io/gh/pinam45/dynamic_bitset/branch/master/graph/badge.svg)](https://codecov.io/gh/pinam45/dynamic_bitset)
 [![license](https://img.shields.io/github/license/pinam45/dynamic_bitset.svg)](http://opensource.org/licenses/MIT)
 
