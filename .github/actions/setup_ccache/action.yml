@@ -108,4 +108,4 @@ runs:
         path: ${{env.CCACHE_DIR}}
         key: ccache-cache-${{inputs.cache_id}}-${{steps.configure.outputs.timestamp}}
         restore-keys: |
-          ccache-${{inputs.cache_id}}-
+          ccache-cache-${{inputs.cache_id}}-
