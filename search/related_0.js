@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['operator_3c_136',['operator&lt;',['../classsul_1_1dynamic__bitset.html#ae2f4a40605ad4ca4dd8a6ba14113857a',1,'sul::dynamic_bitset']]],
-  ['operator_3d_3d_137',['operator==',['../classsul_1_1dynamic__bitset.html#ae58b98e276b04de150b7bd8298766efb',1,'sul::dynamic_bitset']]]
+  ['operator_3c_0',['operator&lt;',['../classsul_1_1dynamic__bitset.html#a973dbbefb47f6eb35a2b454cb8aa839a',1,'sul::dynamic_bitset']]],
+  ['operator_3d_3d_1',['operator==',['../classsul_1_1dynamic__bitset.html#aac69de1d1aa07d10846e42e5aa559b84',1,'sul::dynamic_bitset']]]
 ];
