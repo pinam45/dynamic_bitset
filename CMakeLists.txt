@@ -150,6 +150,9 @@ if(DYNAMICBITSET_TOPLEVEL_PROJECT)
 	# IDE folders
 	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 	set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")
+
+	# Flags
+	include(cmake/flags.cmake)
 endif()
 
 # Create Headers target for IDE?
