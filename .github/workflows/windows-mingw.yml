@@ -41,7 +41,7 @@ jobs:
       shell: cmake -P {0}
       run: |
         execute_process(
-          COMMAND "C:\msys64\usr\bin\bash"
+          COMMAND "C:/msys64/usr/bin/bash"
           -lc 'pacman --noconfirm --needed -S mingw-w64-x86_64-${{matrix.config.compiler_name}}'
           RESULT_VARIABLE result
         )
