@@ -51,6 +51,7 @@
 #include <functional>
 #include <type_traits>
 #include <limits>
+#include <stdexcept>
 #include <cmath>
 #include <cassert>
 
@@ -1424,6 +1425,40 @@ public:
 	[[nodiscard]] constexpr std::basic_string<_CharT, _Traits, _Alloc> to_string(
 	  _CharT zero = _CharT('0'),
 	  _CharT one = _CharT('1')) const;
+
+	/**
+	 * @brief      Converts the contents of the bitset to an <tt>unsigned long</tt> integer.
+	 *
+	 * @details    The first bit of the bitset corresponds to the least significant digit of the
+	 *             number and the last bit corresponds to the most significant digit.
+	 *
+	 * @return     The numeric value corresponding to the bitset contents.
+	 *
+	 * @throws     std::overflow_error  if the value is too large to be represented in an <tt>unsigned
+	 *                                  long</tt>
+	 *
+	 * @complexity Constant.
+	 *
+	 * @since      1.3.0
+	 */
+	[[nodiscard]] constexpr unsigned long to_ulong() const;
+
+	/**
+	 * @brief      Converts the contents of the bitset to an <tt>unsigned long long</tt> integer.
+	 *
+	 * @details    The first bit of the bitset corresponds to the least significant digit of the
+	 *             number and the last bit corresponds to the most significant digit.
+	 *
+	 * @return     The numeric value corresponding to the bitset contents.
+	 *
+	 * @throws     std::overflow_error  if the value is too large to be represented in an <tt>unsigned long
+	 *                                  long</tt>
+	 *
+	 * @complexity Constant.
+	 *
+	 * @since      1.3.0
+	 */
+	[[nodiscard]] constexpr unsigned long long to_ullong() const;
 
 	/**
 	 * @brief      Iterate on the @ref sul::dynamic_bitset and call @p function with the position of
@@ -2959,6 +2994,55 @@ constexpr std::basic_string<_CharT, _Traits, _Alloc> dynamic_bitset<Block, Alloc
 		}
 	}
 	return str;
+}
+
+template<typename Block, typename Allocator>
+constexpr unsigned long dynamic_bitset<Block, Allocator>::to_ulong() const
+{
+	if(m_bits_number == 0)
+	{
+		return 0;
+	}
+
+	constexpr size_t ul_bits_number = std::numeric_limits<unsigned long>::digits;
+	if(find_next(ul_bits_number - 1) != npos)
+	{
+		throw std::overflow_error("sul::dynamic_bitset::to_ulong");
+	}
+
+	unsigned long result = 0;
+	const size_type result_bits_number = std::min(ul_bits_number, m_bits_number);
+	for(size_type i_block = 0; i_block <= block_index(result_bits_number - 1); ++i_block)
+	{
+		result |= (static_cast<unsigned long>(m_blocks[i_block]) << (i_block * bits_per_block));
+	}
+
+	return result;
+}
+
+template<typename Block, typename Allocator>
+constexpr unsigned long long dynamic_bitset<Block, Allocator>::to_ullong() const
+{
+	if(m_bits_number == 0)
+	{
+		return 0;
+	}
+
+	constexpr size_t ull_bits_number = std::numeric_limits<unsigned long long>::digits;
+	if(find_next(ull_bits_number - 1) != npos)
+	{
+		throw std::overflow_error("sul::dynamic_bitset::to_ullong");
+	}
+
+	unsigned long long result = 0;
+	const size_type result_bits_number = std::min(ull_bits_number, m_bits_number);
+	for(size_type i_block = 0; i_block <= block_index(result_bits_number - 1); ++i_block)
+	{
+		result |=
+		  (static_cast<unsigned long long>(m_blocks[i_block]) << (i_block * bits_per_block));
+	}
+
+	return result;
 }
 
 template<typename Block, typename Allocator>
