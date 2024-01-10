@@ -1532,10 +1532,17 @@ TEMPLATE_TEST_CASE("to_ulong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 			  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
 			CAPTURE(bitset);
 
-			while(bitset.size() <= bits_number<unsigned long>)
+			size_t last = sul::dynamic_bitset<TestType>::npos;
+			bitset.iterate_bits_on([&last](size_t bit_pos) noexcept { last = bit_pos; });
+			if(last == sul::dynamic_bitset<TestType>::npos || last <= bits_number<unsigned long>)
 			{
-				bitset.push_back(true);
+				do
+				{
+					bitset.push_back(true);
+				} while(bitset.size() <= bits_number<unsigned long>);
 			}
+			CAPTURE(bitset);
+
 			REQUIRE_THROWS(bitset.to_ulong());
 		}
 	}
@@ -1580,10 +1587,18 @@ TEMPLATE_TEST_CASE("to_ullong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 			  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
 			CAPTURE(bitset);
 
-			while(bitset.size() <= bits_number<unsigned long long>)
+			size_t last = sul::dynamic_bitset<TestType>::npos;
+			bitset.iterate_bits_on([&last](size_t bit_pos) noexcept { last = bit_pos; });
+			if(last == sul::dynamic_bitset<TestType>::npos
+			   || last <= bits_number<unsigned long long>)
 			{
-				bitset.push_back(true);
+				do
+				{
+					bitset.push_back(true);
+				} while(bitset.size() <= bits_number<unsigned long long>);
 			}
+			CAPTURE(bitset);
+
 			REQUIRE_THROWS(bitset.to_ullong());
 		}
 	}
