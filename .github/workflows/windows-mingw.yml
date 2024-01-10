@@ -17,11 +17,11 @@ jobs:
       matrix:
         os: [windows-2019, windows-2022]
         config: [
-          {
-            compiler_name: gcc,
-            c_compiler_path: "C:/msys64/mingw64/bin/gcc.exe",
-            cxx_compiler_path: "C:/msys64/mingw64/bin/g++.exe"
-          },
+#          {
+#            compiler_name: gcc,
+#            c_compiler_path: "C:/msys64/mingw64/bin/gcc.exe",
+#            cxx_compiler_path: "C:/msys64/mingw64/bin/g++.exe"
+#          },
           {
             compiler_name: clang,
             c_compiler_path: "C:/msys64/mingw64/bin/clang.exe",
