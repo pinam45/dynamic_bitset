@@ -1520,7 +1520,7 @@ TEMPLATE_TEST_CASE("to_ulong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 			CAPTURE(bitset);
 
 			unsigned long long bits_taken_mask =
-			  one_block<unsigned long> >> (bits_number<unsigned long long> - bits_to_take);
+			  one_block<unsigned long> >> (bits_number<unsigned long> - bits_to_take);
 			unsigned long ulong_value = static_cast<unsigned long>(value & bits_taken_mask);
 
 			REQUIRE(bitset.to_ulong() == ulong_value);
