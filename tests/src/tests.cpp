@@ -734,8 +734,8 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 			{
 				bitset >>= shift;
 				value &= ~static_cast<unsigned long long>(0)
-				         >> (bits_number<
-				               unsigned long long> - bits_to_take); // set not taken left bits to 0
+				         >> (bits_number<unsigned long long>
+				             - bits_to_take); // set not taken left bits to 0
 				value >>= shift;
 
 				// check bits
@@ -1305,9 +1305,8 @@ TEMPLATE_TEST_CASE("size num_blocks empty capacity",
 	REQUIRE(bitset.size() == bits_to_take);
 
 	// num_blocks
-	const size_t num_blocks =
-	  bits_to_take
-	    / bits_number<TestType> + static_cast<size_t>(bits_to_take % bits_number<TestType> > 0);
+	const size_t num_blocks = bits_to_take / bits_number<TestType>
+	                          + static_cast<size_t>(bits_to_take % bits_number<TestType> > 0);
 	REQUIRE(bitset.num_blocks() == num_blocks);
 
 	const size_t old_capacity = bitset.capacity();
@@ -1492,6 +1491,102 @@ TEMPLATE_TEST_CASE("to_string", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 	string.push_back(bit_value(value, 0) ? '1' : '0');
 
 	REQUIRE(bitset.to_string() == string);
+}
+
+TEMPLATE_TEST_CASE("to_ulong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+
+	SECTION("empty bitset")
+	{
+		const sul::dynamic_bitset<TestType> bitset;
+
+		REQUIRE(bitset.to_ulong() == 0);
+	}
+
+	SECTION("non-empty bitset")
+	{
+		SECTION("value")
+		{
+			const std::tuple<unsigned long long, size_t> values =
+			  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+			                     randomInt<unsigned long long>(SEED),
+			                     randomInt<size_t>(1, bits_number<unsigned long>, SEED + 1)));
+			unsigned long long value = std::get<0>(values);
+			const size_t bits_to_take = std::get<1>(values);
+			CAPTURE(value, bits_to_take);
+
+			sul::dynamic_bitset<TestType> bitset(bits_to_take, value);
+			CAPTURE(bitset);
+
+			unsigned long long bits_taken_mask =
+			  one_block<unsigned long> >> (bits_number<unsigned long long> - bits_to_take);
+			unsigned long ulong_value = static_cast<unsigned long>(value & bits_taken_mask);
+
+			REQUIRE(bitset.to_ulong() == ulong_value);
+		}
+
+		SECTION("overflow exception")
+		{
+			sul::dynamic_bitset<TestType> bitset =
+			  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+			CAPTURE(bitset);
+
+			while(bitset.size() <= bits_number<unsigned long>)
+			{
+				bitset.push_back(true);
+			}
+			REQUIRE_THROWS(bitset.to_ulong());
+		}
+	}
+}
+
+TEMPLATE_TEST_CASE("to_ullong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
+{
+	CAPTURE(SEED);
+
+	SECTION("empty bitset")
+	{
+		const sul::dynamic_bitset<TestType> bitset;
+
+		REQUIRE(bitset.to_ullong() == 0);
+	}
+
+	SECTION("non-empty bitset")
+	{
+		SECTION("value")
+		{
+			const std::tuple<unsigned long long, size_t> values =
+			  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
+			                     randomInt<unsigned long long>(SEED),
+			                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+			unsigned long long value = std::get<0>(values);
+			const size_t bits_to_take = std::get<1>(values);
+			CAPTURE(value, bits_to_take);
+
+			sul::dynamic_bitset<TestType> bitset(bits_to_take, value);
+			CAPTURE(bitset);
+
+			unsigned long long bits_taken_mask =
+			  one_block<unsigned long long> >> (bits_number<unsigned long long> - bits_to_take);
+			unsigned long long ullong_value = value & bits_taken_mask;
+
+			REQUIRE(bitset.to_ullong() == ullong_value);
+		}
+
+		SECTION("overflow exception")
+		{
+			sul::dynamic_bitset<TestType> bitset =
+			  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+			CAPTURE(bitset);
+
+			while(bitset.size() <= bits_number<unsigned long long>)
+			{
+				bitset.push_back(true);
+			}
+			REQUIRE_THROWS(bitset.to_ullong());
+		}
+	}
 }
 
 TEMPLATE_TEST_CASE("iterate_bits_on", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
