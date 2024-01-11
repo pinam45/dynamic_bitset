@@ -20,7 +20,8 @@ endif()
 
 # Configure Doxygen
 set(DOXYGEN_GENERATE_TREEVIEW YES)
-#set(DOXYGEN_DISABLE_INDEX YES)
+set(DOXYGEN_DISABLE_INDEX NO)
+set(DOXYGEN_FULL_SIDEBAR NO)
 set(DOXYGEN_GENERATE_HTML YES)
 set(DOXYGEN_GENERATE_LATEX NO)
 set(DOXYGEN_GENERATE_XML NO)
@@ -31,8 +32,14 @@ set(DOXYGEN_EXCLUDE_SYMBOLS "DYNAMIC_BITSET_CAN_USE_*")
 set(DOXYGEN_ALIASES "\"complexity=@par Complexity^^\"")
 set(DOXYGEN_OUTPUT_LANGUAGE "English")
 set(DOXYGEN_MARKDOWN_SUPPORT YES)
-set(
-  DOXYGEN_HTML_EXTRA_STYLESHEET
+set(DOXYGEN_HTML_COLORSTYLE LIGHT)
+set(DOXYGEN_HTML_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/header.html")
+set(DOXYGEN_HTML_EXTRA_FILES
+	"${DOXYGEN_AWESOME_CSS_PATH}/doxygen-awesome-darkmode-toggle.js"
+	"${DOXYGEN_AWESOME_CSS_PATH}/doxygen-awesome-fragment-copy-button.js"
+	"${DOXYGEN_AWESOME_CSS_PATH}/doxygen-awesome-paragraph-link.js"
+)
+set(DOXYGEN_HTML_EXTRA_STYLESHEET
   "${DOXYGEN_AWESOME_CSS_PATH}/doxygen-awesome.css"
   "${DOXYGEN_AWESOME_CSS_PATH}/doxygen-awesome-sidebar-only.css"
   "${DOXYGEN_AWESOME_CSS_PATH}/doxygen-awesome-sidebar-only-darkmode-toggle.css"
