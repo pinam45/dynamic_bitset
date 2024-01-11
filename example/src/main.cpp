@@ -115,6 +115,12 @@ int main()
 	// conversion to string with 0 and 1
 	std::cout << "String representation (0 and 1): " << a.to_string() << std::endl;
 
+	// conversion to unsigned long
+	std::cout << "Numeric value (unsigned long): " << a.to_ulong() << std::endl;
+
+	// conversion to unsigned long long
+	std::cout << "Numeric value (unsigned long long): " << a.to_ullong() << std::endl;
+
 	// iterate on bits on
 	std::cout << "Bits on: ";
 	a.iterate_bits_on([](size_t bit_pos) noexcept { std::cout << bit_pos << ' '; });
