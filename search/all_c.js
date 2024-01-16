@@ -1,12 +1,8 @@
 var searchData=
 [
-  ['set_0',['set',['../classsul_1_1dynamic__bitset_1_1reference.html#ae59554e738486d23f5bcd356274eb6ca',1,'sul::dynamic_bitset::reference::set()'],['../classsul_1_1dynamic__bitset.html#a02655df92a32e6e3955fd65e0537ffc0',1,'sul::dynamic_bitset::set(size_type pos, size_type len, bool value)'],['../classsul_1_1dynamic__bitset.html#a1d1044443f26dbc7881c3ce9cfb0b4b0',1,'sul::dynamic_bitset::set(size_type pos, bool value=true)'],['../classsul_1_1dynamic__bitset.html#a1d6fcc837d2d9555693a27f888e48fa9',1,'sul::dynamic_bitset::set()']]],
-  ['shrink_5fto_5ffit_1',['shrink_to_fit',['../classsul_1_1dynamic__bitset.html#aaedd8fc429da52af19b9080c735d1d81',1,'sul::dynamic_bitset']]],
-  ['size_2',['size',['../classsul_1_1dynamic__bitset.html#a0b58f8123f5b249fc4b5ab021d162ba6',1,'sul::dynamic_bitset']]],
-  ['size_5ftype_3',['size_type',['../classsul_1_1dynamic__bitset.html#a5959b3611fa6890de62e45acb30de65e',1,'sul::dynamic_bitset']]],
-  ['sul_4',['sul',['../namespacesul.html',1,'']]],
-  ['sul_5fdynamic_5fbitset_5fversion_5fmajor_5',['SUL_DYNAMIC_BITSET_VERSION_MAJOR',['../dynamic__bitset_8hpp.html#a7e5ee1d5e07a46b32bcf61d0dba5d026',1,'dynamic_bitset.hpp']]],
-  ['sul_5fdynamic_5fbitset_5fversion_5fminor_6',['SUL_DYNAMIC_BITSET_VERSION_MINOR',['../dynamic__bitset_8hpp.html#a448442dcfc71c220781987abb8886f9a',1,'dynamic_bitset.hpp']]],
-  ['sul_5fdynamic_5fbitset_5fversion_5fpatch_7',['SUL_DYNAMIC_BITSET_VERSION_PATCH',['../dynamic__bitset_8hpp.html#afa48b302d77cec0b253a37bff7951a0d',1,'dynamic_bitset.hpp']]],
-  ['swap_8',['swap',['../classsul_1_1dynamic__bitset.html#a7daf1c2c30ea9e5c888f288aec4e2ff3',1,'sul::dynamic_bitset::swap(dynamic_bitset&lt; Block, Allocator &gt; &amp;other)'],['../classsul_1_1dynamic__bitset.html#a5d89a65b063651ec9e2102c01f4ca24a',1,'sul::dynamic_bitset::swap(dynamic_bitset&lt; Block, Allocator &gt; &amp;bitset1, dynamic_bitset&lt; Block, Allocator &gt; &amp;bitset2)'],['../namespacesul.html#ab45bac1934592e5c646b0727d8d91923',1,'sul::swap()']]]
+  ['reference_0',['reference',['../classsul_1_1dynamic__bitset_1_1reference.html',1,'sul::dynamic_bitset&lt; Block, Allocator &gt;::reference'],['../classsul_1_1dynamic__bitset_1_1reference.html#a66f1230859331550af679eedbbbd4ab1',1,'sul::dynamic_bitset::reference::reference(dynamic_bitset&lt; Block, Allocator &gt; &amp;bitset, size_type bit_pos)'],['../classsul_1_1dynamic__bitset_1_1reference.html#aa39b99f4a7113c0f1d9113bd36c1fa5d',1,'sul::dynamic_bitset::reference::reference(const reference &amp;) noexcept=default'],['../classsul_1_1dynamic__bitset_1_1reference.html#aaffb82a22596a90d32d1b5bca3d68609',1,'sul::dynamic_bitset::reference::reference(reference &amp;&amp;) noexcept=default']]],
+  ['requirements_1',['Requirements',['../index.html#autotoc_md1',1,'']]],
+  ['reserve_2',['reserve',['../classsul_1_1dynamic__bitset.html#aac4bc750bf0f21ecf6faa2d47a78a5da',1,'sul::dynamic_bitset']]],
+  ['reset_3',['reset',['../classsul_1_1dynamic__bitset_1_1reference.html#a05fb6782169cc0299f92e2dd7202736d',1,'sul::dynamic_bitset::reference::reset()'],['../classsul_1_1dynamic__bitset.html#aee2f1f7a057c82998680287fbd9f7be0',1,'sul::dynamic_bitset::reset(size_type pos, size_type len)'],['../classsul_1_1dynamic__bitset.html#a0d24aa0c946bf5179fde13cf4917e740',1,'sul::dynamic_bitset::reset(size_type pos)'],['../classsul_1_1dynamic__bitset.html#a6176399b41476be7597c48b36ed41f06',1,'sul::dynamic_bitset::reset()']]],
+  ['resize_4',['resize',['../classsul_1_1dynamic__bitset.html#aeaff9346a99a8404178335043a724ee2',1,'sul::dynamic_bitset']]]
 ];

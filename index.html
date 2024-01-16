@@ -1,47 +1,65 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- HTML header for doxygen 1.10.0-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
-<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=11"/>
-<meta name="generator" content="Doxygen 1.9.3"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>dynamic_bitset: dynamic_bitset</title>
-<link href="tabs.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="dynsections.js"></script>
-<link href="navtree.css" rel="stylesheet" type="text/css"/>
+    <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=11"/>
+    <meta name="generator" content="Doxygen 1.10.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>dynamic_bitset: dynamic_bitset</title>
+    <link href="tabs.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="dynsections.js"></script>
+    <script type="text/javascript" src="clipboard.js"></script>
+    <link href="navtree.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="resize.js"></script>
 <script type="text/javascript" src="navtreedata.js"></script>
 <script type="text/javascript" src="navtree.js"></script>
-<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="cookie.js"></script>
+    <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+    <link href="doxygen.css" rel="stylesheet" type="text/css"/>
+    <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
 <link href="custom.css" rel="stylesheet" type="text/css"/>
+    <!-- https://tholman.com/github-corners/ -->
+    <a href="https://github.com/pinam45/dynamic_bitset" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+    <script type="text/javascript">
+        DoxygenAwesomeDarkModeToggle.init()
+    </script>
+    <script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+    <script type="text/javascript">
+        DoxygenAwesomeFragmentCopyButton.init()
+    </script>
+    <script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+    <script type="text/javascript">
+        DoxygenAwesomeParagraphLink.init()
+    </script>
 </head>
 <body>
-<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
-<div id="titlearea">
-<table cellspacing="0" cellpadding="0">
- <tbody>
- <tr id="projectrow">
-  <td id="projectalign">
-   <div id="projectname">dynamic_bitset<span id="projectnumber">&#160;1.2.1</span>
-   </div>
-   <div id="projectbrief">Simple Useful Libraries: C++17/20 header-only dynamic bitset</div>
-  </td>
- </tr>
- </tbody>
-</table>
-</div>
-<!-- end header part -->
-<!-- Generated by Doxygen 1.9.3 -->
+    <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+        <div id="titlearea">
+            <table cellspacing="0" cellpadding="0">
+                <tbody>
+                <tr id="projectrow">
+                    <td id="projectalign">
+                        <div id="projectname">dynamic_bitset<span id="projectnumber">&#160;1.2.1</span>
+                        </div>
+                        <div id="projectbrief">Simple Useful Libraries: C++17/20 header-only dynamic bitset</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- end header part -->
+<!-- Generated by Doxygen 1.10.0 -->
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-var searchBox = new SearchBox("searchBox", "search",'Search','.html');
+var searchBox = new SearchBox("searchBox", "search/",'.html');
 /* @license-end */
 </script>
 <script type="text/javascript" src="menudata.js"></script>
@@ -50,7 +68,7 @@ var searchBox = new SearchBox("searchBox", "search",'Search','.html');
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
 $(function() {
   initMenu('',true,false,'search.php','Search');
-  $(document).ready(function() { init_search(); });
+  $(function() { init_search(); });
 });
 /* @license-end */
 </script>
@@ -68,7 +86,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function(){initNavTree('index.html',''); initResizable(); });
+$(function(){initNavTree('index.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -81,20 +99,27 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
-<iframe src="javascript:void(0)" frameborder="0" 
-        name="MSearchResults" id="MSearchResults">
-</iframe>
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
 </div>
 
 <div><div class="header">
   <div class="headertitle"><div class="title">dynamic_bitset </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p ><a class="anchor" id="md__home_runner_work_dynamic_bitset_dynamic_bitset_dynamic_bitset_README"></a> <a href="https://github.com/pinam45/dynamic_bitset/actions/workflows/ubuntu.yml"><img src="https://github.com/pinam45/dynamic_bitset/workflows/Ubuntu/badge.svg?branch=master" alt="Ubuntu" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-mingw.yml"><img src="https://github.com/pinam45/dynamic_bitset/workflows/Windows%20MinGW/badge.svg?branch=master" alt="Windows MinGW" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-msvc.yml"><img src="https://github.com/pinam45/dynamic_bitset/workflows/Windows%20Visual%20Studio/badge.svg?branch=master" alt="Windows Visual Studio" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/pinam45/dynamic_bitset/actions/workflows/macos.yml"><img src="https://github.com/pinam45/dynamic_bitset/workflows/macOS/badge.svg?branch=master" alt="macOS" style="pointer-events: none;" class="inline"/></a> <a href="https://pinam45.github.io/dynamic_bitset"><img src="https://github.com/pinam45/dynamic_bitset/workflows/Documentation/badge.svg?branch=master" alt="documentation" style="pointer-events: none;" class="inline"/></a> <a href="https://codecov.io/gh/pinam45/dynamic_bitset"><img src="https://codecov.io/gh/pinam45/dynamic_bitset/branch/master/graph/badge.svg" alt="codecov" style="pointer-events: none;" class="inline"/></a> <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/pinam45/dynamic_bitset.svg" alt="license" style="pointer-events: none;" class="inline"/></a></p>
-<p >Simple Useful Libraries: C++17/20 header-only dynamic bitset</p>
+<div class="textblock"><p><a class="anchor" id="md__2home_2runner_2work_2dynamic__bitset_2dynamic__bitset_2dynamic__bitset_2README"></a> <a href="https://github.com/pinam45/dynamic_bitset/actions/workflows/ubuntu.yml"><img src="https://github.com/pinam45/dynamic_bitset/workflows/Ubuntu/badge.svg?branch=master" alt="Ubuntu" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-mingw.yml"><img src="https://github.com/pinam45/dynamic_bitset/workflows/Windows%20MinGW/badge.svg?branch=master" alt="Windows MinGW" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-msvc.yml"><img src="https://github.com/pinam45/dynamic_bitset/workflows/Windows%20Visual%20Studio/badge.svg?branch=master" alt="Windows Visual Studio" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/pinam45/dynamic_bitset/actions/workflows/macos.yml"><img src="https://github.com/pinam45/dynamic_bitset/workflows/macOS/badge.svg?branch=master" alt="macOS" style="pointer-events: none;" class="inline"/></a> <a href="https://pinam45.github.io/dynamic_bitset"><img src="https://github.com/pinam45/dynamic_bitset/workflows/Documentation/badge.svg?branch=master" alt="documentation" style="pointer-events: none;" class="inline"/></a> <a href="https://codecov.io/gh/pinam45/dynamic_bitset"><img src="https://codecov.io/gh/pinam45/dynamic_bitset/branch/master/graph/badge.svg" alt="codecov" style="pointer-events: none;" class="inline"/></a> <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/pinam45/dynamic_bitset.svg" alt="license" style="pointer-events: none;" class="inline"/></a></p>
+<p>Simple Useful Libraries: C++17/20 header-only dynamic bitset</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Requirements</h1>
-<p >To use this <em>dynamic bitset</em>, you will need a <b>C++17 (or later) compliant compiler</b>. If you use CMake and want to use the <em>dynamic bitset</em> as a subproject, you will need <b>CMake 3.10 or later</b>.</p>
+<p>To use this <em>dynamic bitset</em>, you will need a <b>C++17 (or later) compliant compiler</b>. If you use CMake and want to use the <em>dynamic bitset</em> as a subproject, you will need <b>CMake 3.10 or later</b>.</p>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Usage sample</h1>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="dynamic__bitset_8hpp.html">sul/dynamic_bitset.hpp</a>&gt;</span></div>
@@ -120,24 +145,24 @@ Usage sample</h1>
 <div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;common bits = &quot;</span> &lt;&lt; (bitset1 &amp; bitset2) &lt;&lt; std::endl;</div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclasssul_1_1dynamic__bitset_html"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a></div><div class="ttdoc">Dynamic bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:171</div></div>
-<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_a133b525f7a7bdee3a082be852d38822b"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#a133b525f7a7bdee3a082be852d38822b">sul::dynamic_bitset::push_back</a></div><div class="ttdeci">constexpr void push_back(bool value)</div><div class="ttdoc">Add a new bit with the value value at the end of the sul::dynamic_bitset.</div><div class="ttdef"><b>Definition:</b> dynamic_bitset.hpp:2270</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a></div><div class="ttdoc">Dynamic bitset.</div><div class="ttdef"><b>Definition</b> dynamic_bitset.hpp:172</div></div>
+<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_a133b525f7a7bdee3a082be852d38822b"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#a133b525f7a7bdee3a082be852d38822b">sul::dynamic_bitset::push_back</a></div><div class="ttdeci">constexpr void push_back(bool value)</div><div class="ttdoc">Add a new bit with the value value at the end of the sul::dynamic_bitset.</div><div class="ttdef"><b>Definition</b> dynamic_bitset.hpp:2305</div></div>
 <div class="ttc" id="adynamic__bitset_8hpp_html"><div class="ttname"><a href="dynamic__bitset_8hpp.html">dynamic_bitset.hpp</a></div><div class="ttdoc">sul::dynamic_bitset declaration and implementation.</div></div>
-</div><!-- fragment --><p >Possible output: </p><pre class="fragment">bitset1     = 100010110111
+</div><!-- fragment --><p>Possible output: </p><pre class="fragment">bitset1     = 100010110111
 bitset2     = 001011011011
 common bits = 000010010011
 </pre><p> Test it on <a href="https://godbolt.org/z/1veE71rYT">godbolt.org</a>.</p>
 <h1><a class="anchor" id="autotoc_md3"></a>
 Optional dependency</h1>
-<p >Optionally, <a href="https://github.com/kimwalisch/libpopcnt">libpopcnt</a> will be used to optimize the bits counting operations, if the header is available (<code>__has_include(&lt;libpopcnt.h&gt;)</code>) and <code>DYNAMIC_BITSET_NO_LIBPOPCNT</code> is not defined.</p>
+<p>Optionally, <a href="https://github.com/kimwalisch/libpopcnt">libpopcnt</a> will be used to optimize the bits counting operations, if the header is available (<code>__has_include(&lt;libpopcnt.h&gt;)</code>) and <code>DYNAMIC_BITSET_NO_LIBPOPCNT</code> is not defined.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Integration</h1>
-<p >As it is a header-only library, the easiest way to integrate the <em><a class="el" href="classsul_1_1dynamic__bitset.html" title="Dynamic bitset.">sul::dynamic_bitset</a></em> class in your project is to just copy the <a href="include/sul">sul</a> folder in your project sources. Optionally, if you also copy <em>libpopcnt.h</em> from <a href="https://github.com/kimwalisch/libpopcnt">libpopcnt</a>, it will be used by default if it is available.</p>
+<p>As it is a header-only library, the easiest way to integrate the <em><a class="el" href="classsul_1_1dynamic__bitset.html" title="Dynamic bitset.">sul::dynamic_bitset</a></em> class in your project is to just copy the <a href="include/sul">sul</a> folder in your project sources. Optionally, if you also copy <em>libpopcnt.h</em> from <a href="https://github.com/kimwalisch/libpopcnt">libpopcnt</a>, it will be used by default if it is available.</p>
 <h1><a class="anchor" id="autotoc_md5"></a>
 CMake integration</h1>
-<p >If you use CMake and want to use the <em>dynamic bitset</em> as a subproject, clone the repository (or add it as a git submodule) in a sub-folder of your project. Then, in your <em>CMakeLists.txt</em> add: </p><div class="fragment"><div class="line">add_subdirectory(&lt;path_to_dynamic_bitset_folder&gt;)</div>
+<p>If you use CMake and want to use the <em>dynamic bitset</em> as a subproject, clone the repository (or add it as a git submodule) in a sub-folder of your project. Then, in your <em>CMakeLists.txt</em> add: </p><div class="fragment"><div class="line">add_subdirectory(&lt;path_to_dynamic_bitset_folder&gt;)</div>
 </div><!-- fragment --><p> It will define the <em>dynamic_bitset</em> target and the alias target <em><a class="el" href="classsul_1_1dynamic__bitset.html" title="Dynamic bitset.">sul::dynamic_bitset</a></em> that you can use to add the folder containing <em><a class="el" href="dynamic__bitset_8hpp.html" title="sul::dynamic_bitset declaration and implementation.">dynamic_bitset.hpp</a></em> to your project header folders. To do so, in your <em>CMakeLists.txt</em> add: </p><div class="fragment"><div class="line">target_link_libraries(&lt;your_project_target&gt; PRIVATE sul::dynamic_bitset)</div>
-</div><!-- fragment --><p >For example, a simple project with the repository as a git submodule in the <em>extlibs</em> folder, could have a <em>CMakeLists.txt</em> similar to this: </p><div class="fragment"><div class="line">cmake_minimum_required(VERSION 3.10)</div>
+</div><!-- fragment --><p>For example, a simple project with the repository as a git submodule in the <em>extlibs</em> folder, could have a <em>CMakeLists.txt</em> similar to this: </p><div class="fragment"><div class="line">cmake_minimum_required(VERSION 3.10)</div>
 <div class="line">project(CoolProject LANGUAGES CXX)</div>
 <div class="line"> </div>
 <div class="line">add_executable(CoolProject main.cpp)</div>
@@ -145,7 +170,7 @@ CMake integration</h1>
 <div class="line"> </div>
 <div class="line">add_subdirectory(extlibs/dynamic_bitset)</div>
 <div class="line">target_link_libraries(CoolProject PRIVATE sul::dynamic_bitset)</div>
-</div><!-- fragment --><p >If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the <em>dynamic bitset</em> CMake options <code>DYNAMICBITSET_USE_LIBPOPCNT</code> and <code>DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE</code> to <code>ON</code>(default values), the folder containing <em>libpopcnt.h</em> will also be added to the headers paths and libpopcnt will be used.</p>
+</div><!-- fragment --><p>If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the <em>dynamic bitset</em> CMake options <code>DYNAMICBITSET_USE_LIBPOPCNT</code> and <code>DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE</code> to <code>ON</code>(default values), the folder containing <em>libpopcnt.h</em> will also be added to the headers paths and libpopcnt will be used.</p>
 <h1><a class="anchor" id="autotoc_md6"></a>
 CMake options</h1>
 <h2><a class="anchor" id="autotoc_md7"></a>
@@ -190,12 +215,12 @@ Default values</h2>
 </table>
 <h1><a class="anchor" id="autotoc_md9"></a>
 Build tests, example, and documentation</h1>
-<p >The latest version of the documentation is available online <a href="https://pinam45.github.io/dynamic_bitset">here</a>.</p>
-<p >To build the tests, the example, and the documentation, git submodules are required, so don't forget to pull the submodules with the repository using <code>--recursive</code>: </p><pre class="fragment">$ git clone --recursive https://github.com/pinam45/dynamic_bitset.git
+<p>The latest version of the documentation is available online <a href="https://pinam45.github.io/dynamic_bitset">here</a>.</p>
+<p>To build the tests, the example, and the documentation, git submodules are required, so don't forget to pull the submodules with the repository using <code>--recursive</code>: </p><pre class="fragment">$ git clone --recursive https://github.com/pinam45/dynamic_bitset.git
 </pre><p> or if you have already cloned the repository: </p><pre class="fragment">$ git submodule update --init --recursive
 </pre><p> The project uses CMake to build and define the options <code>DYNAMICBITSET_BUILD_TESTS</code>, <code>DYNAMICBITSET_BUILD_EXAMPLE</code>, and <code>DYNAMICBITSET_BUILD_DOCS</code> to enable the generation of the tests, example, and documentation targets, these option are enabled by default if the project is the master project (not included from another <em>CMakeLists.txt</em> with <em>add_subdirectory</em>).</p>
-<p >Generating the documentation requires <b><a href="http://www.doxygen.nl/">Doxygen</a> 1.8.16 or later</b> and is done by building the target <em>dynamic_bitset_docs</em>. For running the tests, build the <em>dynamic_bitset_tests</em> target and launch the tests using ctest.</p>
-<p >See <a href="https://cmake.org/runningcmake/">Running CMake</a> and <a href="https://cmake.org/cmake/help/latest/manual/ctest.1.html">the ctest documentation</a> for more information. On linux, a common way of doing this is: </p><pre class="fragment">$ mkdir cmake-build
+<p>Generating the documentation requires <b><a href="http://www.doxygen.nl/">Doxygen</a> 1.8.16 or later</b> and is done by building the target <em>dynamic_bitset_docs</em>. For running the tests, build the <em>dynamic_bitset_tests</em> target and launch the tests using ctest.</p>
+<p>See <a href="https://cmake.org/runningcmake/">Running CMake</a> and <a href="https://cmake.org/cmake/help/latest/manual/ctest.1.html">the ctest documentation</a> for more information. On linux, a common way of doing this is: </p><pre class="fragment">$ mkdir cmake-build
 $ cd cmake-build
 $ cmake ..
 $ cmake --build .
@@ -203,19 +228,20 @@ $ ctest --output-on-failure
 </pre><p> On Windows, there is batch files available to configure a Visual Studio project in the [ide](ide) folder.</p>
 <h1><a class="anchor" id="autotoc_md10"></a>
 License</h1>
-<p ><img src="http://opensource.org/trademarks/opensource/OSI-Approved-License-100x137.png" alt="" align="right" class="inline"/></p>
-<p >dynamic_bitset is licensed under the <a href="http://opensource.org/licenses/MIT">MIT License</a>:</p>
-<p >Copyright &copy; 2019 <a href="https://github.com/pinam45">Maxime Pinard</a></p>
-<p >Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
-<p >The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-<p >THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. </p>
+<p><img src="http://opensource.org/trademarks/opensource/OSI-Approved-License-100x137.png" alt="" align="right" class="inline"/></p>
+<p>dynamic_bitset is licensed under the <a href="http://opensource.org/licenses/MIT">MIT License</a>:</p>
+<p>Copyright &copy; 2019 <a href="https://github.com/pinam45">Maxime Pinard</a></p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. </p>
 </div></div><!-- PageDoc -->
+<a href="doxygen_crawl.html"/>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
   </ul>
 </div>
 </body>

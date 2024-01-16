@@ -66,6 +66,8 @@ var classsul_1_1dynamic__bitset =
     [ "test", "classsul_1_1dynamic__bitset.html#aab8df7a8611ee28d389d769e80f6c26d", null ],
     [ "test_set", "classsul_1_1dynamic__bitset.html#a1a0989b21f66b5c6fce814f9fee0a30c", null ],
     [ "to_string", "classsul_1_1dynamic__bitset.html#a5af8874097723447bec7d97fee25541d", null ],
+    [ "to_ullong", "classsul_1_1dynamic__bitset.html#aed3cb081490d4f269de7f3bfc574f8c8", null ],
+    [ "to_ulong", "classsul_1_1dynamic__bitset.html#a9d442a993dacd1aca16e6a33a12a0960", null ],
     [ "operator!=", "classsul_1_1dynamic__bitset.html#a0f7b1ee86ec4241214179413bcdd7be8", null ],
     [ "operator&", "classsul_1_1dynamic__bitset.html#acd7517c85c4a04ae842aea1bb832b6e1", null ],
     [ "operator-", "classsul_1_1dynamic__bitset.html#aeccf308d8f405721b588abce7b75c962", null ],
