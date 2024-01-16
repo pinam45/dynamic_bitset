@@ -1,10 +1,10 @@
 # dynamic_bitset
 
-[![Ubuntu](https://github.com/pinam45/dynamic_bitset/workflows/Ubuntu/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/ubuntu.yml)
-[![Windows MinGW](https://github.com/pinam45/dynamic_bitset/workflows/Windows%20MinGW/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-mingw.yml)
-[![Windows Visual Studio](https://github.com/pinam45/dynamic_bitset/workflows/Windows%20Visual%20Studio/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-msvc.yml)
-[![macOS](https://github.com/pinam45/dynamic_bitset/workflows/macOS/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/macos.yml)
-[![documentation](https://github.com/pinam45/dynamic_bitset/workflows/Documentation/badge.svg?branch=master)](https://pinam45.github.io/dynamic_bitset)
+[![Ubuntu](https://github.com/pinam45/dynamic_bitset/actions/workflows/ubuntu.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/ubuntu.yml)
+[![Windows MinGW](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-mingw.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-mingw.yml)
+[![Windows Visual Studio](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-msvc.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-msvc.yml)
+[![macOS](https://github.com/pinam45/dynamic_bitset/actions/workflows/macos.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/macos.yml)
+[![documentation](https://github.com/pinam45/dynamic_bitset/actions/workflows/documentation.yml/badge.svg?branch=master)](https://pinam45.github.io/dynamic_bitset)
 [![codecov](https://codecov.io/gh/pinam45/dynamic_bitset/branch/master/graph/badge.svg)](https://codecov.io/gh/pinam45/dynamic_bitset)
 [![license](https://img.shields.io/github/license/pinam45/dynamic_bitset.svg)](http://opensource.org/licenses/MIT)
 
@@ -141,7 +141,7 @@ On Windows, there is batch files available to configure a Visual Studio project 
 
 ## License
 
-<img align="right" src="http://opensource.org/trademarks/opensource/OSI-Approved-License-100x137.png">
+<img align="right" width="100px" src="https://opensource.org/wp-content/uploads/2009/06/OSIApproved.svg">
 
 dynamic_bitset is licensed under the [MIT License](http://opensource.org/licenses/MIT):
 
