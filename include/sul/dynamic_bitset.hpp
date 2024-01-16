@@ -20,14 +20,14 @@
  *
  * @since      1.1.0
  */
-#define SUL_DYNAMIC_BITSET_VERSION_MINOR 2
+#define SUL_DYNAMIC_BITSET_VERSION_MINOR 3
 
 /**
  * @brief      @ref sul::dynamic_bitset version patch.
  *
  * @since      1.1.0
  */
-#define SUL_DYNAMIC_BITSET_VERSION_PATCH 1
+#define SUL_DYNAMIC_BITSET_VERSION_PATCH 0
 
 /** @file
  * @brief      @ref sul::dynamic_bitset declaration and implementation.
