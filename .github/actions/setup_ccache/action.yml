@@ -90,10 +90,10 @@ runs:
         file(APPEND "$ENV{GITHUB_ENV}" "CCACHE_MAXSIZE=400M\n")
         set(ccache_binary "${workspace}/ccache/bin/ccache")
         message(STATUS "ccache binary: ${ccache_binary}")
-        message("::set-output name=ccache_binary::${ccache_binary}")
+        file(APPEND "$ENV{GITHUB_OUTPUT}" "ccache_binary=${ccache_binary}\n")
         execute_process(COMMAND ${ccache_binary} --zero-stats)
         string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
-        message("::set-output name=timestamp::${current_date}")
+        file(APPEND "$ENV{GITHUB_OUTPUT}" "timestamp=${current_date}\n")
 
     - name: Print ccache config
       id: print

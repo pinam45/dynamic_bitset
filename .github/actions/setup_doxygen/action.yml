@@ -54,7 +54,7 @@ runs:
           message(FATAL_ERROR "Unsupported")
         endif()
         set(doxygen_dir "doxygen-${{inputs.doxygen_version}}")
-        message("::set-output name=doxygen_install::${workspace}/doxygen/${doxygen_dir}")
+        file(APPEND "$ENV{GITHUB_OUTPUT}" "doxygen_install=${workspace}/doxygen/${doxygen_dir}\n")
 
     - name: Print version
       id: print

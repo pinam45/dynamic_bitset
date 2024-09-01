@@ -70,9 +70,9 @@ runs:
         set(cmake_binary "${workspace}/cmake/${cmake_bin_dir}/cmake")
         set(ctest_binary "${workspace}/cmake/${cmake_bin_dir}/ctest")
         message(STATUS "CMake binary: ${cmake_binary}")
-        message("::set-output name=cmake_binary::${cmake_binary}")
+        file(APPEND "$ENV{GITHUB_OUTPUT}" "cmake_binary=${cmake_binary}\n")
         message(STATUS "CTest binary: ${ctest_binary}")
-        message("::set-output name=ctest_binary::${ctest_binary}")
+        file(APPEND "$ENV{GITHUB_OUTPUT}" "ctest_binary=${ctest_binary}\n")
 
     - name: Print version
       id: print
