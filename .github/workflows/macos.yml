@@ -15,13 +15,25 @@ jobs:
       fail-fast: false
       matrix:
         config: [
-          # {os: macos-11, xcode: 11.7},
-          # {os: macos-11, xcode: 12.4},
-          {os: macos-11, xcode: 12.5.1},
-          # {os: macos-11, xcode: 13.0},
-          # {os: macos-11, xcode: 13.1},
-          # {os: macos-11, xcode: 13.2},
-          {os: macos-11, xcode: 13.2.1}
+          # {os: macos-12, xcode: 13.1},
+          # {os: macos-12, xcode: 13.2.1},
+          # {os: macos-12, xcode: 13.3.1},
+          {os: macos-12, xcode: 13.4.1},
+          # {os: macos-12, xcode: 14.0.1},
+          # {os: macos-12, xcode: 14.1},
+          {os: macos-12, xcode: 14.2},
+          # {os: macos-13, xcode: 14.1},
+          # {os: macos-13, xcode: 14.2},
+          {os: macos-13, xcode: 14.3.1},
+          # {os: macos-13, xcode: 15.0.1},
+          # {os: macos-13, xcode: 15.1},
+          {os: macos-13, xcode: 15.2},
+          {os: macos-14, xcode: 14.3.1},
+          # {os: macos-14, xcode: 15.0.1},
+          # {os: macos-14, xcode: 15.1},
+          # {os: macos-14, xcode: 15.2},
+          # {os: macos-14, xcode: 15.3},
+          {os: macos-14, xcode: 15.4},
         ]
         build_type: [Debug, Release, Sanitize]
 

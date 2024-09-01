@@ -16,11 +16,22 @@ jobs:
       fail-fast: false
       matrix:
         config: [
-          {os: ubuntu-20.04, compiler_name: gcc-9, c_compiler: gcc-9, cxx_compiler: g++-9},
           {os: ubuntu-20.04, compiler_name: gcc-10, c_compiler: gcc-10, cxx_compiler: g++-10},
           {os: ubuntu-20.04, compiler_name: clang-10, c_compiler: clang-10, cxx_compiler: clang++-10},
           {os: ubuntu-20.04, compiler_name: clang-11, c_compiler: clang-11, cxx_compiler: clang++-11},
-          {os: ubuntu-20.04, compiler_name: clang-12, c_compiler: clang-12, cxx_compiler: clang++-12}
+          {os: ubuntu-20.04, compiler_name: clang-12, c_compiler: clang-12, cxx_compiler: clang++-12},
+          {os: ubuntu-22.04, compiler_name: gcc-10, c_compiler: gcc-10, cxx_compiler: g++-10},
+          {os: ubuntu-22.04, compiler_name: gcc-11, c_compiler: gcc-11, cxx_compiler: g++-11},
+          {os: ubuntu-22.04, compiler_name: gcc-12, c_compiler: gcc-12, cxx_compiler: g++-12},
+          {os: ubuntu-22.04, compiler_name: clang-13, c_compiler: clang-13, cxx_compiler: clang++-13},
+          {os: ubuntu-22.04, compiler_name: clang-14, c_compiler: clang-14, cxx_compiler: clang++-14},
+          {os: ubuntu-22.04, compiler_name: clang-15, c_compiler: clang-15, cxx_compiler: clang++-15},
+          {os: ubuntu-24.04, compiler_name: gcc-12, c_compiler: gcc-12, cxx_compiler: g++-12},
+          {os: ubuntu-24.04, compiler_name: gcc-13, c_compiler: gcc-13, cxx_compiler: g++-13},
+          {os: ubuntu-24.04, compiler_name: gcc-14, c_compiler: gcc-14, cxx_compiler: g++-14},
+          {os: ubuntu-24.04, compiler_name: clang-16, c_compiler: clang-16, cxx_compiler: clang++-16},
+          {os: ubuntu-24.04, compiler_name: clang-17, c_compiler: clang-17, cxx_compiler: clang++-17},
+          {os: ubuntu-24.04, compiler_name: clang-18, c_compiler: clang-18, cxx_compiler: clang++-18},
         ]
         build_type: [Debug, Release, Sanitize]
 
