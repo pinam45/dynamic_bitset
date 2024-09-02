@@ -19,7 +19,7 @@ runs:
   steps:
     - name: Cache ccache
       id: cache
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: ${{github.workspace}}/ccache
         key: ccache-${{inputs.ccache_version}}-${{inputs.used_env}}
@@ -103,7 +103,7 @@ runs:
         execute_process(COMMAND ${{steps.configure.outputs.ccache_binary}} --show-config)
 
     - name: Cache ccache files
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: ${{env.CCACHE_DIR}}
         key: ccache-cache-${{inputs.cache_id}}-${{steps.configure.outputs.timestamp}}

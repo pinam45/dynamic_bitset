@@ -19,7 +19,7 @@ runs:
   steps:
     - name: Cache CMake
       id: cache
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: ${{github.workspace}}/cmake
         key: cmake-${{inputs.cmake_version}}-${{inputs.used_env}}

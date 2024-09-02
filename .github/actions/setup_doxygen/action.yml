@@ -19,7 +19,7 @@ runs:
   steps:
     - name: Cache Doxygen
       id: cache
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: ${{github.workspace}}/doxygen
         key: doxygen-${{inputs.doxygen_version}}-${{inputs.used_env}}
