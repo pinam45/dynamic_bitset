@@ -118,8 +118,12 @@ jobs:
         endif()
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v4
       with:
-        files: ${{github.workspace}}/coverage.info
+        fail_ci_if_error: true
+        file: ${{github.workspace}}/coverage.info
         root_dir: ${{github.workspace}}/dynamic_bitset
+        token: ${{ secrets.CODECOV_TOKEN }}
+        plugin: noop
+        plugins: noop
         verbose: true
