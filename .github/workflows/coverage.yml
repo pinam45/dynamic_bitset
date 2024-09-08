@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         config: [
-          {os: ubuntu-20.04, compiler_name: gcc, c_compiler: gcc-9, cxx_compiler: g++-9}
+          {os: ubuntu-24.04, compiler_name: gcc, c_compiler: gcc-13, cxx_compiler: g++-13}
         ]
 
     steps:
@@ -103,7 +103,7 @@ jobs:
           message(FATAL_ERROR "Bad exit status")
         endif()
         execute_process(
-          COMMAND lcov --directory "${workspace}/dynamic_bitset/build" --capture --output-file "${workspace}/coverage.info"
+          COMMAND lcov --ignore-errors mismatch --directory "${workspace}/dynamic_bitset/build" --capture --output-file "${workspace}/coverage.info"
           RESULT_VARIABLE result
         )
         if(NOT result EQUAL 0)
