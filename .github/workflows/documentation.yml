@@ -7,13 +7,13 @@ on:
 
 env:
   CMAKE_VERSION: 3.28.1
-  DOXYGEN_VERSION: 1.10.0
-  DOXYGEN_LIBCLANG_VERSION: 9
+  DOXYGEN_VERSION: 1.12.0
+  DOXYGEN_LIBCLANG_VERSION: 18
 
 jobs:
   build:
-    name: ubuntu-20.04 - documentation
-    runs-on: ubuntu-20.04
+    name: ubuntu-24.04 - documentation
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout dynamic_bitset
       uses: actions/checkout@v4
@@ -26,7 +26,7 @@ jobs:
       uses: ./dynamic_bitset/.github/actions/setup_cmake
       with:
         cmake_version: ${{env.CMAKE_VERSION}}
-        used_env: ${{matrix.config.os}}
+        used_env: ubuntu-24.04
 
     - name: Setup Doxygen
       id: doxygen
@@ -34,7 +34,7 @@ jobs:
       with:
         doxygen_version: ${{env.DOXYGEN_VERSION}}
         doxygen_libclang_version: ${{env.DOXYGEN_LIBCLANG_VERSION}}
-        used_env: ubuntu-20.04
+        used_env: ubuntu-24.04
 
     - name: Configure
       shell: cmake -P {0}
