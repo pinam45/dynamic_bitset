@@ -6,7 +6,7 @@ on:
 
 env:
   CMAKE_VERSION: 3.30.3
-  CCACHE_VERSION: 4.9
+  CCACHE_VERSION: 4.10.2
 
 jobs:
   build:
