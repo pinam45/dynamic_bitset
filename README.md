@@ -1,7 +1,7 @@
 # dynamic_bitset
 
 [![Ubuntu](https://github.com/pinam45/dynamic_bitset/actions/workflows/ubuntu.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/ubuntu.yml)
-[![Windows MinGW](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-mingw.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-mingw.yml)
+[![Windows MSYS2](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-msys2.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-msys2.yml)
 [![Windows Visual Studio](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-msvc.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/windows-msvc.yml)
 [![macOS](https://github.com/pinam45/dynamic_bitset/actions/workflows/macos.yml/badge.svg?branch=master)](https://github.com/pinam45/dynamic_bitset/actions/workflows/macos.yml)
 [![documentation](https://github.com/pinam45/dynamic_bitset/actions/workflows/documentation.yml/badge.svg?branch=master)](https://pinam45.github.io/dynamic_bitset)

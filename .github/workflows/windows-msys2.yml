@@ -1,0 +1,84 @@
+name: Windows MSYS2
+
+on:
+  - push
+  - pull_request
+
+env:
+  CMAKE_VERSION: 3.30.3
+  CCACHE_VERSION: 4.10.2
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2019, windows-2022]
+        sys: [mingw64, mingw32, clang64, clang32, ucrt64]
+        build_type: [Debug, Release]
+    name: ${{matrix.os}} - ${{matrix.sys}} - ${{matrix.build_type}}
+    runs-on: ${{matrix.os}}
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+    - name: Checkout dynamic_bitset
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        path: dynamic_bitset
+
+    - name: Setup build environment
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{matrix.sys}}
+        update: true
+        pacboy: >-
+          toolchain:p
+          cmake:p
+          ninja:p
+
+    - name: Setup CMake
+      id: cmake
+      uses: ./dynamic_bitset/.github/actions/setup_cmake
+      with:
+        cmake_version: ${{env.CMAKE_VERSION}}
+        used_env: ${{matrix.os}}
+
+    - name: Setup ccache
+      id: ccache
+      uses: ./dynamic_bitset/.github/actions/setup_ccache
+      with:
+        ccache_version: ${{env.CCACHE_VERSION}}
+        used_env: ${{matrix.os}}
+        cache_id: ${{matrix.os}}-${{matrix.sys}}-${{matrix.build_type}}
+
+    - name: Configure
+      run: >-
+        ${{steps.cmake.outputs.cmake_binary}}
+        -S "${{github.workspace}}/dynamic_bitset"
+        -B "${{github.workspace}}/dynamic_bitset/build"
+        -G Ninja
+        -D CMAKE_CONFIGURATION_TYPES=${{matrix.build_type}}
+        -D CMAKE_BUILD_TYPE=${{matrix.build_type}}
+        -D CMAKE_C_COMPILER_LAUNCHER=${{steps.ccache.outputs.ccache_binary}}
+        -D CMAKE_CXX_COMPILER_LAUNCHER=${{steps.ccache.outputs.ccache_binary}}
+
+    - name: Build
+      run: >-
+        ${{steps.cmake.outputs.cmake_binary}}
+        --build "${{github.workspace}}/dynamic_bitset/build"
+        --config ${{matrix.build_type}}
+        --parallel $(nproc)
+
+    - name: Ccache stats
+      run: >-
+        ${{steps.ccache.outputs.ccache_binary}} --show-stats
+
+    - name: Run tests
+      run: >-
+        ${{steps.cmake.outputs.ctest_binary}}
+        --test-dir "${{github.workspace}}/dynamic_bitset/build"
+        --output-on-failure
+        --parallel $(nproc)
