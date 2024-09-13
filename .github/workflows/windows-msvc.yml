@@ -9,8 +9,6 @@ env:
 
 jobs:
   build:
-    name: ${{matrix.config.os}} - ${{matrix.config.generator_short}} - ${{matrix.config.toolset}} - ${{matrix.architecture}} - ${{matrix.build_type}}
-    runs-on: ${{matrix.config.os}}
     strategy:
       fail-fast: false
       matrix:
@@ -22,6 +20,12 @@ jobs:
         ]
         architecture: [Win32, x64]
         build_type: [Debug, Release]
+    name: ${{matrix.config.os}} - ${{matrix.config.generator_short}} - ${{matrix.config.toolset}} - ${{matrix.architecture}} - ${{matrix.build_type}}
+    runs-on: ${{matrix.config.os}}
+    env:
+      CMAKE_GENERATOR: ${{matrix.config.generator}}
+      CMAKE_GENERATOR_TOOLSET: ${{matrix.config.toolset}}
+      CMAKE_GENERATOR_PLATFORM: ${{matrix.architecture}}
 
     steps:
     - name: Checkout dynamic_bitset
@@ -30,13 +34,6 @@ jobs:
         submodules: recursive
         path: dynamic_bitset
 
-    - name: Setup build environment
-      shell: cmake -P {0}
-      run: |
-        file(APPEND "$ENV{GITHUB_ENV}" "CMAKE_GENERATOR=${{matrix.config.generator}}\n")
-        file(APPEND "$ENV{GITHUB_ENV}" "CMAKE_GENERATOR_TOOLSET=${{matrix.config.toolset}}\n")
-        file(APPEND "$ENV{GITHUB_ENV}" "CMAKE_GENERATOR_PLATFORM=${{matrix.architecture}}\n")
-
     - name: Setup CMake
       id: cmake
       uses: ./dynamic_bitset/.github/actions/setup_cmake
@@ -44,51 +41,30 @@ jobs:
         cmake_version: ${{env.CMAKE_VERSION}}
         used_env: ${{matrix.config.os}}
 
+    - name: CMake version
+      run: ${{steps.cmake.outputs.cmake_binary}} --version
+
+    - name: CTest version
+      run: ${{steps.cmake.outputs.ctest_binary}} --version
+
     - name: Configure
-      shell: cmake -P {0}
-      run: |
-        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
-        execute_process(
-          COMMAND ${{steps.cmake.outputs.cmake_binary}}
-            -S "${workspace}/dynamic_bitset"
-            -B "${workspace}/dynamic_bitset/build"
-            -D CMAKE_CONFIGURATION_TYPES=${{matrix.build_type}}
-            -D CMAKE_BUILD_TYPE=${{matrix.build_type}}
-          RESULT_VARIABLE result
-        )
-        if(NOT result EQUAL 0)
-          message(FATAL_ERROR "Bad exit status")
-        endif()
+      run: >-
+        ${{steps.cmake.outputs.cmake_binary}}
+        -S "${{github.workspace}}/dynamic_bitset"
+        -B "${{github.workspace}}/dynamic_bitset/build"
+        -D CMAKE_CONFIGURATION_TYPES=${{matrix.build_type}}
+        -D CMAKE_BUILD_TYPE=${{matrix.build_type}}
 
     - name: Build
-      shell: cmake -P {0}
-      run: |
-        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
-        include(ProcessorCount)
-        ProcessorCount(N)
-        execute_process(
-          COMMAND ${{steps.cmake.outputs.cmake_binary}}
-            --build "${workspace}/dynamic_bitset/build"
-            --config ${{matrix.build_type}}
-            --parallel ${N}
-          RESULT_VARIABLE result
-        )
-        if(NOT result EQUAL 0)
-          message(FATAL_ERROR "Bad exit status")
-        endif()
+      run: >-
+        ${{steps.cmake.outputs.cmake_binary}}
+        --build "${{github.workspace}}/dynamic_bitset/build"
+        --config ${{matrix.build_type}}
+        --parallel ${env:NUMBER_OF_PROCESSORS}
 
     - name: Run tests
-      shell: cmake -P {0}
-      run: |
-        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
-        include(ProcessorCount)
-        ProcessorCount(N)
-        set(ENV{CTEST_OUTPUT_ON_FAILURE} "ON")
-        execute_process(
-          COMMAND ${{steps.cmake.outputs.ctest_binary}} --output-on-failure --parallel ${N}
-          WORKING_DIRECTORY "${workspace}/dynamic_bitset/build"
-          RESULT_VARIABLE result
-        )
-        if(NOT result EQUAL 0)
-          message(FATAL_ERROR "Running tests failed!")
-        endif()
+      run: >-
+        ${{steps.cmake.outputs.ctest_binary}}
+        --test-dir "${{github.workspace}}/dynamic_bitset/build"
+        --output-on-failure
+        --parallel ${env:NUMBER_OF_PROCESSORS}
