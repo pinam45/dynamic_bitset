@@ -36,7 +36,6 @@ jobs:
         update: true
         pacboy: >-
           toolchain:p
-          cmake:p
           ninja:p
 
     - name: Setup CMake
@@ -53,6 +52,24 @@ jobs:
         ccache_version: ${{env.CCACHE_VERSION}}
         used_env: ${{matrix.os}}
         cache_id: ${{matrix.os}}-${{matrix.sys}}-${{matrix.build_type}}
+
+    - name: CMake version
+      run: ${{steps.cmake.outputs.cmake_binary}} --version
+
+    - name: CTest version
+      run: ${{steps.cmake.outputs.ctest_binary}} --version
+
+    - name: Ccache version
+      run: ${{steps.ccache.outputs.ccache_binary}} --version
+
+    - name: Ninja version
+      run: ninja --version
+
+    - name: C compiler version
+      run: cc --version
+
+    - name: C++ compiler version
+      run: c++ --version
 
     - name: Configure
       run: >-
