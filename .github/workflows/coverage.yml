@@ -9,14 +9,18 @@ env:
 
 jobs:
   build:
-    name: ${{matrix.config.os}} - ${{matrix.config.compiler_name}} - coverage
-    runs-on: ${{matrix.config.os}}
     strategy:
       fail-fast: false
       matrix:
         config: [
           {os: ubuntu-24.04, compiler_name: gcc, c_compiler: gcc-13, cxx_compiler: g++-13}
         ]
+    name: ${{matrix.config.os}} - ${{matrix.config.compiler_name}} - coverage
+    runs-on: ${{matrix.config.os}}
+    env:
+      CMAKE_GENERATOR: "Unix Makefiles"
+      CC: ${{matrix.config.c_compiler}}
+      CXX: ${{matrix.config.cxx_compiler}}
 
     steps:
     - name: Checkout dynamic_bitset
@@ -25,15 +29,6 @@ jobs:
         submodules: recursive
         path: dynamic_bitset
 
-    - name: Setup build environment
-      shell: cmake -P {0}
-      run: |
-        execute_process(COMMAND ${{matrix.config.c_compiler}} --version)
-        execute_process(COMMAND ${{matrix.config.cxx_compiler}} --version)
-        file(APPEND "$ENV{GITHUB_ENV}" "CMAKE_GENERATOR=Unix Makefiles\n")
-        file(APPEND "$ENV{GITHUB_ENV}" "CC=${{matrix.config.c_compiler}}\n")
-        file(APPEND "$ENV{GITHUB_ENV}" "CXX=${{matrix.config.cxx_compiler}}\n")
-
     - name: Setup CMake
       id: cmake
       uses: ./dynamic_bitset/.github/actions/setup_cmake
@@ -41,81 +36,49 @@ jobs:
         cmake_version: ${{env.CMAKE_VERSION}}
         used_env: ${{matrix.config.os}}
 
+    - name: CMake version
+      run: ${{steps.cmake.outputs.cmake_binary}} --version
+
+    - name: CTest version
+      run: ${{steps.cmake.outputs.ctest_binary}} --version
+
+    - name: Make version
+      run: make --version
+
+    - name: C compiler version
+      run: ${CC} --version
+
+    - name: C++ compiler version
+      run: ${CXX} --version
+
     - name: Configure
-      shell: cmake -P {0}
-      run: |
-        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
-        execute_process(
-          COMMAND ${{steps.cmake.outputs.cmake_binary}}
-            -S "${workspace}/dynamic_bitset"
-            -B "${workspace}/dynamic_bitset/build"
-            -D CMAKE_CONFIGURATION_TYPES=Release
-            -D CMAKE_BUILD_TYPE=Release
-            -D DYNAMICBITSET_ENABLE_COVERAGE=ON
-          RESULT_VARIABLE result
-        )
-        if(NOT result EQUAL 0)
-          message(FATAL_ERROR "Bad exit status")
-        endif()
+      run: >-
+        ${{steps.cmake.outputs.cmake_binary}}
+        -S "${{github.workspace}}/dynamic_bitset"
+        -B "${{github.workspace}}/dynamic_bitset/build"
+        -D CMAKE_CONFIGURATION_TYPES=Release
+        -D CMAKE_BUILD_TYPE=Release
+        -D DYNAMICBITSET_ENABLE_COVERAGE=ON
 
     - name: Build
-      shell: cmake -P {0}
-      run: |
-        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
-        include(ProcessorCount)
-        ProcessorCount(N)
-        execute_process(
-          COMMAND ${{steps.cmake.outputs.cmake_binary}}
-            --build "${workspace}/dynamic_bitset/build"
-            --config Release
-            --parallel ${N}
-          RESULT_VARIABLE result
-        )
-        if(NOT result EQUAL 0)
-          message(FATAL_ERROR "Bad exit status")
-        endif()
+      run: >-
+        ${{steps.cmake.outputs.cmake_binary}}
+        --build "${{github.workspace}}/dynamic_bitset/build"
+        --config Release
+        --parallel $(nproc)
 
     - name: Run tests
-      shell: cmake -P {0}
-      run: |
-        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
-        include(ProcessorCount)
-        ProcessorCount(N)
-        set(ENV{CTEST_OUTPUT_ON_FAILURE} "ON")
-        execute_process(
-          COMMAND ${{steps.cmake.outputs.ctest_binary}} --output-on-failure --parallel ${N}
-          WORKING_DIRECTORY "${workspace}/dynamic_bitset/build"
-          RESULT_VARIABLE result
-        )
-        if(NOT result EQUAL 0)
-          message(FATAL_ERROR "Running tests failed!")
-        endif()
+      run: >-
+        ${{steps.cmake.outputs.ctest_binary}}
+        --test-dir "${{github.workspace}}/dynamic_bitset/build"
+        --output-on-failure
+        --parallel $(nproc)
 
     - name: Generate coverage report
-      shell: cmake -P {0}
       run: |
-        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
-        execute_process(
-          COMMAND sudo apt install lcov
-          RESULT_VARIABLE result
-        )
-        if(NOT result EQUAL 0)
-          message(FATAL_ERROR "Bad exit status")
-        endif()
-        execute_process(
-          COMMAND lcov --ignore-errors mismatch --directory "${workspace}/dynamic_bitset/build" --capture --output-file "${workspace}/coverage.info"
-          RESULT_VARIABLE result
-        )
-        if(NOT result EQUAL 0)
-          message(FATAL_ERROR "Bad exit status")
-        endif()
-        execute_process(
-          COMMAND lcov --extract "${workspace}/coverage.info" "*/dynamic_bitset.hpp" --output-file "${workspace}/coverage.info"
-          RESULT_VARIABLE result
-        )
-        if(NOT result EQUAL 0)
-          message(FATAL_ERROR "Bad exit status")
-        endif()
+        sudo apt install lcov
+        lcov --ignore-errors mismatch --directory "${{github.workspace}}/dynamic_bitset/build" --capture --output-file "${{github.workspace}}/coverage.info"
+        lcov --extract "${{github.workspace}}/coverage.info" "*/dynamic_bitset.hpp" --output-file "${{github.workspace}}/coverage.info"
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
