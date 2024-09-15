@@ -36,35 +36,22 @@ jobs:
         doxygen_libclang_version: ${{env.DOXYGEN_LIBCLANG_VERSION}}
         used_env: ubuntu-24.04
 
+    - name: CMake version
+      run: ${{steps.cmake.outputs.cmake_binary}} --version
+
     - name: Configure
-      shell: cmake -P {0}
-      run: |
-        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
-        execute_process(
-          COMMAND ${{steps.cmake.outputs.cmake_binary}}
-            -S "${workspace}/dynamic_bitset"
-            -B "${workspace}/dynamic_bitset/build"
-            -D Doxygen_ROOT=${{steps.doxygen.outputs.doxygen_install}}
-            -D CMAKE_POLICY_DEFAULT_CMP0074=NEW
-          RESULT_VARIABLE result
-        )
-        if(NOT result EQUAL 0)
-          message(FATAL_ERROR "Bad exit status")
-        endif()
+      run: >-
+        ${{steps.cmake.outputs.cmake_binary}}
+        -S "${{github.workspace}}/dynamic_bitset"
+        -B "${{github.workspace}}/dynamic_bitset/build"
+        -D Doxygen_ROOT=${{steps.doxygen.outputs.doxygen_install}}
+        -D CMAKE_POLICY_DEFAULT_CMP0074=NEW
 
     - name: Build
-      shell: cmake -P {0}
-      run: |
-        file(TO_CMAKE_PATH [=[${{github.workspace}}]=] workspace)
-        execute_process(
-          COMMAND ${{steps.cmake.outputs.cmake_binary}}
-            --build "${workspace}/dynamic_bitset/build"
-            --target dynamic_bitset_docs
-          RESULT_VARIABLE result
-        )
-        if(NOT result EQUAL 0)
-          message(FATAL_ERROR "Bad exit status")
-        endif()
+      run: >-
+        ${{steps.cmake.outputs.cmake_binary}}
+        --build "${{github.workspace}}/dynamic_bitset/build"
+        --target dynamic_bitset_docs
 
     - name: Deploy
       id: deploy
