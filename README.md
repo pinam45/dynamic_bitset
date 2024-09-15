@@ -115,7 +115,8 @@ If you pulled the git submodule libpopcnt (in [extlibs](extlibs)) and set the *d
 
 ## Build tests, example, and documentation
 
-The latest version of the documentation is available online [here](https://pinam45.github.io/dynamic_bitset).
+> [!NOTE]
+> The latest version of the documentation is available online [here](https://pinam45.github.io/dynamic_bitset).
 
 To build the tests, the example, and the documentation, git submodules are required, so don't forget to pull the submodules with the repository using ``--recursive``:
 
@@ -127,7 +128,7 @@ or if you have already cloned the repository:
 
 The project uses CMake to build and define the options ``DYNAMICBITSET_BUILD_TESTS``, ``DYNAMICBITSET_BUILD_EXAMPLE``, and ``DYNAMICBITSET_BUILD_DOCS`` to enable the generation of the tests, example, and documentation targets, these option are enabled by default if the project is the master project (not included from another *CMakeLists.txt* with *add_subdirectory*).
 
-Generating the documentation requires **[Doxygen](http://www.doxygen.nl/) 1.8.16 or later** and is done by building the target *dynamic_bitset_docs*. For running the tests, build the *dynamic_bitset_tests* target and launch the tests using ctest.
+Generating the documentation requires **[Doxygen](http://www.doxygen.nl/) 1.9.6 or later** and is done by building the target *dynamic_bitset_docs*. For running the tests, build the *dynamic_bitset_tests* target and launch the tests using ctest.
 
 See [Running CMake](https://cmake.org/runningcmake/) and [the ctest documentation](https://cmake.org/cmake/help/latest/manual/ctest.1.html) for more information. On linux, a common way of doing this is:
 
@@ -140,8 +141,6 @@ See [Running CMake](https://cmake.org/runningcmake/) and [the ctest documentatio
 On Windows, there is batch files available to configure a Visual Studio project in the [ide](ide) folder.
 
 ## License
-
-<img align="right" width="100px" src="https://opensource.org/wp-content/uploads/2009/06/OSIApproved.svg">
 
 dynamic_bitset is licensed under the [MIT License](http://opensource.org/licenses/MIT):
 
