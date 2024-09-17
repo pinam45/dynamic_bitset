@@ -8,21 +8,20 @@
 #ifndef DYNAMIC_BITSET_RANDOMINTGENERATOR_HPP
 #define DYNAMIC_BITSET_RANDOMINTGENERATOR_HPP
 
-#include <catch2/catch.hpp>
+#include <catch2/generators/catch_generators.hpp>
+#include <catch2/catch_get_random_seed.hpp>
 
 #include <random>
 
 template<typename integral_type>
 constexpr Catch::Generators::GeneratorWrapper<integral_type> randomInt(
-  std::minstd_rand::result_type seed =
-    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
+  uint32_t seed = Catch::getSeed());
 
 template<typename integral_type>
 constexpr Catch::Generators::GeneratorWrapper<integral_type> randomInt(
   integral_type low,
   integral_type high,
-  std::minstd_rand::result_type seed =
-    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
+  uint32_t seed = Catch::getSeed());
 
 template<typename integral_type>
 class RandomIntGenerator : public Catch::Generators::IGenerator<integral_type>
@@ -31,14 +30,10 @@ class RandomIntGenerator : public Catch::Generators::IGenerator<integral_type>
 	              "template argument must be an integral type");
 
 public:
-	constexpr explicit RandomIntGenerator(
-	  std::minstd_rand::result_type seed =
-	    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
-	constexpr RandomIntGenerator(
-	  integral_type low,
-	  integral_type high,
-	  std::minstd_rand::result_type seed =
-	    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
+	constexpr explicit RandomIntGenerator(uint32_t seed = Catch::getSeed());
+	constexpr RandomIntGenerator(integral_type low,
+	                             integral_type high,
+	                             uint32_t seed = Catch::getSeed());
 
 	constexpr const integral_type& get() const override;
 	constexpr bool next() override;
@@ -50,7 +45,7 @@ private:
 };
 
 template<typename integral_type>
-constexpr RandomIntGenerator<integral_type>::RandomIntGenerator(std::minstd_rand::result_type seed)
+constexpr RandomIntGenerator<integral_type>::RandomIntGenerator(uint32_t seed)
   : m_rand(seed), m_dist(), m_current_number()
 {
 	next();
@@ -59,7 +54,7 @@ constexpr RandomIntGenerator<integral_type>::RandomIntGenerator(std::minstd_rand
 template<typename integral_type>
 constexpr RandomIntGenerator<integral_type>::RandomIntGenerator(integral_type low,
                                                                 integral_type high,
-                                                                std::minstd_rand::result_type seed)
+                                                                uint32_t seed)
   : m_rand(seed), m_dist(low, high), m_current_number()
 {
 	next();
@@ -79,25 +74,23 @@ constexpr bool RandomIntGenerator<integral_type>::next()
 }
 
 template<typename integral_type>
-constexpr Catch::Generators::GeneratorWrapper<integral_type> randomInt(
-  std::minstd_rand::result_type seed)
+constexpr Catch::Generators::GeneratorWrapper<integral_type> randomInt(uint32_t seed)
 {
 	static_assert(std::is_integral<integral_type>::value,
 	              "template argument must be an integral type");
 	return Catch::Generators::GeneratorWrapper<integral_type>(
-	  std::make_unique<RandomIntGenerator<integral_type>>(seed));
+	  Catch::Detail::make_unique<RandomIntGenerator<integral_type>>(seed));
 }
 
 template<typename integral_type>
-constexpr Catch::Generators::GeneratorWrapper<integral_type> randomInt(
-  integral_type low,
-  integral_type high,
-  std::minstd_rand::result_type seed)
+constexpr Catch::Generators::GeneratorWrapper<integral_type> randomInt(integral_type low,
+                                                                       integral_type high,
+                                                                       uint32_t seed)
 {
 	static_assert(std::is_integral<integral_type>::value,
 	              "template argument must be an integral type");
 	return Catch::Generators::GeneratorWrapper<integral_type>(
-	  std::make_unique<RandomIntGenerator<integral_type>>(low, high, seed));
+	  Catch::Detail::make_unique<RandomIntGenerator<integral_type>>(low, high, seed));
 }
 
 #endif //DYNAMIC_BITSET_RANDOMINTGENERATOR_HPP

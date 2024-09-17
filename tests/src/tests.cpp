@@ -5,22 +5,27 @@
 // See accompanying file LICENSE or copy at
 // https://opensource.org/licenses/MIT
 //
-#include "config.hpp"
-#include "utils.hpp"
-#include "RandomIntGenerator.hpp"
-#include "RandomDynamicBitsetGenerator.hpp"
+#include "MultiTakeGenerator.hpp"
 #include "RandomBitsetStringGenerator.hpp"
 #include "RandomChunkGenerator.hpp"
-#include "MultiTakeGenerator.hpp"
+#include "RandomDynamicBitsetGenerator.hpp"
+#include "RandomIntGenerator.hpp"
+#include "config.hpp"
+#include "utils.hpp"
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_message.hpp>
+#include <catch2/catch_template_test_macros.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/generators/catch_generators.hpp>
+#include <catch2/generators/catch_generators_adapters.hpp>
+#include <catch2/generators/catch_generators_random.hpp>
 #include <sul/dynamic_bitset.hpp>
 
 #include <algorithm>
-#include <vector>
+#include <cstdint>
 #include <list>
 #include <sstream>
-#include <cstdint>
+#include <vector>
 
 TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {

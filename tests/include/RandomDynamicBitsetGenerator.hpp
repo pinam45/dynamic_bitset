@@ -8,22 +8,21 @@
 #ifndef DYNAMIC_BITSET_RANDOMDYNAMICBITSETGENERATOR_HPP
 #define DYNAMIC_BITSET_RANDOMDYNAMICBITSETGENERATOR_HPP
 
-#include <catch2/catch.hpp>
+#include <catch2/generators/catch_generators.hpp>
+#include <catch2/catch_get_random_seed.hpp>
 #include <sul/dynamic_bitset.hpp>
 
 #include <random>
 
 template<typename Block>
 constexpr Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>> randomDynamicBitset(
-  std::minstd_rand::result_type seed =
-    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
+  uint32_t seed = Catch::getSeed());
 
 template<typename Block>
 constexpr Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>> randomDynamicBitset(
   typename sul::dynamic_bitset<Block>::size_type min_size,
   typename sul::dynamic_bitset<Block>::size_type max_size,
-  std::minstd_rand::result_type seed =
-    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
+  uint32_t seed = Catch::getSeed());
 
 template<typename Block>
 class RandomDynamicBitsetGenerator
@@ -34,14 +33,10 @@ public:
 	static constexpr size_type default_min_size = 1;
 	static constexpr size_type default_max_size = 8 * std::numeric_limits<Block>::digits;
 
-	constexpr explicit RandomDynamicBitsetGenerator(
-	  std::minstd_rand::result_type seed =
-	    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
-	constexpr RandomDynamicBitsetGenerator(
-	  size_type min_size,
-	  size_type max_size,
-	  std::minstd_rand::result_type seed =
-	    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
+	constexpr explicit RandomDynamicBitsetGenerator(uint32_t seed = Catch::getSeed());
+	constexpr RandomDynamicBitsetGenerator(size_type min_size,
+	                                       size_type max_size,
+	                                       uint32_t seed = Catch::getSeed());
 
 	constexpr const sul::dynamic_bitset<Block>& get() const override;
 	constexpr bool next() override;
@@ -54,8 +49,7 @@ private:
 };
 
 template<typename Block>
-constexpr RandomDynamicBitsetGenerator<Block>::RandomDynamicBitsetGenerator(
-  std::minstd_rand::result_type seed)
+constexpr RandomDynamicBitsetGenerator<Block>::RandomDynamicBitsetGenerator(uint32_t seed)
   : m_rand(seed)
   , m_size_dist(default_min_size, default_max_size)
   , m_block_dist()
@@ -65,10 +59,9 @@ constexpr RandomDynamicBitsetGenerator<Block>::RandomDynamicBitsetGenerator(
 }
 
 template<typename Block>
-constexpr RandomDynamicBitsetGenerator<Block>::RandomDynamicBitsetGenerator(
-  RandomDynamicBitsetGenerator::size_type min_size,
-  RandomDynamicBitsetGenerator::size_type max_size,
-  std::minstd_rand::result_type seed)
+constexpr RandomDynamicBitsetGenerator<Block>::RandomDynamicBitsetGenerator(size_type min_size,
+                                                                            size_type max_size,
+                                                                            uint32_t seed)
   : m_rand(seed), m_size_dist(min_size, max_size), m_block_dist(), m_current_bitset()
 {
 	next();
@@ -95,20 +88,20 @@ constexpr bool RandomDynamicBitsetGenerator<Block>::next()
 
 template<typename Block>
 constexpr Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>> randomDynamicBitset(
-  std::minstd_rand::result_type seed)
+  uint32_t seed)
 {
 	return Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>>(
-	  std::make_unique<RandomDynamicBitsetGenerator<Block>>(seed));
+	  Catch::Detail::make_unique<RandomDynamicBitsetGenerator<Block>>(seed));
 }
 
 template<typename Block>
 constexpr Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>> randomDynamicBitset(
   typename sul::dynamic_bitset<Block>::size_type min_size,
   typename sul::dynamic_bitset<Block>::size_type max_size,
-  std::minstd_rand::result_type seed)
+  uint32_t seed)
 {
 	return Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>>(
-	  std::make_unique<RandomDynamicBitsetGenerator<Block>>(min_size, max_size, seed));
+	  Catch::Detail::make_unique<RandomDynamicBitsetGenerator<Block>>(min_size, max_size, seed));
 }
 
 #endif //DYNAMIC_BITSET_RANDOMDYNAMICBITSETGENERATOR_HPP

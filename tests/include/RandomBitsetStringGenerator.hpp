@@ -8,20 +8,19 @@
 #ifndef DYNAMIC_BITSET_RANDOMBITSETSTRINGGENERATOR_HPP
 #define DYNAMIC_BITSET_RANDOMBITSETSTRINGGENERATOR_HPP
 
-#include <catch2/catch.hpp>
+#include <catch2/generators/catch_generators.hpp>
+#include <catch2/catch_get_random_seed.hpp>
 
 #include <random>
 #include <string>
 
 Catch::Generators::GeneratorWrapper<std::string> randomBitsetString(
-  std::minstd_rand::result_type seed =
-    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
+  uint32_t seed = Catch::getSeed());
 
 Catch::Generators::GeneratorWrapper<std::string> randomBitsetString(
   std::string::size_type min_size,
   std::string::size_type max_size,
-  std::minstd_rand::result_type seed =
-    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
+  uint32_t seed = Catch::getSeed());
 
 class RandomBitsetStringGenerator : public Catch::Generators::IGenerator<std::string>
 {
@@ -30,14 +29,10 @@ public:
 	static constexpr size_type default_min_size = 1;
 	static constexpr size_type default_max_size = 8 * 32;
 
-	explicit RandomBitsetStringGenerator(
-	  std::minstd_rand::result_type seed =
-	    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
-	RandomBitsetStringGenerator(
-	  size_type min_size,
-	  size_type max_size,
-	  std::minstd_rand::result_type seed =
-	    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
+	explicit RandomBitsetStringGenerator(uint32_t seed = Catch::getSeed());
+	RandomBitsetStringGenerator(size_type min_size,
+	                            size_type max_size,
+	                            uint32_t seed = Catch::getSeed());
 
 	const std::string& get() const override;
 	bool next() override;
@@ -49,7 +44,7 @@ private:
 	std::string m_current_bitset;
 };
 
-RandomBitsetStringGenerator::RandomBitsetStringGenerator(std::minstd_rand::result_type seed)
+RandomBitsetStringGenerator::RandomBitsetStringGenerator(uint32_t seed)
   : m_rand(seed), m_size_dist(default_min_size, default_max_size), m_bit_dist(), m_current_bitset()
 {
 	next();
@@ -58,7 +53,7 @@ RandomBitsetStringGenerator::RandomBitsetStringGenerator(std::minstd_rand::resul
 RandomBitsetStringGenerator::RandomBitsetStringGenerator(
   RandomBitsetStringGenerator::size_type min_size,
   RandomBitsetStringGenerator::size_type max_size,
-  std::minstd_rand::result_type seed)
+  uint32_t seed)
   : m_rand(seed), m_size_dist(min_size, max_size), m_bit_dist(), m_current_bitset()
 {
 	next();
@@ -81,20 +76,19 @@ bool RandomBitsetStringGenerator::next()
 	return true;
 }
 
-Catch::Generators::GeneratorWrapper<std::string> randomBitsetString(
-  std::minstd_rand::result_type seed)
+Catch::Generators::GeneratorWrapper<std::string> randomBitsetString(uint32_t seed)
 {
 	return Catch::Generators::GeneratorWrapper<std::string>(
-	  std::make_unique<RandomBitsetStringGenerator>(seed));
+	  Catch::Detail::make_unique<RandomBitsetStringGenerator>(seed));
 }
 
 Catch::Generators::GeneratorWrapper<std::string> randomBitsetString(
   typename std::string::size_type min_size,
   typename std::string::size_type max_size,
-  std::minstd_rand::result_type seed)
+  uint32_t seed)
 {
 	return Catch::Generators::GeneratorWrapper<std::string>(
-	  std::make_unique<RandomBitsetStringGenerator>(min_size, max_size, seed));
+	  Catch::Detail::make_unique<RandomBitsetStringGenerator>(min_size, max_size, seed));
 }
 
 #endif //DYNAMIC_BITSET_RANDOMBITSETSTRINGGENERATOR_HPP

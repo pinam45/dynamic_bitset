@@ -8,7 +8,8 @@
 #ifndef DYNAMIC_BITSET_RANDOMCHUNKGENERATOR_HPP
 #define DYNAMIC_BITSET_RANDOMCHUNKGENERATOR_HPP
 
-#include <catch2/catch.hpp>
+#include <catch2/generators/catch_generators.hpp>
+#include <catch2/catch_get_random_seed.hpp>
 
 #include <algorithm>
 #include <tuple>
@@ -20,19 +21,16 @@ constexpr Catch::Generators::GeneratorWrapper<std::vector<T>> randomChunk(
   size_t min_chunk_size,
   size_t max_chunk_size,
   Catch::Generators::GeneratorWrapper<T>&& generator,
-  std::minstd_rand::result_type seed =
-    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
+  uint32_t seed = Catch::getSeed());
 
 template<typename T>
 class RandomChunkGenerator final : public Catch::Generators::IGenerator<std::vector<T>>
 {
 public:
-	constexpr RandomChunkGenerator(
-	  size_t min_chunk_size,
-	  size_t max_chunk_size,
-	  Catch::Generators::GeneratorWrapper<T>&& generator,
-	  std::minstd_rand::result_type seed =
-	    static_cast<std::minstd_rand::result_type>(std::random_device{}()));
+	constexpr RandomChunkGenerator(size_t min_chunk_size,
+	                               size_t max_chunk_size,
+	                               Catch::Generators::GeneratorWrapper<T>&& generator,
+	                               uint32_t seed = Catch::getSeed());
 
 	constexpr std::vector<T> const& get() const override;
 
@@ -50,7 +48,7 @@ constexpr RandomChunkGenerator<T>::RandomChunkGenerator(
   size_t min_chunk_size,
   size_t max_chunk_size,
   Catch::Generators::GeneratorWrapper<T>&& generator,
-  std::minstd_rand::result_type seed)
+  uint32_t seed)
   : m_rand(seed)
   , m_size_dist(min_chunk_size, max_chunk_size)
   , m_chunk()
@@ -106,10 +104,10 @@ constexpr Catch::Generators::GeneratorWrapper<std::vector<T>> randomChunk(
   size_t min_chunk_size,
   size_t max_chunk_size,
   Catch::Generators::GeneratorWrapper<T>&& generator,
-  std::minstd_rand::result_type seed)
+  uint32_t seed)
 {
 	return Catch::Generators::GeneratorWrapper<std::vector<T>>(
-	  std::make_unique<RandomChunkGenerator<T>>(
+	  Catch::Detail::make_unique<RandomChunkGenerator<T>>(
 	    min_chunk_size, max_chunk_size, std::move(generator), seed));
 }
 

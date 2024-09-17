@@ -33,27 +33,23 @@ target_sources(
 target_sources(
   dynamic_bitset_tests_libpopcnt PRIVATE
   ${includes}
-  "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/count.cpp"
 )
 target_sources(
   dynamic_bitset_tests_std_bitops PRIVATE
   ${includes}
-  "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/count.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/find_first_find_next.cpp"
 )
 target_sources(
   dynamic_bitset_tests_builtins PRIVATE
   ${includes}
-  "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/count.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/find_first_find_next.cpp"
 )
 target_sources(
   dynamic_bitset_tests_builtins_msvc_32 PRIVATE
   ${includes}
-  "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/src/find_first_find_next.cpp"
 )
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${includes} ${sources})
@@ -79,7 +75,7 @@ foreach(
 	target_link_libraries(${target} PRIVATE dynamic_bitset)
 
 	# Link Catch2
-	target_link_libraries(${target} PRIVATE Catch2::Catch2)
+	target_link_libraries(${target} PRIVATE Catch2::Catch2WithMain)
 
 	# Enable coverage information generation?
 	if(DYNAMICBITSET_ENABLE_COVERAGE)

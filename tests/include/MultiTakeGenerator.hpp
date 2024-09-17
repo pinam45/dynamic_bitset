@@ -8,7 +8,7 @@
 #ifndef DYNAMIC_BITSET_MULTITAKEGENERATOR_HPP
 #define DYNAMIC_BITSET_MULTITAKEGENERATOR_HPP
 
-#include <catch2/catch.hpp>
+#include <catch2/generators/catch_generators.hpp>
 
 #include <algorithm>
 #include <tuple>
@@ -120,7 +120,7 @@ constexpr Catch::Generators::GeneratorWrapper<std::tuple<T...>> multitake(
   Catch::Generators::GeneratorWrapper<T>&&... generators)
 {
 	return Catch::Generators::GeneratorWrapper<std::tuple<T...>>(
-	  std::make_unique<MultiTakeGenerator<T...>>(target, std::move(generators)...));
+	  Catch::Detail::make_unique<MultiTakeGenerator<T...>>(target, std::move(generators)...));
 }
 
 #endif //DYNAMIC_BITSET_MULTITAKEGENERATOR_HPP

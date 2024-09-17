@@ -12,7 +12,7 @@
 
 constexpr size_t RANDOM_VECTORS_TO_TEST = 100;
 constexpr size_t RANDOM_VARIATIONS_TO_TEST = 10;
-constexpr std::minstd_rand::result_type SEED = 314159;
+constexpr uint32_t SEED = 314159;
 //const std::minstd_rand::result_type SEED = std::random_device{}();
 
 #endif //DYNAMIC_BITSET_CONFIG_HPP
