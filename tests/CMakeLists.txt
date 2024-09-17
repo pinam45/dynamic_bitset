@@ -83,11 +83,6 @@ foreach(
 		target_link_options(${target} PRIVATE "--coverage")
 		message(STATUS "${target}: enabled coverage")
 	endif()
-	# Some MinGW workaround for:
-	# "Fatal error: can't write 233 bytes to section .text of tests/CMakeFiles/dynamic_bitset_tests_base.dir/src/main.cpp.obj: 'File too big'"
-	if(MINGW)
-		target_compile_options(${target} PRIVATE "-Wa,-mbig-obj")
-	endif()
 
 	# Require C++17/20
 	if(cxx_std_20 IN_LIST CMAKE_CXX_COMPILE_FEATURES)
