@@ -6,7 +6,6 @@
 // https://opensource.org/licenses/MIT
 //
 #include "MultiTakeGenerator.hpp"
-#include "RandomIntGenerator.hpp"
 #include "config.hpp"
 #include "utils.hpp"
 
@@ -42,8 +41,6 @@ TEMPLATE_TEST_CASE("find_first find_next (" FIND_FIRST_FIND_NEXT_TESTED_IMPL ")"
                    uint32_t,
                    uint64_t)
 {
-	CAPTURE(SEED);
-
 	SECTION("empty-bitset")
 	{
 		sul::dynamic_bitset<TestType> bitset;
@@ -56,8 +53,8 @@ TEMPLATE_TEST_CASE("find_first find_next (" FIND_FIRST_FIND_NEXT_TESTED_IMPL ")"
 	{
 		const std::tuple<size_t, size_t> values =
 		  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-		                     randomInt<size_t>(0, 5 * bits_number<TestType>, SEED),
-		                     randomInt<size_t>(0, 5 * bits_number<TestType>, SEED + 1)));
+		                     random<size_t>(0, 5 * bits_number<TestType>),
+		                     random<size_t>(0, 5 * bits_number<TestType>)));
 		const size_t first_bit_pos = std::get<0>(values);
 		const size_t second_bit_pos = first_bit_pos + 1 + std::get<1>(values);
 		CAPTURE(first_bit_pos, second_bit_pos);

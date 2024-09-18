@@ -36,8 +36,6 @@ TEMPLATE_TEST_CASE("count (" COUNT_TESTED_IMPL ")",
                    uint32_t,
                    uint64_t)
 {
-	CAPTURE(SEED);
-
 	SECTION("empty bitset")
 	{
 		sul::dynamic_bitset<TestType> bitset;
@@ -48,7 +46,7 @@ TEMPLATE_TEST_CASE("count (" COUNT_TESTED_IMPL ")",
 	SECTION("non-empty bitset")
 	{
 		sul::dynamic_bitset<TestType> bitset =
-		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 		CAPTURE(bitset);
 
 		size_t count = 0;

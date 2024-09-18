@@ -9,7 +9,6 @@
 #include "RandomBitsetStringGenerator.hpp"
 #include "RandomChunkGenerator.hpp"
 #include "RandomDynamicBitsetGenerator.hpp"
-#include "RandomIntGenerator.hpp"
 #include "config.hpp"
 #include "utils.hpp"
 
@@ -29,8 +28,6 @@
 
 TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
-
 	SECTION("default constructor")
 	{
 		sul::dynamic_bitset<TestType> bitset;
@@ -43,11 +40,11 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 	SECTION("nbits and init_val constructor")
 	{
-		CAPTURE(SEED);
-		const std::tuple<unsigned long long, size_t> values =
-		  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-		                     randomInt<unsigned long long>(SEED),
-		                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+		const std::tuple<unsigned long long, size_t> values = GENERATE(
+		  multitake(RANDOM_VECTORS_TO_TEST,
+		            random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                       std::numeric_limits<unsigned long long>::max()),
+		            random<size_t>(1, bits_number<unsigned long long>)));
 		const unsigned long long value = std::get<0>(values);
 		const size_t bits_to_take = std::get<1>(values);
 		CAPTURE(value, bits_to_take);
@@ -69,7 +66,9 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 		SECTION("one value")
 		{
 			const TestType init_value =
-			  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomInt<TestType>(SEED)));
+			  GENERATE(take(RANDOM_VECTORS_TO_TEST,
+			                random<TestType>(std::numeric_limits<TestType>::min(),
+			                                 std::numeric_limits<TestType>::max())));
 			const sul::dynamic_bitset<TestType> bitset = {init_value};
 			CAPTURE(init_value, bitset);
 
@@ -85,7 +84,11 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 		SECTION("two values")
 		{
 			const std::tuple<TestType, TestType> init_values = GENERATE(multitake(
-			  RANDOM_VECTORS_TO_TEST, randomInt<TestType>(SEED), randomInt<TestType>(SEED + 1)));
+			  RANDOM_VECTORS_TO_TEST,
+			  random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+			                             std::numeric_limits<unsigned long long>::max()),
+			  random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+			                             std::numeric_limits<unsigned long long>::max())));
 			std::initializer_list<TestType> init_values_list = {std::get<0>(init_values),
 			                                                    std::get<1>(init_values)};
 			const sul::dynamic_bitset<TestType> bitset = init_values_list;
@@ -109,10 +112,11 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 	SECTION("string constructor")
 	{
-		const std::tuple<unsigned long long, size_t> values =
-		  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-		                     randomInt<unsigned long long>(SEED),
-		                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+		const std::tuple<unsigned long long, size_t> values = GENERATE(
+		  multitake(RANDOM_VECTORS_TO_TEST,
+		            random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                       std::numeric_limits<unsigned long long>::max()),
+		            random<size_t>(1, bits_number<unsigned long long>)));
 		const unsigned long long value = std::get<0>(values);
 		const size_t bits_to_take = std::get<1>(values);
 		CAPTURE(value, bits_to_take);
@@ -179,7 +183,11 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 		SECTION("partial string")
 		{
 			const std::tuple<size_t, size_t> parameters = GENERATE(multitake(
-			  RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 2), randomInt<size_t>(SEED + 3)));
+			  RANDOM_VARIATIONS_TO_TEST,
+			  random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+			                             std::numeric_limits<unsigned long long>::max()),
+			  random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+			                             std::numeric_limits<unsigned long long>::max())));
 			const size_t pos = std::get<0>(parameters) % bits_to_take;
 			const size_t n =
 			  (pos == (bits_to_take - 1)) ? std::get<1>(parameters) % (bits_to_take - pos) : 0;
@@ -229,9 +237,8 @@ TEMPLATE_TEST_CASE("constructors", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	sul::dynamic_bitset<TestType> bitset =
-	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 	CAPTURE(bitset);
 
 	SECTION("resizing to 0")
@@ -252,8 +259,7 @@ TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 	SECTION("changing size")
 	{
-		size_t size_change =
-		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(0, 128, SEED + 1)));
+		size_t size_change = GENERATE(take(RANDOM_VARIATIONS_TO_TEST, random<size_t>(0, 128)));
 		const bool new_values = GENERATE(true, false);
 		CAPTURE(size_change, new_values);
 
@@ -296,9 +302,8 @@ TEMPLATE_TEST_CASE("resize", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 TEMPLATE_TEST_CASE("clear", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	sul::dynamic_bitset<TestType> bitset =
-	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 	CAPTURE(bitset);
 
 	bitset.clear();
@@ -309,11 +314,10 @@ TEMPLATE_TEST_CASE("clear", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 TEMPLATE_TEST_CASE("push_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	std::tuple<sul::dynamic_bitset<TestType>, sul::dynamic_bitset<TestType>> values =
 	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-	                     randomDynamicBitset<TestType>(SEED),
-	                     randomDynamicBitset<TestType>(1, 2 * bits_number<TestType>, SEED + 1)));
+	                     randomDynamicBitset<TestType>(),
+	                     randomDynamicBitset<TestType>(1, 2 * bits_number<TestType>)));
 	sul::dynamic_bitset<TestType>& bitset = std::get<0>(values);
 	sul::dynamic_bitset<TestType>& to_push = std::get<1>(values);
 	CAPTURE(bitset, to_push);
@@ -342,8 +346,6 @@ TEMPLATE_TEST_CASE("push_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 
 TEMPLATE_TEST_CASE("pop_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
-
 	SECTION("empty bitset")
 	{
 		sul::dynamic_bitset<TestType> bitset;
@@ -357,8 +359,8 @@ TEMPLATE_TEST_CASE("pop_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 	{
 		std::tuple<sul::dynamic_bitset<TestType>, size_t> values =
 		  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-		                     randomDynamicBitset<TestType>(SEED),
-		                     randomInt<TestType>(1, 2 * bits_number<TestType>, SEED + 1)));
+		                     randomDynamicBitset<TestType>(),
+		                     random<TestType>(1, 2 * bits_number<TestType>)));
 		sul::dynamic_bitset<TestType>& bitset = std::get<0>(values);
 		size_t to_pop = std::min(bitset.size(), std::get<1>(values));
 		CAPTURE(bitset, to_pop);
@@ -387,16 +389,17 @@ TEMPLATE_TEST_CASE("pop_back", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	sul::dynamic_bitset<TestType> bitset =
-	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 	CAPTURE(bitset);
 	const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 
 	SECTION("one value")
 	{
 		const TestType value =
-		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<TestType>(SEED + 1)));
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
+		                random<TestType>(std::numeric_limits<TestType>::min(),
+		                                 std::numeric_limits<TestType>::max())));
 		CAPTURE(value);
 
 		bitset.append(value);
@@ -427,8 +430,12 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 	SECTION("two values initializer_list")
 	{
-		const std::tuple<TestType, TestType> init_values = GENERATE(multitake(
-		  RANDOM_VARIATIONS_TO_TEST, randomInt<TestType>(SEED + 1), randomInt<TestType>(SEED + 2)));
+		const std::tuple<TestType, TestType> init_values = GENERATE(
+		  multitake(RANDOM_VARIATIONS_TO_TEST,
+		            random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                       std::numeric_limits<unsigned long long>::max()),
+		            random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                       std::numeric_limits<unsigned long long>::max())));
 		std::initializer_list<TestType> values = {std::get<0>(init_values),
 		                                          std::get<1>(init_values)};
 		CAPTURE(values);
@@ -469,9 +476,12 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 	SECTION("random access iterators")
 	{
-		const std::vector<TestType> values =
-		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
-		                randomChunk<TestType>(2, 5, randomInt<TestType>(SEED + 1), SEED + 2)));
+		const std::vector<TestType> values = GENERATE(
+		  take(RANDOM_VARIATIONS_TO_TEST,
+		       randomChunk<TestType>(2,
+		                             5,
+		                             random<TestType>(std::numeric_limits<TestType>::min(),
+		                                              std::numeric_limits<TestType>::max()))));
 		CAPTURE(values);
 
 		bitset.append(std::cbegin(values), std::cend(values));
@@ -501,9 +511,12 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 	SECTION("bidirectional iterators")
 	{
-		const std::vector<TestType> values =
-		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
-		                randomChunk<TestType>(2, 5, randomInt<TestType>(SEED + 1), SEED + 2)));
+		const std::vector<TestType> values = GENERATE(
+		  take(RANDOM_VARIATIONS_TO_TEST,
+		       randomChunk<TestType>(2,
+		                             5,
+		                             random<TestType>(std::numeric_limits<TestType>::min(),
+		                                              std::numeric_limits<TestType>::max()))));
 		CAPTURE(values);
 
 		const std::list<TestType> values_list(std::cbegin(values), std::cend(values));
@@ -535,12 +548,13 @@ TEMPLATE_TEST_CASE("append", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	const std::tuple<unsigned long long, unsigned long long, size_t> values =
 	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-	                     randomInt<unsigned long long>(SEED),
-	                     randomInt<unsigned long long>(SEED + 1),
-	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 2)));
+	                     random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+	                                                std::numeric_limits<unsigned long long>::max()),
+	                     random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+	                                                std::numeric_limits<unsigned long long>::max()),
+	                     random<size_t>(1, bits_number<unsigned long long>)));
 	unsigned long long value1 = std::get<0>(values);
 	const unsigned long long value2 = std::get<1>(values);
 	const size_t bits_to_take = std::get<2>(values);
@@ -675,12 +689,10 @@ TEMPLATE_TEST_CASE("bitwise operators", "[dynamic_bitset]", uint16_t, uint32_t, 
 
 TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
-
 	SECTION("null shifts")
 	{
 		sul::dynamic_bitset<TestType> bitset =
-		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 		CAPTURE(bitset);
 
 		sul::dynamic_bitset<TestType> bitset_copy = bitset;
@@ -706,11 +718,12 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 
 	SECTION("real shifts")
 	{
-		const std::tuple<unsigned long long, size_t, size_t> values =
-		  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-		                     randomInt<unsigned long long>(SEED),
-		                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1),
-		                     randomInt<size_t>(0, bits_number<unsigned long long> - 1, SEED + 2)));
+		const std::tuple<unsigned long long, size_t, size_t> values = GENERATE(
+		  multitake(RANDOM_VECTORS_TO_TEST,
+		            random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                       std::numeric_limits<unsigned long long>::max()),
+		            random<size_t>(1, bits_number<unsigned long long>),
+		            random<size_t>(0, bits_number<unsigned long long> - 1)));
 		unsigned long long value = std::get<0>(values);
 		const size_t bits_to_take = std::get<1>(values);
 		const size_t shift = std::get<2>(values);
@@ -792,11 +805,11 @@ TEMPLATE_TEST_CASE("shift operators", "[dynamic_bitset]", uint16_t, uint32_t, ui
 
 TEMPLATE_TEST_CASE("operator~", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	const std::tuple<unsigned long long, size_t> values =
 	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-	                     randomInt<unsigned long long>(SEED),
-	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	                     random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+	                                                std::numeric_limits<unsigned long long>::max()),
+	                     random<size_t>(1, bits_number<unsigned long long>)));
 	unsigned long long value = std::get<0>(values);
 	const size_t bits_to_take = std::get<1>(values);
 	CAPTURE(value, bits_to_take);
@@ -819,16 +832,19 @@ TEMPLATE_TEST_CASE("operator~", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 
 TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
-	sul::dynamic_bitset<TestType> bitset = GENERATE(take(
-	  RANDOM_VECTORS_TO_TEST,
-	  randomDynamicBitset<TestType>(3 * bits_number<TestType>, 8 * bits_number<TestType>, SEED)));
+	sul::dynamic_bitset<TestType> bitset = GENERATE(
+	  take(RANDOM_VECTORS_TO_TEST,
+	       randomDynamicBitset<TestType>(3 * bits_number<TestType>, 8 * bits_number<TestType>)));
 	CAPTURE(bitset);
 
 	SECTION("range")
 	{
-		const std::tuple<size_t, size_t> values = GENERATE(multitake(
-		  RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1), randomInt<size_t>(SEED + 2)));
+		const std::tuple<size_t, size_t> values = GENERATE(
+		  multitake(RANDOM_VARIATIONS_TO_TEST,
+		            random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                       std::numeric_limits<unsigned long long>::max()),
+		            random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                       std::numeric_limits<unsigned long long>::max())));
 		const size_t pos = std::get<0>(values) % bitset.size();
 		const size_t len = std::get<1>(values) % (bitset.size() - pos);
 		CAPTURE(pos, len);
@@ -929,7 +945,10 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 	SECTION("single bit")
 	{
 		const size_t pos =
-		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1))) % bitset.size();
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
+		                random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                           std::numeric_limits<unsigned long long>::max())))
+		  % bitset.size();
 		CAPTURE(pos);
 
 		const sul::dynamic_bitset<TestType> bitset_copy = bitset;
@@ -1032,11 +1051,11 @@ TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uin
 
 TEMPLATE_TEST_CASE("test", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	const std::tuple<unsigned long long, size_t> values =
 	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-	                     randomInt<unsigned long long>(SEED),
-	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	                     random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+	                                                std::numeric_limits<unsigned long long>::max()),
+	                     random<size_t>(1, bits_number<unsigned long long>)));
 	unsigned long long value = std::get<0>(values);
 	const size_t bits_to_take = std::get<1>(values);
 	CAPTURE(value, bits_to_take);
@@ -1054,11 +1073,11 @@ TEMPLATE_TEST_CASE("test", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 TEMPLATE_TEST_CASE("test_set", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	const std::tuple<unsigned long long, size_t> values =
 	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-	                     randomInt<unsigned long long>(SEED),
-	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	                     random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+	                                                std::numeric_limits<unsigned long long>::max()),
+	                     random<size_t>(1, bits_number<unsigned long long>)));
 	unsigned long long value = std::get<0>(values);
 	const size_t bits_to_take = std::get<1>(values);
 	const bool set_to = GENERATE(true, false);
@@ -1091,10 +1110,9 @@ TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 	SECTION("non-empty bitset")
 	{
-		CAPTURE(SEED);
-		const size_t bitset_size = GENERATE(
-		  take(RANDOM_VECTORS_TO_TEST,
-		       randomInt<size_t>(3 * bits_number<TestType>, 8 * bits_number<TestType>, SEED)));
+		const size_t bitset_size =
+		  GENERATE(take(RANDOM_VECTORS_TO_TEST,
+		                random<size_t>(3 * bits_number<TestType>, 8 * bits_number<TestType>)));
 		CAPTURE(bitset_size);
 
 		sul::dynamic_bitset<TestType> bitset(bitset_size);
@@ -1111,7 +1129,11 @@ TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 		SECTION("one bit on")
 		{
 			const size_t pos =
-			  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1))) % bitset_size;
+			  GENERATE(
+			    take(RANDOM_VARIATIONS_TO_TEST,
+			         random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+			                                    std::numeric_limits<unsigned long long>::max())))
+			  % bitset_size;
 			CAPTURE(pos);
 			bitset.reset();
 			bitset.set(pos);
@@ -1132,11 +1154,11 @@ TEMPLATE_TEST_CASE("all any none", "[dynamic_bitset]", uint16_t, uint32_t, uint6
 
 TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	const std::tuple<unsigned long long, size_t> values =
 	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-	                     randomInt<unsigned long long>(SEED),
-	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	                     random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+	                                                std::numeric_limits<unsigned long long>::max()),
+	                     random<size_t>(1, bits_number<unsigned long long>)));
 	unsigned long long value = std::get<0>(values);
 	const size_t bits_to_take = std::get<1>(values);
 	CAPTURE(value, bits_to_take);
@@ -1156,8 +1178,10 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 
 	SECTION("reference operator=")
 	{
-		const unsigned long long other_value =
-		  GENERATE(take(1, randomInt<unsigned long long>(SEED + 2)));
+		const unsigned long long other_value = GENERATE(
+		  take(1,
+		       random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                  std::numeric_limits<unsigned long long>::max())));
 		sul::dynamic_bitset<TestType> other_bitset(bits_to_take, other_value);
 		CAPTURE(other_bitset);
 
@@ -1184,8 +1208,10 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 
 	SECTION("reference binary operators")
 	{
-		const unsigned long long other_value =
-		  GENERATE(take(1, randomInt<unsigned long long>(SEED + 2)));
+		const unsigned long long other_value = GENERATE(
+		  take(1,
+		       random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                  std::numeric_limits<unsigned long long>::max())));
 		sul::dynamic_bitset<TestType> other_bitset(bits_to_take, other_value);
 		CAPTURE(other_bitset);
 
@@ -1253,7 +1279,10 @@ TEMPLATE_TEST_CASE("array subscript operator", "[dynamic_bitset]", uint16_t, uin
 	SECTION("set reset flip assign")
 	{
 		const size_t pos =
-		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 2))) % bits_to_take;
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
+		                random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                           std::numeric_limits<unsigned long long>::max())))
+		  % bits_to_take;
 		CAPTURE(pos);
 
 		SECTION("set")
@@ -1294,11 +1323,11 @@ TEMPLATE_TEST_CASE("size num_blocks empty capacity",
                    uint32_t,
                    uint64_t)
 {
-	CAPTURE(SEED);
 	const std::tuple<unsigned long long, size_t> values =
 	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-	                     randomInt<unsigned long long>(SEED),
-	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	                     random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+	                                                std::numeric_limits<unsigned long long>::max()),
+	                     random<size_t>(1, bits_number<unsigned long long>)));
 	unsigned long long value = std::get<0>(values);
 	const size_t bits_to_take = std::get<1>(values);
 	CAPTURE(value, bits_to_take);
@@ -1323,9 +1352,8 @@ TEMPLATE_TEST_CASE("size num_blocks empty capacity",
 
 TEMPLATE_TEST_CASE("reserve shrink_to_fit", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
-	const size_t size = GENERATE(
-	  take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(1, 8 * bits_number<TestType>, SEED)));
+	const size_t size =
+	  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, random<size_t>(1, 8 * bits_number<TestType>)));
 	CAPTURE(size);
 
 	sul::dynamic_bitset<TestType> bitset;
@@ -1343,9 +1371,8 @@ TEMPLATE_TEST_CASE("is_subset_of is_proper_subset_of",
                    uint32_t,
                    uint64_t)
 {
-	CAPTURE(SEED);
 	sul::dynamic_bitset<TestType> bitset =
-	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 	CAPTURE(bitset);
 
 	const sul::dynamic_bitset<TestType> bitset_copy = bitset;
@@ -1361,7 +1388,10 @@ TEMPLATE_TEST_CASE("is_subset_of is_proper_subset_of",
 		if(bitset.any())
 		{
 			const size_t bit_to_reset =
-			  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1)))
+			  GENERATE(
+			    take(RANDOM_VARIATIONS_TO_TEST,
+			         random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+			                                    std::numeric_limits<unsigned long long>::max())))
 			  % bitset.count();
 			size_t bit_to_reset_pos = bitset.find_first();
 			for(size_t i = 1; i < bit_to_reset; ++i)
@@ -1381,7 +1411,10 @@ TEMPLATE_TEST_CASE("is_subset_of is_proper_subset_of",
 		{
 			const sul::dynamic_bitset<TestType> not_bitset = ~bitset;
 			const size_t bit_to_set =
-			  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1)))
+			  GENERATE(
+			    take(RANDOM_VARIATIONS_TO_TEST,
+			         random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+			                                    std::numeric_limits<unsigned long long>::max())))
 			  % not_bitset.count();
 			size_t bit_to_set_pos = not_bitset.find_first();
 			for(size_t i = 1; i < bit_to_set; ++i)
@@ -1398,9 +1431,8 @@ TEMPLATE_TEST_CASE("is_subset_of is_proper_subset_of",
 
 TEMPLATE_TEST_CASE("intersects", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	sul::dynamic_bitset<TestType> bitset =
-	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 	CAPTURE(bitset);
 
 	// require non 0-only bitset
@@ -1435,11 +1467,9 @@ TEMPLATE_TEST_CASE("intersects", "[dynamic_bitset]", uint16_t, uint32_t, uint64_
 
 TEMPLATE_TEST_CASE("swap", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	const std::tuple<sul::dynamic_bitset<TestType>, sul::dynamic_bitset<TestType>> bitsets =
-	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-	                     randomDynamicBitset<TestType>(SEED),
-	                     randomDynamicBitset<TestType>(SEED + 1)));
+	  GENERATE(multitake(
+	    RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(), randomDynamicBitset<TestType>()));
 	sul::dynamic_bitset<TestType> bitset1 = std::get<0>(bitsets);
 	sul::dynamic_bitset<TestType> bitset2 = std::get<1>(bitsets);
 	CAPTURE(bitset1, bitset2);
@@ -1475,11 +1505,11 @@ TEMPLATE_TEST_CASE("get_allocator", "[dynamic_bitset]", uint16_t, uint32_t, uint
 
 TEMPLATE_TEST_CASE("to_string", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	const std::tuple<unsigned long long, size_t> values =
 	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-	                     randomInt<unsigned long long>(SEED),
-	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	                     random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+	                                                std::numeric_limits<unsigned long long>::max()),
+	                     random<size_t>(1, bits_number<unsigned long long>)));
 	unsigned long long value = std::get<0>(values);
 	const size_t bits_to_take = std::get<1>(values);
 	CAPTURE(value, bits_to_take);
@@ -1500,8 +1530,6 @@ TEMPLATE_TEST_CASE("to_string", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 
 TEMPLATE_TEST_CASE("to_ulong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
-
 	SECTION("empty bitset")
 	{
 		const sul::dynamic_bitset<TestType> bitset;
@@ -1513,10 +1541,11 @@ TEMPLATE_TEST_CASE("to_ulong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 	{
 		SECTION("value")
 		{
-			const std::tuple<unsigned long long, size_t> values =
-			  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-			                     randomInt<unsigned long long>(SEED),
-			                     randomInt<size_t>(1, bits_number<unsigned long>, SEED + 1)));
+			const std::tuple<unsigned long long, size_t> values = GENERATE(
+			  multitake(RANDOM_VECTORS_TO_TEST,
+			            random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+			                                       std::numeric_limits<unsigned long long>::max()),
+			            random<size_t>(1, bits_number<unsigned long>)));
 			unsigned long long value = std::get<0>(values);
 			const size_t bits_to_take = std::get<1>(values);
 			CAPTURE(value, bits_to_take);
@@ -1534,7 +1563,7 @@ TEMPLATE_TEST_CASE("to_ulong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 		SECTION("overflow exception")
 		{
 			sul::dynamic_bitset<TestType> bitset =
-			  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+			  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 			CAPTURE(bitset);
 
 			size_t last = sul::dynamic_bitset<TestType>::npos;
@@ -1555,8 +1584,6 @@ TEMPLATE_TEST_CASE("to_ulong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 TEMPLATE_TEST_CASE("to_ullong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
-
 	SECTION("empty bitset")
 	{
 		const sul::dynamic_bitset<TestType> bitset;
@@ -1568,10 +1595,11 @@ TEMPLATE_TEST_CASE("to_ullong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 	{
 		SECTION("value")
 		{
-			const std::tuple<unsigned long long, size_t> values =
-			  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-			                     randomInt<unsigned long long>(SEED),
-			                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+			const std::tuple<unsigned long long, size_t> values = GENERATE(
+			  multitake(RANDOM_VECTORS_TO_TEST,
+			            random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+			                                       std::numeric_limits<unsigned long long>::max()),
+			            random<size_t>(1, bits_number<unsigned long long>)));
 			unsigned long long value = std::get<0>(values);
 			const size_t bits_to_take = std::get<1>(values);
 			CAPTURE(value, bits_to_take);
@@ -1589,7 +1617,7 @@ TEMPLATE_TEST_CASE("to_ullong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 		SECTION("overflow exception")
 		{
 			sul::dynamic_bitset<TestType> bitset =
-			  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+			  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 			CAPTURE(bitset);
 
 			size_t last = sul::dynamic_bitset<TestType>::npos;
@@ -1611,11 +1639,11 @@ TEMPLATE_TEST_CASE("to_ullong", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 
 TEMPLATE_TEST_CASE("iterate_bits_on", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	const std::tuple<unsigned long long, size_t> values =
 	  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-	                     randomInt<unsigned long long>(SEED),
-	                     randomInt<size_t>(1, bits_number<unsigned long long>, SEED + 1)));
+	                     random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+	                                                std::numeric_limits<unsigned long long>::max()),
+	                     random<size_t>(1, bits_number<unsigned long long>)));
 	unsigned long long value = std::get<0>(values);
 	const size_t bits_to_take = std::get<1>(values);
 	CAPTURE(value, bits_to_take);
@@ -1662,7 +1690,10 @@ TEMPLATE_TEST_CASE("iterate_bits_on", "[dynamic_bitset]", uint16_t, uint32_t, ui
 			bitset.push_back(true);
 		}
 		const size_t stop_at_bit =
-		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 2))) % bitset.count()
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
+		                random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                           std::numeric_limits<unsigned long long>::max())))
+		    % bitset.count()
 		  + 1;
 
 		SECTION("no parameters")
@@ -1716,12 +1747,10 @@ TEMPLATE_TEST_CASE("iterate_bits_on", "[dynamic_bitset]", uint16_t, uint32_t, ui
 
 TEMPLATE_TEST_CASE("data", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
-
 	SECTION("const")
 	{
 		const sul::dynamic_bitset<TestType> bitset =
-		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 		CAPTURE(bitset);
 
 		if(!bitset.empty())
@@ -1734,7 +1763,7 @@ TEMPLATE_TEST_CASE("data", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 	SECTION("non-const")
 	{
 		sul::dynamic_bitset<TestType> bitset =
-		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 		CAPTURE(bitset);
 
 		if(!bitset.empty())
@@ -1747,9 +1776,8 @@ TEMPLATE_TEST_CASE("data", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 
 TEMPLATE_TEST_CASE("operator== operator!=", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	sul::dynamic_bitset<TestType> bitset =
-	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 	CAPTURE(bitset);
 
 	SECTION("same")
@@ -1778,7 +1806,10 @@ TEMPLATE_TEST_CASE("operator== operator!=", "[dynamic_bitset]", uint16_t, uint32
 		const sul::dynamic_bitset<TestType> bitset_copy = bitset;
 
 		size_t pos =
-		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 1))) % bitset.size();
+		  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
+		                random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                           std::numeric_limits<unsigned long long>::max())))
+		  % bitset.size();
 		CAPTURE(pos);
 		bitset.flip(pos);
 		REQUIRE_FALSE(bitset == bitset_copy);
@@ -1794,8 +1825,6 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
                    uint32_t,
                    uint64_t)
 {
-	CAPTURE(SEED);
-
 	SECTION("2 empty bitsets")
 	{
 		const sul::dynamic_bitset<TestType> bitset1;
@@ -1815,7 +1844,7 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 	SECTION("1 empty bitset")
 	{
 		const sul::dynamic_bitset<TestType> bitset =
-		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+		  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 		const sul::dynamic_bitset<TestType> empty_bitset;
 		CAPTURE(bitset);
 
@@ -1832,10 +1861,12 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 
 	SECTION("non-empty bitsets")
 	{
-		const std::tuple<unsigned long long, unsigned long long> values =
-		  GENERATE(multitake(RANDOM_VECTORS_TO_TEST,
-		                     randomInt<unsigned long long>(SEED),
-		                     randomInt<unsigned long long>(SEED + 1)));
+		const std::tuple<unsigned long long, unsigned long long> values = GENERATE(
+		  multitake(RANDOM_VECTORS_TO_TEST,
+		            random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                       std::numeric_limits<unsigned long long>::max()),
+		            random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+		                                       std::numeric_limits<unsigned long long>::max())));
 		const unsigned long long value1 = std::get<0>(values);
 		const unsigned long long value2 = std::get<1>(values) % value1; // value2 != value1
 		const size_t bits_to_take = bits_number<unsigned long long>;
@@ -1915,7 +1946,10 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 
 				// make bitset1 < bitset2
 				const size_t bit_pos =
-				  GENERATE(take(RANDOM_VARIATIONS_TO_TEST, randomInt<size_t>(SEED + 2)))
+				  GENERATE(take(
+				    RANDOM_VARIATIONS_TO_TEST,
+				    random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+				                               std::numeric_limits<unsigned long long>::max())))
 				  % bitset1.size();
 				CAPTURE(bit_pos);
 				if(bitset1[bit_pos])
@@ -1928,9 +1962,8 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 				}
 
 				// add some 0 to a bitset to have a different size
-				const size_t bits_to_add =
-				  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
-				                randomInt<size_t>(0, 2 * bits_number<TestType>, SEED + 3)));
+				const size_t bits_to_add = GENERATE(
+				  take(RANDOM_VARIATIONS_TO_TEST, random<size_t>(0, 2 * bits_number<TestType>)));
 				const bool bitset_to_add = GENERATE(true, false);
 				CAPTURE(bits_to_add, bitset_to_add);
 
@@ -1958,7 +1991,7 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 
 				sul::dynamic_bitset<TestType> bits_to_add =
 				  GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
-				                randomDynamicBitset<TestType>(1, 2 * bits_number<TestType>, SEED)));
+				                randomDynamicBitset<TestType>(1, 2 * bits_number<TestType>)));
 				CAPTURE(bits_to_add);
 				if(bits_to_add.none())
 				{
@@ -1985,9 +2018,8 @@ TEMPLATE_TEST_CASE("operator< operator<= operator> operator>=",
 
 TEMPLATE_TEST_CASE("ostream operator<<", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
 	sul::dynamic_bitset<TestType> bitset =
-	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(SEED)));
+	  GENERATE(take(RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>()));
 	CAPTURE(bitset);
 
 	std::stringstream sstream;
@@ -2012,8 +2044,6 @@ TEMPLATE_TEST_CASE("ostream operator<<", "[dynamic_bitset]", uint16_t, uint32_t,
 
 TEMPLATE_TEST_CASE("istream operator>>", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-	CAPTURE(SEED);
-
 	SECTION("invalid stream")
 	{
 		std::stringstream sstream;
@@ -2027,7 +2057,7 @@ TEMPLATE_TEST_CASE("istream operator>>", "[dynamic_bitset]", uint16_t, uint32_t,
 	{
 		SECTION("only valid characters")
 		{
-			std::string str = GENERATE(take(RANDOM_VECTORS_TO_TEST, randomBitsetString(SEED)));
+			std::string str = GENERATE(take(RANDOM_VECTORS_TO_TEST, randomBitsetString()));
 			CAPTURE(str);
 
 			std::stringstream sstream;
@@ -2055,7 +2085,7 @@ TEMPLATE_TEST_CASE("istream operator>>", "[dynamic_bitset]", uint16_t, uint32_t,
 
 		SECTION("with invalid characters")
 		{
-			std::string str = GENERATE(take(RANDOM_VECTORS_TO_TEST, randomBitsetString(SEED)));
+			std::string str = GENERATE(take(RANDOM_VECTORS_TO_TEST, randomBitsetString()));
 			CAPTURE(str);
 
 			std::stringstream sstream;
