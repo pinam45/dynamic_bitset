@@ -9,20 +9,21 @@
 #define DYNAMIC_BITSET_RANDOMDYNAMICBITSETGENERATOR_HPP
 
 #include <catch2/generators/catch_generators.hpp>
-#include <catch2/catch_get_random_seed.hpp>
+#include <catch2/generators/catch_generators_random.hpp>
+
 #include <sul/dynamic_bitset.hpp>
 
 #include <random>
 
 template<typename Block>
 constexpr Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>> randomDynamicBitset(
-  uint32_t seed = Catch::getSeed());
+  uint32_t seed = Catch::Generators::Detail::getSeed());
 
 template<typename Block>
 constexpr Catch::Generators::GeneratorWrapper<sul::dynamic_bitset<Block>> randomDynamicBitset(
   typename sul::dynamic_bitset<Block>::size_type min_size,
   typename sul::dynamic_bitset<Block>::size_type max_size,
-  uint32_t seed = Catch::getSeed());
+  uint32_t seed = Catch::Generators::Detail::getSeed());
 
 template<typename Block>
 class RandomDynamicBitsetGenerator
@@ -33,10 +34,11 @@ public:
 	static constexpr size_type default_min_size = 1;
 	static constexpr size_type default_max_size = 8 * std::numeric_limits<Block>::digits;
 
-	constexpr explicit RandomDynamicBitsetGenerator(uint32_t seed = Catch::getSeed());
+	constexpr explicit RandomDynamicBitsetGenerator(
+	  uint32_t seed = Catch::Generators::Detail::getSeed());
 	constexpr RandomDynamicBitsetGenerator(size_type min_size,
 	                                       size_type max_size,
-	                                       uint32_t seed = Catch::getSeed());
+	                                       uint32_t seed = Catch::Generators::Detail::getSeed());
 
 	constexpr const sul::dynamic_bitset<Block>& get() const override;
 	constexpr bool next() override;

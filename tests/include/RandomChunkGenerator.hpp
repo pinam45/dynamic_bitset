@@ -9,44 +9,44 @@
 #define DYNAMIC_BITSET_RANDOMCHUNKGENERATOR_HPP
 
 #include <catch2/generators/catch_generators.hpp>
-#include <catch2/catch_get_random_seed.hpp>
+#include <catch2/generators/catch_generators_random.hpp>
 
 #include <algorithm>
-#include <tuple>
-#include <random>
 #include <cassert>
 
 template<typename T>
 constexpr Catch::Generators::GeneratorWrapper<std::vector<T>> randomChunk(
-  size_t min_chunk_size,
-  size_t max_chunk_size,
+  typename std::vector<T>::size_type min_chunk_size,
+  typename std::vector<T>::size_type max_chunk_size,
   Catch::Generators::GeneratorWrapper<T>&& generator,
-  uint32_t seed = Catch::getSeed());
+  uint32_t seed = Catch::Generators::Detail::getSeed());
 
 template<typename T>
 class RandomChunkGenerator final : public Catch::Generators::IGenerator<std::vector<T>>
 {
 public:
-	constexpr RandomChunkGenerator(size_t min_chunk_size,
-	                               size_t max_chunk_size,
+	using size_type = typename std::vector<T>::size_type;
+
+	constexpr RandomChunkGenerator(size_type min_chunk_size,
+	                               size_type max_chunk_size,
 	                               Catch::Generators::GeneratorWrapper<T>&& generator,
-	                               uint32_t seed = Catch::getSeed());
+	                               uint32_t seed = Catch::Generators::Detail::getSeed());
 
 	constexpr std::vector<T> const& get() const override;
 
 	constexpr bool next() override;
 
 private:
-	std::minstd_rand m_rand;
-	std::uniform_int_distribution<size_t> m_size_dist;
+	Catch::SimplePcg32 m_rand;
+	Catch::uniform_integer_distribution<size_type> m_size_dist;
 	std::vector<T> m_chunk;
 	Catch::Generators::GeneratorWrapper<T> m_generator;
 };
 
 template<typename T>
 constexpr RandomChunkGenerator<T>::RandomChunkGenerator(
-  size_t min_chunk_size,
-  size_t max_chunk_size,
+  size_type min_chunk_size,
+  size_type max_chunk_size,
   Catch::Generators::GeneratorWrapper<T>&& generator,
   uint32_t seed)
   : m_rand(seed)
@@ -54,7 +54,7 @@ constexpr RandomChunkGenerator<T>::RandomChunkGenerator(
   , m_chunk()
   , m_generator(std::move(generator))
 {
-	const size_t size = m_size_dist(m_rand);
+	const size_type size = m_size_dist(m_rand);
 	m_chunk.reserve(size);
 	if(size == 0)
 	{
@@ -62,12 +62,12 @@ constexpr RandomChunkGenerator<T>::RandomChunkGenerator(
 	}
 
 	m_chunk.push_back(m_generator.get());
-	for(size_t i = 1; i < min_chunk_size; ++i)
+	for(size_type i = 1; i < min_chunk_size; ++i)
 	{
 		assert(m_generator.next() && "Not enough values to initialize the first chunk");
 		m_chunk.push_back(m_generator.get());
 	}
-	for(size_t i = min_chunk_size; i < size; ++i)
+	for(size_type i = min_chunk_size; i < size; ++i)
 	{
 		if(m_generator.next())
 		{
@@ -85,10 +85,10 @@ constexpr const std::vector<T>& RandomChunkGenerator<T>::get() const
 template<typename T>
 constexpr bool RandomChunkGenerator<T>::next()
 {
-	const size_t size = m_size_dist(m_rand);
+	const size_type size = m_size_dist(m_rand);
 	m_chunk.clear();
 	m_chunk.reserve(size);
-	for(size_t i = 0; i < size; ++i)
+	for(size_type i = 0; i < size; ++i)
 	{
 		if(!m_generator.next())
 		{
@@ -101,8 +101,8 @@ constexpr bool RandomChunkGenerator<T>::next()
 
 template<typename T>
 constexpr Catch::Generators::GeneratorWrapper<std::vector<T>> randomChunk(
-  size_t min_chunk_size,
-  size_t max_chunk_size,
+  typename std::vector<T>::size_type min_chunk_size,
+  typename std::vector<T>::size_type max_chunk_size,
   Catch::Generators::GeneratorWrapper<T>&& generator,
   uint32_t seed)
 {
