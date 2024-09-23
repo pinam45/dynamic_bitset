@@ -16,6 +16,15 @@ int main()
     // declare bitset with 12 bits from a value
     sul::dynamic_bitset<uint32_t> a(12, 0b0100010110111);
 
+    // conversion to string with 0 and 1
+    std::cout << "String representation (0 and 1): " << a.to_string() << std::endl;
+
+    // conversion to unsigned long
+    std::cout << "Numeric value (unsigned long): " << a.to_ulong() << std::endl;
+
+    // conversion to unsigned long long
+    std::cout << "Numeric value (unsigned long long): " << a.to_ullong() << std::endl;
+
     // remove all bits, resize to 0
     a.clear();
 
@@ -155,7 +164,7 @@ int main()
     std::cout << "b = " << b << std::endl;
 
     // determine if a bitset is a subset of another bitset
-    // (if it only contain bits from the other bitset)
+    // (if it only contains bits from the other bitset)
     std::cout << "a is a subset of b? " << a.is_subset_of(b) << std::endl;
 
     // determine if a bitset is a proper subset of another bitset
