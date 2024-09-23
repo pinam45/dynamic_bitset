@@ -1375,7 +1375,8 @@ namespace sul
          *
          * @since      1.0.0
          */
-        constexpr void swap(dynamic_bitset<Block, Allocator>& other);
+        constexpr void
+        swap(dynamic_bitset<Block, Allocator>& other) noexcept(noexcept(std::swap(m_blocks, other.m_blocks)));
 
         /**
          * @brief      Gets the associated allocator.
@@ -2017,7 +2018,8 @@ namespace sul
      * @relatesalso dynamic_bitset
      */
     template<typename Block, typename Allocator>
-    constexpr void swap(dynamic_bitset<Block, Allocator>& bitset1, dynamic_bitset<Block, Allocator>& bitset2);
+    constexpr void swap(dynamic_bitset<Block, Allocator>& bitset1,
+                        dynamic_bitset<Block, Allocator>& bitset2) noexcept(noexcept(bitset1.swap(bitset2)));
 
     //=================================================================================================
     // dynamic_bitset::reference functions implementations
@@ -2914,7 +2916,8 @@ namespace sul
     }
 
     template<typename Block, typename Allocator>
-    constexpr void dynamic_bitset<Block, Allocator>::swap(dynamic_bitset<Block, Allocator>& other)
+    constexpr void dynamic_bitset<Block, Allocator>::swap(dynamic_bitset<Block, Allocator>& other) noexcept(
+      noexcept(std::swap(m_blocks, other.m_blocks)))
     {
         std::swap(m_blocks, other.m_blocks);
         std::swap(m_bits_number, other.m_bits_number);
@@ -3663,7 +3666,8 @@ namespace sul
     }
 
     template<typename Block, typename Allocator>
-    constexpr void swap(dynamic_bitset<Block, Allocator>& bitset1, dynamic_bitset<Block, Allocator>& bitset2)
+    constexpr void swap(dynamic_bitset<Block, Allocator>& bitset1,
+                        dynamic_bitset<Block, Allocator>& bitset2) noexcept(noexcept(bitset1.swap(bitset2)))
     {
         bitset1.swap(bitset2);
     }
