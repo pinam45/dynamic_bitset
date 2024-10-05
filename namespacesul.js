@@ -1,17 +1,28 @@
 var namespacesul =
 [
     [ "dynamic_bitset", "classsul_1_1dynamic__bitset.html", "classsul_1_1dynamic__bitset" ],
+    [ "operator!=", "classsul_1_1dynamic__bitset.html#a0f7b1ee86ec4241214179413bcdd7be8", null ],
     [ "operator!=", "namespacesul.html#ad2d5ef9bea6555e3e2d3bb9692148e7d", null ],
+    [ "operator&", "classsul_1_1dynamic__bitset.html#acd7517c85c4a04ae842aea1bb832b6e1", null ],
     [ "operator&", "namespacesul.html#a724248cb7b68c989b01dc4b1d436200f", null ],
+    [ "operator-", "classsul_1_1dynamic__bitset.html#aeccf308d8f405721b588abce7b75c962", null ],
     [ "operator-", "namespacesul.html#a9abf55427e76fb3c6581f5297c0df99b", null ],
     [ "operator<", "namespacesul.html#a29d9254be055e7d41d45d784b54af5ab", null ],
+    [ "operator<<", "classsul_1_1dynamic__bitset.html#a34989718e176fcc10ad159bd5e81fa1f", null ],
     [ "operator<<", "namespacesul.html#aa60cc8803d96c61359eb54e2cea18c5a", null ],
+    [ "operator<=", "classsul_1_1dynamic__bitset.html#ad0d8adf00cab9f124c639a1d65aa828f", null ],
     [ "operator<=", "namespacesul.html#a282ebf2b89b2674404fd47fca4552698", null ],
     [ "operator==", "namespacesul.html#ac1b32213fae0f7cba4bb5a3c441219fb", null ],
+    [ "operator>", "classsul_1_1dynamic__bitset.html#abcdffd30f82823a08f3f83ce55781dac", null ],
     [ "operator>", "namespacesul.html#a29e4b0810d4d9474106141180f0af9a5", null ],
+    [ "operator>=", "classsul_1_1dynamic__bitset.html#a69ec214fa901b968f0f5f0546ab9899b", null ],
     [ "operator>=", "namespacesul.html#a27857d83e7a8a65ffceb43026ee55d44", null ],
+    [ "operator>>", "classsul_1_1dynamic__bitset.html#ad9e5bf18870d0597f7bcdc5571e66fb2", null ],
     [ "operator>>", "namespacesul.html#a2bca018d9ac2f75e6923429e9aaf234d", null ],
+    [ "operator^", "classsul_1_1dynamic__bitset.html#a843fc4c5b46b2ceaf33171465b7e92ed", null ],
     [ "operator^", "namespacesul.html#a9dd880b73dd0efb4d94aeaf17d27ad77", null ],
+    [ "operator|", "classsul_1_1dynamic__bitset.html#ae80b09036233dc7653f403e9998dd44b", null ],
     [ "operator|", "namespacesul.html#a674acfc31c3b6294f73cd926719c9bcf", null ],
-    [ "swap", "namespacesul.html#ab45bac1934592e5c646b0727d8d91923", null ]
+    [ "swap", "classsul_1_1dynamic__bitset.html#ae9a5cb0054ff6d44a5e36a96d6f80da0", null ],
+    [ "swap", "namespacesul.html#adcdb8a57cf053680fc11c506029a2734", null ]
 ];

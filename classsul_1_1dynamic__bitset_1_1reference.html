@@ -1,11 +1,11 @@
-<!-- HTML header for doxygen 1.10.0-->
+<!-- HTML header for doxygen 1.12.0-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
     <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=11"/>
-    <meta name="generator" content="Doxygen 1.10.0"/>
+    <meta name="generator" content="Doxygen 1.12.0"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>dynamic_bitset: sul::dynamic_bitset&lt; Block, Allocator &gt;::reference Class Reference</title>
     <link href="tabs.css" rel="stylesheet" type="text/css"/>
@@ -13,9 +13,9 @@
     <script type="text/javascript" src="dynsections.js"></script>
     <script type="text/javascript" src="clipboard.js"></script>
     <link href="navtree.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="resize.js"></script>
 <script type="text/javascript" src="navtreedata.js"></script>
 <script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
 <script type="text/javascript" src="cookie.js"></script>
     <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
@@ -26,7 +26,38 @@
 <link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
 <link href="custom.css" rel="stylesheet" type="text/css"/>
     <!-- https://tholman.com/github-corners/ -->
-    <a href="https://github.com/pinam45/dynamic_bitset" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <a href="https://github.com/pinam45/dynamic_bitset" class="github-corner" aria-label="View source on GitHub">
+        <svg width="80" height="80" viewBox="0 0 250 250"
+             style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+            <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+            <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+                  fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+            <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+                  fill="currentColor" class="octo-body"></path>
+        </svg>
+    </a>
+    <style>.github-corner:hover .octo-arm {
+        animation: octocat-wave 560ms ease-in-out
+    }
+    @keyframes octocat-wave {
+        0%, 100% {
+            transform: rotate(0)
+        }
+        20%, 60% {
+            transform: rotate(-25deg)
+        }
+        40%, 80% {
+            transform: rotate(10deg)
+        }
+    }
+    @media (max-width: 500px) {
+        .github-corner:hover .octo-arm {
+            animation: none
+        }
+        .github-corner .octo-arm {
+            animation: octocat-wave 560ms ease-in-out
+        }
+    }</style>
     <script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
     <script type="text/javascript">
         DoxygenAwesomeDarkModeToggle.init()
@@ -56,10 +87,15 @@
             </table>
         </div>
         <!-- end header part -->
-<!-- Generated by Doxygen 1.10.0 -->
+<!-- Generated by Doxygen 1.12.0 -->
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
 var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
 /* @license-end */
 </script>
 <script type="text/javascript" src="menudata.js"></script>
@@ -67,7 +103,7 @@ var searchBox = new SearchBox("searchBox", "search/",'.html');
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
 $(function() {
-  initMenu('',true,false,'search.php','Search');
+  initMenu('',true,false,'search.php','Search',true);
   $(function() { init_search(); });
 });
 /* @license-end */
@@ -86,7 +122,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(function(){initNavTree('classsul_1_1dynamic__bitset_1_1reference.html',''); initResizable(); });
+$(function(){initNavTree('classsul_1_1dynamic__bitset_1_1reference.html',''); initResizable(true); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -126,63 +162,63 @@ $(function(){initNavTree('classsul_1_1dynamic__bitset_1_1reference.html',''); in
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a66f1230859331550af679eedbbbd4ab1" id="r_a66f1230859331550af679eedbbbd4ab1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66f1230859331550af679eedbbbd4ab1">reference</a> (<a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; &amp;<a class="el" href="classsul_1_1dynamic__bitset.html">bitset</a>, <a class="el" href="classsul_1_1dynamic__bitset.html#a5959b3611fa6890de62e45acb30de65e">size_type</a> <a class="el" href="classsul_1_1dynamic__bitset.html">bit_pos</a>)</td></tr>
+<tr class="memitem:a66f1230859331550af679eedbbbd4ab1" id="r_a66f1230859331550af679eedbbbd4ab1"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66f1230859331550af679eedbbbd4ab1">reference</a> (<a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt; &amp;bitset, <a class="el" href="classsul_1_1dynamic__bitset.html#a7e6892d032e1c00dda6091173d4639c7">size_type</a> bit_pos)</td></tr>
 <tr class="memdesc:a66f1230859331550af679eedbbbd4ab1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> to a bit from a <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> and a bit position.  <br /></td></tr>
 <tr class="separator:a66f1230859331550af679eedbbbd4ab1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa39b99f4a7113c0f1d9113bd36c1fa5d" id="r_aa39b99f4a7113c0f1d9113bd36c1fa5d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa39b99f4a7113c0f1d9113bd36c1fa5d">reference</a> (<a class="el" href="classsul_1_1dynamic__bitset.html">const</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;) <a class="el" href="classsul_1_1dynamic__bitset.html">noexcept</a>=<a class="el" href="classsul_1_1dynamic__bitset.html">default</a></td></tr>
+<tr class="memitem:aa39b99f4a7113c0f1d9113bd36c1fa5d" id="r_aa39b99f4a7113c0f1d9113bd36c1fa5d"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa39b99f4a7113c0f1d9113bd36c1fa5d">reference</a> (const <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;) noexcept=default</td></tr>
 <tr class="memdesc:aa39b99f4a7113c0f1d9113bd36c1fa5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <br /></td></tr>
 <tr class="separator:aa39b99f4a7113c0f1d9113bd36c1fa5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaffb82a22596a90d32d1b5bca3d68609" id="r_aaffb82a22596a90d32d1b5bca3d68609"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaffb82a22596a90d32d1b5bca3d68609">reference</a> (<a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&amp;) <a class="el" href="classsul_1_1dynamic__bitset.html">noexcept</a>=<a class="el" href="classsul_1_1dynamic__bitset.html">default</a></td></tr>
+<tr class="memitem:aaffb82a22596a90d32d1b5bca3d68609" id="r_aaffb82a22596a90d32d1b5bca3d68609"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaffb82a22596a90d32d1b5bca3d68609">reference</a> (<a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&amp;) noexcept=default</td></tr>
 <tr class="memdesc:aaffb82a22596a90d32d1b5bca3d68609"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move constructor.  <br /></td></tr>
 <tr class="separator:aaffb82a22596a90d32d1b5bca3d68609"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71f0016524b42a9de8addbddcea2cdfa" id="r_a71f0016524b42a9de8addbddcea2cdfa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71f0016524b42a9de8addbddcea2cdfa">~reference</a> () <a class="el" href="classsul_1_1dynamic__bitset.html">noexcept</a>=<a class="el" href="classsul_1_1dynamic__bitset.html">default</a></td></tr>
+<tr class="memitem:a71f0016524b42a9de8addbddcea2cdfa" id="r_a71f0016524b42a9de8addbddcea2cdfa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71f0016524b42a9de8addbddcea2cdfa">~reference</a> () noexcept=default</td></tr>
 <tr class="memdesc:a71f0016524b42a9de8addbddcea2cdfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <br /></td></tr>
 <tr class="separator:a71f0016524b42a9de8addbddcea2cdfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1007b3a5c951ffe5c05f431af41f692" id="r_ac1007b3a5c951ffe5c05f431af41f692"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac1007b3a5c951ffe5c05f431af41f692">operator=</a> (<a class="el" href="classsul_1_1dynamic__bitset.html">bool</a> <a class="el" href="classsul_1_1dynamic__bitset.html">v</a>)</td></tr>
+<tr class="memitem:ac1007b3a5c951ffe5c05f431af41f692" id="r_ac1007b3a5c951ffe5c05f431af41f692"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac1007b3a5c951ffe5c05f431af41f692">operator=</a> (bool v)</td></tr>
 <tr class="memdesc:ac1007b3a5c951ffe5c05f431af41f692"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign a value to the referenced bit.  <br /></td></tr>
 <tr class="separator:ac1007b3a5c951ffe5c05f431af41f692"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7f4286ee346ec34656dbf3f40b5c716" id="r_ad7f4286ee346ec34656dbf3f40b5c716"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7f4286ee346ec34656dbf3f40b5c716">operator=</a> (<a class="el" href="classsul_1_1dynamic__bitset.html">const</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;<a class="el" href="classsul_1_1dynamic__bitset.html">rhs</a>)</td></tr>
+<tr class="memitem:ad7f4286ee346ec34656dbf3f40b5c716" id="r_ad7f4286ee346ec34656dbf3f40b5c716"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7f4286ee346ec34656dbf3f40b5c716">operator=</a> (const <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;rhs)</td></tr>
 <tr class="memdesc:ad7f4286ee346ec34656dbf3f40b5c716"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign a value to the referenced bit from another <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a>.  <br /></td></tr>
 <tr class="separator:ad7f4286ee346ec34656dbf3f40b5c716"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac033434706885f80dc33029ec43ccb0d" id="r_ac033434706885f80dc33029ec43ccb0d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac033434706885f80dc33029ec43ccb0d">operator=</a> (<a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&amp;<a class="el" href="classsul_1_1dynamic__bitset.html">rhs</a>) <a class="el" href="classsul_1_1dynamic__bitset.html">noexcept</a></td></tr>
+<tr class="memitem:ac033434706885f80dc33029ec43ccb0d" id="r_ac033434706885f80dc33029ec43ccb0d"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac033434706885f80dc33029ec43ccb0d">operator=</a> (<a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&amp;rhs) noexcept</td></tr>
 <tr class="memdesc:ac033434706885f80dc33029ec43ccb0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign a value to the referenced bit from another <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a>.  <br /></td></tr>
 <tr class="separator:ac033434706885f80dc33029ec43ccb0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab17406b7d3abdf2a5ef27a8d3368788f" id="r_ab17406b7d3abdf2a5ef27a8d3368788f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab17406b7d3abdf2a5ef27a8d3368788f">operator&amp;=</a> (<a class="el" href="classsul_1_1dynamic__bitset.html">bool</a> <a class="el" href="classsul_1_1dynamic__bitset.html">v</a>)</td></tr>
+<tr class="memitem:ab17406b7d3abdf2a5ef27a8d3368788f" id="r_ab17406b7d3abdf2a5ef27a8d3368788f"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab17406b7d3abdf2a5ef27a8d3368788f">operator&amp;=</a> (bool v)</td></tr>
 <tr class="memdesc:ab17406b7d3abdf2a5ef27a8d3368788f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply binary operator AND to the referenced bit and a value, and assign the result to the referenced bit.  <br /></td></tr>
 <tr class="separator:ab17406b7d3abdf2a5ef27a8d3368788f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a755e492e28c3600be91cb6a981b32081" id="r_a755e492e28c3600be91cb6a981b32081"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a755e492e28c3600be91cb6a981b32081">operator|=</a> (<a class="el" href="classsul_1_1dynamic__bitset.html">bool</a> <a class="el" href="classsul_1_1dynamic__bitset.html">v</a>)</td></tr>
+<tr class="memitem:a755e492e28c3600be91cb6a981b32081" id="r_a755e492e28c3600be91cb6a981b32081"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a755e492e28c3600be91cb6a981b32081">operator|=</a> (bool v)</td></tr>
 <tr class="memdesc:a755e492e28c3600be91cb6a981b32081"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply binary operator OR to the referenced bit and a value, and assign the result to the referenced bit.  <br /></td></tr>
 <tr class="separator:a755e492e28c3600be91cb6a981b32081"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea2b20d4b02e7e4d082689d7b9e66dee" id="r_aea2b20d4b02e7e4d082689d7b9e66dee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea2b20d4b02e7e4d082689d7b9e66dee">operator^=</a> (<a class="el" href="classsul_1_1dynamic__bitset.html">bool</a> <a class="el" href="classsul_1_1dynamic__bitset.html">v</a>)</td></tr>
+<tr class="memitem:aea2b20d4b02e7e4d082689d7b9e66dee" id="r_aea2b20d4b02e7e4d082689d7b9e66dee"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea2b20d4b02e7e4d082689d7b9e66dee">operator^=</a> (bool v)</td></tr>
 <tr class="memdesc:aea2b20d4b02e7e4d082689d7b9e66dee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply binary operator XOR to the referenced bit and a value, and assign the result to the referenced bit.  <br /></td></tr>
 <tr class="separator:aea2b20d4b02e7e4d082689d7b9e66dee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a093e0e12d6ee6411ae02fe9474a42e2d" id="r_a093e0e12d6ee6411ae02fe9474a42e2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a093e0e12d6ee6411ae02fe9474a42e2d">operator-=</a> (<a class="el" href="classsul_1_1dynamic__bitset.html">bool</a> <a class="el" href="classsul_1_1dynamic__bitset.html">v</a>)</td></tr>
+<tr class="memitem:a093e0e12d6ee6411ae02fe9474a42e2d" id="r_a093e0e12d6ee6411ae02fe9474a42e2d"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a093e0e12d6ee6411ae02fe9474a42e2d">operator-=</a> (bool v)</td></tr>
 <tr class="memdesc:a093e0e12d6ee6411ae02fe9474a42e2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply binary difference to the referenced bit and a value, and assign the result to the referenced bit.  <br /></td></tr>
 <tr class="separator:a093e0e12d6ee6411ae02fe9474a42e2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abad5bf99ebf4487a200159eee2f25dd2" id="r_abad5bf99ebf4487a200159eee2f25dd2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abad5bf99ebf4487a200159eee2f25dd2">operator~</a> () <a class="el" href="classsul_1_1dynamic__bitset.html">const</a></td></tr>
+<tr class="memitem:abad5bf99ebf4487a200159eee2f25dd2" id="r_abad5bf99ebf4487a200159eee2f25dd2"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abad5bf99ebf4487a200159eee2f25dd2">operator~</a> () const</td></tr>
 <tr class="memdesc:abad5bf99ebf4487a200159eee2f25dd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the result of applying unary NOT operator.  <br /></td></tr>
 <tr class="separator:abad5bf99ebf4487a200159eee2f25dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dc206b129ae52c772eb758447f776a4" id="r_a7dc206b129ae52c772eb758447f776a4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7dc206b129ae52c772eb758447f776a4">operator bool</a> () <a class="el" href="classsul_1_1dynamic__bitset.html">const</a></td></tr>
+<tr class="memitem:a7dc206b129ae52c772eb758447f776a4" id="r_a7dc206b129ae52c772eb758447f776a4"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7dc206b129ae52c772eb758447f776a4">operator bool</a> () const</td></tr>
 <tr class="memdesc:a7dc206b129ae52c772eb758447f776a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">bool conversion operator.  <br /></td></tr>
 <tr class="separator:a7dc206b129ae52c772eb758447f776a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a918a82630944b3ad71b105afb803cd" id="r_a5a918a82630944b3ad71b105afb803cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a918a82630944b3ad71b105afb803cd">operator&amp;</a> ()=<a class="el" href="classsul_1_1dynamic__bitset.html">delete</a></td></tr>
+<tr class="memitem:a5a918a82630944b3ad71b105afb803cd" id="r_a5a918a82630944b3ad71b105afb803cd"><td class="memItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a918a82630944b3ad71b105afb803cd">operator&amp;</a> ()=delete</td></tr>
 <tr class="memdesc:a5a918a82630944b3ad71b105afb803cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleted to avoid taking the address of a temporary proxy object.  <br /></td></tr>
 <tr class="separator:a5a918a82630944b3ad71b105afb803cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae59554e738486d23f5bcd356274eb6ca" id="r_ae59554e738486d23f5bcd356274eb6ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae59554e738486d23f5bcd356274eb6ca">set</a> ()</td></tr>
+<tr class="memitem:ae59554e738486d23f5bcd356274eb6ca" id="r_ae59554e738486d23f5bcd356274eb6ca"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae59554e738486d23f5bcd356274eb6ca">set</a> ()</td></tr>
 <tr class="memdesc:ae59554e738486d23f5bcd356274eb6ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the referenced bit to <em>true</em>.  <br /></td></tr>
 <tr class="separator:ae59554e738486d23f5bcd356274eb6ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05fb6782169cc0299f92e2dd7202736d" id="r_a05fb6782169cc0299f92e2dd7202736d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05fb6782169cc0299f92e2dd7202736d">reset</a> ()</td></tr>
+<tr class="memitem:a05fb6782169cc0299f92e2dd7202736d" id="r_a05fb6782169cc0299f92e2dd7202736d"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05fb6782169cc0299f92e2dd7202736d">reset</a> ()</td></tr>
 <tr class="memdesc:a05fb6782169cc0299f92e2dd7202736d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the referenced bit to <em>false</em>.  <br /></td></tr>
 <tr class="separator:a05fb6782169cc0299f92e2dd7202736d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd36ecda4a65d8eb1b54d030a4c0e82f" id="r_acd36ecda4a65d8eb1b54d030a4c0e82f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acd36ecda4a65d8eb1b54d030a4c0e82f">flip</a> ()</td></tr>
+<tr class="memitem:acd36ecda4a65d8eb1b54d030a4c0e82f" id="r_acd36ecda4a65d8eb1b54d030a4c0e82f"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acd36ecda4a65d8eb1b54d030a4c0e82f">flip</a> ()</td></tr>
 <tr class="memdesc:acd36ecda4a65d8eb1b54d030a4c0e82f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flip the referenced bit.  <br /></td></tr>
 <tr class="separator:acd36ecda4a65d8eb1b54d030a4c0e82f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b85a54acd3387218d039a437231ca63" id="r_a1b85a54acd3387218d039a437231ca63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b85a54acd3387218d039a437231ca63">assign</a> (<a class="el" href="classsul_1_1dynamic__bitset.html">bool</a> <a class="el" href="classsul_1_1dynamic__bitset.html">v</a>)</td></tr>
+<tr class="memitem:a1b85a54acd3387218d039a437231ca63" id="r_a1b85a54acd3387218d039a437231ca63"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b85a54acd3387218d039a437231ca63">assign</a> (bool v)</td></tr>
 <tr class="memdesc:a1b85a54acd3387218d039a437231ca63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign the value <code>v</code> to the referenced bit.  <br /></td></tr>
 <tr class="separator:a1b85a54acd3387218d039a437231ca63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> = unsigned long long, <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> = std::allocator&lt;Block&gt;&gt;<br />
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename Block = unsigned long long, typename Allocator = std::allocator&lt;Block&gt;&gt;<br />
 class sul::dynamic_bitset&lt; Block, Allocator &gt;::reference</div><p>Reference to a <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> bit. </p>
 <p>As the bits in the <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> class are stored in an optimized way in blocks, it is not possible for the subscript operators to return a reference to a boolean. Hence this class is used as a proxy to enable subscript operator of the <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a> class to be used as if it was an array of bools.</p>
 <dl class="section since"><dt>Since</dt><dd>1.0.0 </dd></dl>
@@ -193,20 +229,20 @@ class sul::dynamic_bitset&lt; Block, Allocator &gt;::reference</div><p>Reference
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::reference </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::reference </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>bitset</em>, </span></td>
+          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>bitset</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset.html#a5959b3611fa6890de62e45acb30de65e">size_type</a></td>          <td class="paramname"><span class="paramname"><em>bit_pos</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset.html#a7e6892d032e1c00dda6091173d4639c7">size_type</a></td>          <td class="paramname"><span class="paramname"><em>bit_pos</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -235,15 +271,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>  = unsigned long long, <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a>  = std::allocator&lt;Block&gt;&gt; </div>
+template&lt;typename Block  = unsigned long long, typename Allocator  = std::allocator&lt;Block&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::reference </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::reference </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset.html">const</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;</td>          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -265,15 +301,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>  = unsigned long long, <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a>  = std::allocator&lt;Block&gt;&gt; </div>
+template&lt;typename Block  = unsigned long long, typename Allocator  = std::allocator&lt;Block&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::reference </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::reference </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -295,15 +331,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>  = unsigned long long, <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a>  = std::allocator&lt;Block&gt;&gt; </div>
+template&lt;typename Block  = unsigned long long, typename Allocator  = std::allocator&lt;Block&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::~reference </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::~reference </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -326,15 +362,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::assign </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::assign </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset.html">bool</a></td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -364,15 +400,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::flip </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::flip </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -396,21 +432,21 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::operator <a class="el" href="classsul_1_1dynamic__bitset.html">bool</a> </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::operator bool </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+<span class="mlabels"><span class="mlabel">nodiscard</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -427,15 +463,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>  = unsigned long long, <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a>  = std::allocator&lt;Block&gt;&gt; </div>
+template&lt;typename Block  = unsigned long long, typename Allocator  = std::allocator&lt;Block&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">void</a> <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::operator&amp; </td>
+          <td class="memname">void <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::operator&amp; </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -457,15 +493,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::operator&amp;= </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::operator&amp;= </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset.html">bool</a></td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -495,15 +531,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::operator-= </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::operator-= </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset.html">bool</a></td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -515,8 +551,7 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 </div><div class="memdoc">
 
 <p>Apply binary difference to the referenced bit and a value, and assign the result to the referenced bit. </p>
-<p>Equivalent to: </p><div class="fragment"><div class="line"><span class="keyword">this</span> &amp;= !<a class="code hl_function" href="classsul_1_1dynamic__bitset.html#a918cd9596247438bc2726456ef16e704">v</a>;</div>
-<div class="ttc" id="aclasssul_1_1dynamic__bitset_html_a918cd9596247438bc2726456ef16e704"><div class="ttname"><a href="classsul_1_1dynamic__bitset.html#a918cd9596247438bc2726456ef16e704">sul::dynamic_bitset::dynamic_bitset</a></div><div class="ttdeci">constexpr dynamic_bitset(const dynamic_bitset&lt; Block, Allocator &gt; &amp;other)=default</div><div class="ttdoc">Copy constructor.</div></div>
+<p>Equivalent to: </p><div class="fragment"><div class="line"><span class="keyword">this</span> &amp;= !v;</div>
 </div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">v</td><td>Value to apply binary difference with</td></tr>
@@ -535,15 +570,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::operator= </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::operator= </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset.html">bool</a></td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -573,15 +608,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>  = unsigned long long, <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a>  = std::allocator&lt;Block&gt;&gt; </div>
+template&lt;typename Block  = unsigned long long, typename Allocator  = std::allocator&lt;Block&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::operator= </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::operator= </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset.html">const</a> <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>rhs</em></span></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>rhs</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -611,13 +646,13 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::operator= </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::operator= </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">dynamic_bitset::reference</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>rhs</em></span></td><td>)</td>
           <td></td>
@@ -649,15 +684,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::operator^= </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::operator^= </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset.html">bool</a></td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -687,15 +722,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::operator|= </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::operator|= </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classsul_1_1dynamic__bitset.html">bool</a></td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>v</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -725,21 +760,21 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">bool</a> <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::operator~ </td>
+          <td class="memname">bool <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::operator~ </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+<span class="mlabels"><span class="mlabel">nodiscard</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -757,15 +792,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::reset </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::reset </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -789,15 +824,15 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a> , <a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt; </div>
+template&lt;typename Block , typename Allocator &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">constexpr</a> <a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; <a class="el" href="classsul_1_1dynamic__bitset.html">Block</a>, <a class="el" href="classsul_1_1dynamic__bitset.html">Allocator</a> &gt;::reference::set </td>
+          <td class="memname"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a>&lt; Block, Allocator &gt;<a class="el" href="#a66f1230859331550af679eedbbbd4ab1">::reference</a> &amp; <a class="el" href="classsul_1_1dynamic__bitset.html">sul::dynamic_bitset</a>&lt; Block, Allocator &gt;::reference::set </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -824,7 +859,7 @@ template&lt;<a class="el" href="classsul_1_1dynamic__bitset.html">typename</a> <
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacesul.html">sul</a></li><li class="navelem"><a class="el" href="classsul_1_1dynamic__bitset.html">dynamic_bitset</a></li><li class="navelem"><a class="el" href="classsul_1_1dynamic__bitset_1_1reference.html">reference</a></li>
-    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.12.0 </li>
   </ul>
 </div>
 </body>

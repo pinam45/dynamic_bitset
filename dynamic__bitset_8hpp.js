@@ -17,5 +17,5 @@ var dynamic__bitset_8hpp =
     [ "operator>>", "dynamic__bitset_8hpp.html#a2bca018d9ac2f75e6923429e9aaf234d", null ],
     [ "operator^", "dynamic__bitset_8hpp.html#a9dd880b73dd0efb4d94aeaf17d27ad77", null ],
     [ "operator|", "dynamic__bitset_8hpp.html#a674acfc31c3b6294f73cd926719c9bcf", null ],
-    [ "swap", "dynamic__bitset_8hpp.html#ab45bac1934592e5c646b0727d8d91923", null ]
+    [ "swap", "dynamic__bitset_8hpp.html#adcdb8a57cf053680fc11c506029a2734", null ]
 ];
