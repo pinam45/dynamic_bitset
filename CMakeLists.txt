@@ -164,18 +164,7 @@ endif()
 
 # Generate format target?
 if(DYNAMICBITSET_FORMAT_TARGET)
-	find_program(
-	  CLANG_FORMAT clang-format
-	  NAMES
-	  clang-format-13
-	  clang-format-12
-	  clang-format-11
-	  clang-format-10
-	  clang-format-9
-	  clang-format-8
-	  clang-format-7
-	  clang-format-6
-	)
+	find_program(CLANG_FORMAT clang-format)
 	if(${CLANG_FORMAT} STREQUAL CLANG_FORMAT-NOTFOUND)
 		message(WARNING "clang-format not found, format targets not generated")
 		set(DYNAMICBITSET_FORMAT_TARGET OFF)
