@@ -5,7 +5,7 @@ option(DYNAMICBITSET_ENABLE_COVERAGE "Enable coverage information generation" OF
 
 # Check dynamic_bitset
 if(NOT TARGET dynamic_bitset)
-	message(FATAL_ERROR "dynamic_bitset target required for the tests")
+    message(FATAL_ERROR "dynamic_bitset target required for the tests")
 endif()
 
 # Project declaration
@@ -62,37 +62,37 @@ foreach(
   dynamic_bitset_tests_builtins
   dynamic_bitset_tests_builtins_msvc_32
 )
-	# Set target IDE folder
-	set_target_properties(${target} PROPERTIES FOLDER "dynamic_bitset/tests")
+    # Set target IDE folder
+    set_target_properties(${target} PROPERTIES FOLDER "dynamic_bitset/tests")
 
-	# Add includes
-	target_include_directories(
-	  ${target} PRIVATE
-	  "${CMAKE_CURRENT_SOURCE_DIR}/include"
-	)
+    # Add includes
+    target_include_directories(
+      ${target} PRIVATE
+      "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    )
 
-	# Link dynamic_bitset
-	target_link_libraries(${target} PRIVATE dynamic_bitset)
+    # Link dynamic_bitset
+    target_link_libraries(${target} PRIVATE dynamic_bitset)
 
-	# Link Catch2
-	target_link_libraries(${target} PRIVATE Catch2::Catch2WithMain)
+    # Link Catch2
+    target_link_libraries(${target} PRIVATE Catch2::Catch2WithMain)
 
-	# Enable coverage information generation?
-	if(DYNAMICBITSET_ENABLE_COVERAGE)
-		target_compile_options(${target} PRIVATE "--coverage")
-		target_link_options(${target} PRIVATE "--coverage")
-		message(STATUS "${target}: enabled coverage")
-	endif()
+    # Enable coverage information generation?
+    if(DYNAMICBITSET_ENABLE_COVERAGE)
+        target_compile_options(${target} PRIVATE "--coverage")
+        target_link_options(${target} PRIVATE "--coverage")
+        message(STATUS "${target}: enabled coverage")
+    endif()
 
-	# Require C++17/20
-	if(cxx_std_20 IN_LIST CMAKE_CXX_COMPILE_FEATURES)
-		target_compile_features(${target} PRIVATE cxx_std_20)
-	else()
-		target_compile_features(${target} PRIVATE cxx_std_17)
-	endif()
+    # Require C++17/20
+    if(cxx_std_20 IN_LIST CMAKE_CXX_COMPILE_FEATURES)
+        target_compile_features(${target} PRIVATE cxx_std_20)
+    else()
+        target_compile_features(${target} PRIVATE cxx_std_17)
+    endif()
 
-	# Discover tests
-	catch_discover_tests(${target})
+    # Discover tests
+    catch_discover_tests(${target})
 endforeach()
 
 # Add compile definitions
@@ -126,11 +126,11 @@ target_compile_definitions(
 
 # Generate format target?
 if(DYNAMICBITSET_FORMAT_TARGET)
-	add_custom_target(
-	  format-dynamic_bitset_tests
-	  COMMAND "${CLANG_FORMAT}" -style=file -i ${includes} ${sources}
-	  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-	  VERBATIM
-	)
-	set_target_properties(format-dynamic_bitset_tests PROPERTIES FOLDER "dynamic_bitset/format")
+    add_custom_target(
+      format-dynamic_bitset_tests
+      COMMAND "${CLANG_FORMAT}" -style=file -i ${includes} ${sources}
+      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+      VERBATIM
+    )
+    set_target_properties(format-dynamic_bitset_tests PROPERTIES FOLDER "dynamic_bitset/format")
 endif()
