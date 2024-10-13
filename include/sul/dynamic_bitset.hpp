@@ -27,7 +27,7 @@
  *
  * @since      1.1.0
  */
-#define SUL_DYNAMIC_BITSET_VERSION_PATCH 0
+#define SUL_DYNAMIC_BITSET_VERSION_PATCH 1
 
 /** @file
  * @brief      @ref sul::dynamic_bitset declaration and implementation.
