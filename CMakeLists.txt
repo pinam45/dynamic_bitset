@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10) # For CXX_STANDARD 17 property on Visual Studio
+cmake_minimum_required(VERSION 3.14) # For ARCH_INDEPENDENT in write_basic_package_version_file
 
 # Project declaration
 project(
@@ -71,6 +71,18 @@ option(
   "Enable generating a target with headers for ide for dynamic_bitset"
   ${DYNAMICBITSET_TOPLEVEL_PROJECT}
 )
+option(
+  DYNAMICBITSET_INSTALL
+  "Enable installation for dynamic_bitset"
+  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+)
+cmake_dependent_option(
+  DYNAMICBITSET_INSTALL_LIBPOPCNT_SUBMODULE
+  "When installing dynamic_bitset, also install libpopcnt from submodule (if available)"
+  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+  "DYNAMICBITSET_INSTALL;DYNAMICBITSET_USE_LIBPOPCNT;DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE"
+  OFF
+)
 
 # Declare dynamic_bitset
 add_library(dynamic_bitset INTERFACE)
@@ -85,7 +97,8 @@ endif()
 # Add includes
 target_include_directories(
   dynamic_bitset ${MAYBE_SYSTEM} INTERFACE
-  "${CMAKE_CURRENT_SOURCE_DIR}/include"
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+  "$<INSTALL_INTERFACE:include>"
 )
 
 # Put the dynamic_bitset class in the global namespace?
@@ -107,7 +120,7 @@ if(DYNAMICBITSET_USE_LIBPOPCNT)
             message(STATUS "dynamic_bitset: libpopcnt submodule is present and will be used")
             target_include_directories(
               dynamic_bitset SYSTEM INTERFACE
-              "${CMAKE_CURRENT_SOURCE_DIR}/extlibs/libpopcnt"
+              "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/extlibs/libpopcnt>"
             )
         else()
             message(WARNING "dynamic_bitset: libpopcnt submodule is missing and won't be used, maybe you didn't pull the git submodules")
@@ -220,4 +233,47 @@ endif()
 # Build documentation?
 if(DYNAMICBITSET_BUILD_DOCS)
     add_subdirectory(docs)
+endif()
+
+# Install the cmake
+if(DYNAMICBITSET_INSTALL)
+    include(GNUInstallDirs)
+    include(CMakePackageConfigHelpers)
+    install(
+      TARGETS dynamic_bitset
+      EXPORT sul
+    )
+    # do not use PUBLIC_HEADER property, it flatten include sub-folder, directly install includes
+    install(
+      DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
+    if(DYNAMICBITSET_INSTALL_LIBPOPCNT_SUBMODULE)
+        get_filename_component(LIBPOPCNT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extlibs/libpopcnt/libpopcnt.h" ABSOLUTE)
+        if(EXISTS "${LIBPOPCNT_PATH}")
+            install(
+              FILES "${LIBPOPCNT_PATH}" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+            )
+        else()
+            message(WARNING "dynamic_bitset: libpopcnt submodule is missing and can't be part of the install, maybe you didn't pull the git submodules")
+        endif()
+    endif()
+    install(
+      EXPORT sul
+      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sul-dynamic_bitset
+      NAMESPACE sul::
+      FILE sul-dynamic_bitset.cmake
+    )
+    install(
+      FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sul-dynamic_bitset-config.cmake
+      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sul-dynamic_bitset
+    )
+    write_basic_package_version_file(
+      ${CMAKE_CURRENT_BINARY_DIR}/sul-dynamic_bitset-config-version.cmake
+      COMPATIBILITY SameMajorVersion
+      ARCH_INDEPENDENT
+    )
+    install(
+      FILES ${CMAKE_CURRENT_BINARY_DIR}/sul-dynamic_bitset-config-version.cmake
+      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sul-dynamic_bitset
+    )
 endif()

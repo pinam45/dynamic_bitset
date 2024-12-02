@@ -12,7 +12,7 @@ target_sources(dynamic_bitset_example PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/m
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 
 # Link dynamic_bitset
-target_link_libraries(dynamic_bitset_example PRIVATE dynamic_bitset)
+target_link_libraries(dynamic_bitset_example PRIVATE sul::dynamic_bitset)
 
 # Require C++17/20
 if(cxx_std_20 IN_LIST CMAKE_CXX_COMPILE_FEATURES)
