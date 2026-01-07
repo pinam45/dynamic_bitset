@@ -813,217 +813,273 @@ TEMPLATE_TEST_CASE("operator~", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t
 
 TEMPLATE_TEST_CASE("set reset flip", "[dynamic_bitset]", uint16_t, uint32_t, uint64_t)
 {
-    sul::dynamic_bitset<TestType> bitset = GENERATE(take(
-      RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(3 * bits_number<TestType>, 8 * bits_number<TestType>)));
-    CAPTURE(bitset);
-
-    SECTION("range")
+    SECTION("empty bitset")
     {
-        const std::tuple<size_t, size_t> values =
-          GENERATE(multitake(RANDOM_VARIATIONS_TO_TEST,
-                             random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
-                                                        std::numeric_limits<unsigned long long>::max()),
-                             random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
-                                                        std::numeric_limits<unsigned long long>::max())));
-        const size_t pos = std::get<0>(values) % bitset.size();
-        const size_t len = std::get<1>(values) % (bitset.size() - pos);
-        CAPTURE(pos, len);
+        sul::dynamic_bitset<TestType> bitset;
+        CAPTURE(bitset);
 
-        const sul::dynamic_bitset<TestType> bitset_copy = bitset;
-
-        SECTION("set")
+        SECTION("range")
         {
-            const bool set_to = GENERATE(true, false);
-            CAPTURE(set_to);
-
-            bitset.set(0, 0, set_to);
-            REQUIRE(bitset == bitset_copy);
-
-            bitset.set(pos, 0, set_to);
-            REQUIRE(bitset == bitset_copy);
-
-            bitset.set(pos, len, set_to);
-
-            // check bits
-            for(size_t i = 0; i < pos; ++i)
+            SECTION("set")
             {
-                CAPTURE(i);
-                REQUIRE(bitset[i] == bitset_copy[i]);
+                const bool set_to = GENERATE(true, false);
+                CAPTURE(set_to);
+
+                bitset.set(0, 0, set_to);
+                REQUIRE(bitset.empty());
             }
-            for(size_t i = 0; i < len; ++i)
+
+            SECTION("reset")
             {
-                CAPTURE(i);
-                REQUIRE(bitset[pos + i] == set_to);
+                bitset.reset(0, 0);
+                REQUIRE(bitset.empty());
             }
-            for(size_t i = pos + len; i < bitset.size(); ++i)
+
+            SECTION("flip")
             {
-                CAPTURE(i);
-                REQUIRE(bitset[i] == bitset_copy[i]);
+                bitset.flip(0, 0);
+                REQUIRE(bitset.empty());
             }
-            REQUIRE(check_consistency(bitset));
         }
 
-        SECTION("reset")
+        SECTION("all bits")
         {
-            bitset.reset(0, 0);
-            REQUIRE(bitset == bitset_copy);
-
-            bitset.reset(pos, 0);
-            REQUIRE(bitset == bitset_copy);
-
-            bitset.reset(pos, len);
-
-            // check bits
-            for(size_t i = 0; i < pos; ++i)
+            SECTION("set")
             {
-                CAPTURE(i);
-                REQUIRE(bitset[i] == bitset_copy[i]);
+                bitset.set();
+                REQUIRE(bitset.empty());
             }
-            for(size_t i = 0; i < len; ++i)
-            {
-                CAPTURE(i);
-                REQUIRE(bitset[pos + i] == false);
-            }
-            for(size_t i = pos + len; i < bitset.size(); ++i)
-            {
-                CAPTURE(i);
-                REQUIRE(bitset[i] == bitset_copy[i]);
-            }
-            REQUIRE(check_consistency(bitset));
-        }
 
-        SECTION("flip")
-        {
-            bitset.flip(0, 0);
-            REQUIRE(bitset == bitset_copy);
-
-            bitset.flip(pos, 0);
-            REQUIRE(bitset == bitset_copy);
-
-            bitset.flip(pos, len);
-
-            // check bits
-            for(size_t i = 0; i < pos; ++i)
+            SECTION("reset")
             {
-                CAPTURE(i);
-                REQUIRE(bitset[i] == bitset_copy[i]);
+                bitset.reset();
+                REQUIRE(bitset.empty());
             }
-            for(size_t i = 0; i < len; ++i)
+
+            SECTION("flip")
             {
-                CAPTURE(i);
-                REQUIRE(bitset[pos + i] != bitset_copy[pos + i]);
+                bitset.flip();
+                REQUIRE(bitset.empty());
             }
-            for(size_t i = pos + len; i < bitset.size(); ++i)
-            {
-                CAPTURE(i);
-                REQUIRE(bitset[i] == bitset_copy[i]);
-            }
-            REQUIRE(check_consistency(bitset));
         }
     }
 
-    SECTION("single bit")
+    SECTION("non-empty bitset")
     {
-        const size_t pos = GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
-                                         random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
-                                                                    std::numeric_limits<unsigned long long>::max())))
-                           % bitset.size();
-        CAPTURE(pos);
 
-        const sul::dynamic_bitset<TestType> bitset_copy = bitset;
+        sul::dynamic_bitset<TestType> bitset = GENERATE(take(
+          RANDOM_VECTORS_TO_TEST, randomDynamicBitset<TestType>(3 * bits_number<TestType>, 8 * bits_number<TestType>)));
+        CAPTURE(bitset);
 
-        SECTION("set")
+        SECTION("range")
         {
-            const bool set_to = GENERATE(true, false);
-            CAPTURE(set_to);
-            bitset.set(pos, set_to);
+            const std::tuple<size_t, size_t> values =
+              GENERATE(multitake(RANDOM_VARIATIONS_TO_TEST,
+                                 random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+                                                            std::numeric_limits<unsigned long long>::max()),
+                                 random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+                                                            std::numeric_limits<unsigned long long>::max())));
+            const size_t pos = std::get<0>(values) % bitset.size();
+            const size_t len = std::get<1>(values) % (bitset.size() - pos);
+            CAPTURE(pos, len);
 
-            // check bits
-            for(size_t i = 0; i < pos; ++i)
-            {
-                CAPTURE(i);
-                REQUIRE(bitset[i] == bitset_copy[i]);
-            }
-            REQUIRE(bitset[pos] == set_to);
-            for(size_t i = pos + 1; i < bitset.size(); ++i)
-            {
-                CAPTURE(i);
-                REQUIRE(bitset[i] == bitset_copy[i]);
-            }
-            REQUIRE(check_consistency(bitset));
-        }
-
-        SECTION("reset")
-        {
-            bitset.reset(pos);
-
-            // check bits
-            for(size_t i = 0; i < pos; ++i)
-            {
-                CAPTURE(i);
-                REQUIRE(bitset[i] == bitset_copy[i]);
-            }
-            REQUIRE(bitset[pos] == false);
-            for(size_t i = pos + 1; i < bitset.size(); ++i)
-            {
-                CAPTURE(i);
-                REQUIRE(bitset[i] == bitset_copy[i]);
-            }
-            REQUIRE(check_consistency(bitset));
-        }
-
-        SECTION("flip")
-        {
-            bitset.flip(pos);
-
-            // check bits
-            for(size_t i = 0; i < pos; ++i)
-            {
-                CAPTURE(i);
-                REQUIRE(bitset[i] == bitset_copy[i]);
-            }
-            REQUIRE(bitset[pos] != bitset_copy[pos]);
-            for(size_t i = pos + 1; i < bitset.size(); ++i)
-            {
-                CAPTURE(i);
-                REQUIRE(bitset[i] == bitset_copy[i]);
-            }
-            REQUIRE(check_consistency(bitset));
-        }
-    }
-
-    SECTION("all bits")
-    {
-        SECTION("set")
-        {
-            bitset.set();
-
-            // check bits
-            REQUIRE(bitset.all());
-            REQUIRE(check_consistency(bitset));
-        }
-
-        SECTION("reset")
-        {
-            bitset.reset();
-
-            // check bits
-            REQUIRE(bitset.none());
-            REQUIRE(check_consistency(bitset));
-        }
-
-        SECTION("flip")
-        {
             const sul::dynamic_bitset<TestType> bitset_copy = bitset;
-            bitset.flip();
 
-            // check bits
-            for(size_t i = 0; i < bitset.size(); ++i)
+            SECTION("set")
             {
-                CAPTURE(i);
-                REQUIRE(bitset[i] != bitset_copy[i]);
+                const bool set_to = GENERATE(true, false);
+                CAPTURE(set_to);
+
+                bitset.set(0, 0, set_to);
+                REQUIRE(bitset == bitset_copy);
+
+                bitset.set(pos, 0, set_to);
+                REQUIRE(bitset == bitset_copy);
+
+                bitset.set(pos, len, set_to);
+
+                // check bits
+                for(size_t i = 0; i < pos; ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] == bitset_copy[i]);
+                }
+                for(size_t i = 0; i < len; ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[pos + i] == set_to);
+                }
+                for(size_t i = pos + len; i < bitset.size(); ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] == bitset_copy[i]);
+                }
+                REQUIRE(check_consistency(bitset));
             }
-            REQUIRE(check_consistency(bitset));
+
+            SECTION("reset")
+            {
+                bitset.reset(0, 0);
+                REQUIRE(bitset == bitset_copy);
+
+                bitset.reset(pos, 0);
+                REQUIRE(bitset == bitset_copy);
+
+                bitset.reset(pos, len);
+
+                // check bits
+                for(size_t i = 0; i < pos; ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] == bitset_copy[i]);
+                }
+                for(size_t i = 0; i < len; ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[pos + i] == false);
+                }
+                for(size_t i = pos + len; i < bitset.size(); ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] == bitset_copy[i]);
+                }
+                REQUIRE(check_consistency(bitset));
+            }
+
+            SECTION("flip")
+            {
+                bitset.flip(0, 0);
+                REQUIRE(bitset == bitset_copy);
+
+                bitset.flip(pos, 0);
+                REQUIRE(bitset == bitset_copy);
+
+                bitset.flip(pos, len);
+
+                // check bits
+                for(size_t i = 0; i < pos; ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] == bitset_copy[i]);
+                }
+                for(size_t i = 0; i < len; ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[pos + i] != bitset_copy[pos + i]);
+                }
+                for(size_t i = pos + len; i < bitset.size(); ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] == bitset_copy[i]);
+                }
+                REQUIRE(check_consistency(bitset));
+            }
+        }
+
+        SECTION("single bit")
+        {
+            const size_t pos =
+              GENERATE(take(RANDOM_VARIATIONS_TO_TEST,
+                            random<unsigned long long>(std::numeric_limits<unsigned long long>::min(),
+                                                       std::numeric_limits<unsigned long long>::max())))
+              % bitset.size();
+            CAPTURE(pos);
+
+            const sul::dynamic_bitset<TestType> bitset_copy = bitset;
+
+            SECTION("set")
+            {
+                const bool set_to = GENERATE(true, false);
+                CAPTURE(set_to);
+                bitset.set(pos, set_to);
+
+                // check bits
+                for(size_t i = 0; i < pos; ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] == bitset_copy[i]);
+                }
+                REQUIRE(bitset[pos] == set_to);
+                for(size_t i = pos + 1; i < bitset.size(); ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] == bitset_copy[i]);
+                }
+                REQUIRE(check_consistency(bitset));
+            }
+
+            SECTION("reset")
+            {
+                bitset.reset(pos);
+
+                // check bits
+                for(size_t i = 0; i < pos; ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] == bitset_copy[i]);
+                }
+                REQUIRE(bitset[pos] == false);
+                for(size_t i = pos + 1; i < bitset.size(); ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] == bitset_copy[i]);
+                }
+                REQUIRE(check_consistency(bitset));
+            }
+
+            SECTION("flip")
+            {
+                bitset.flip(pos);
+
+                // check bits
+                for(size_t i = 0; i < pos; ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] == bitset_copy[i]);
+                }
+                REQUIRE(bitset[pos] != bitset_copy[pos]);
+                for(size_t i = pos + 1; i < bitset.size(); ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] == bitset_copy[i]);
+                }
+                REQUIRE(check_consistency(bitset));
+            }
+        }
+
+        SECTION("all bits")
+        {
+            SECTION("set")
+            {
+                bitset.set();
+
+                // check bits
+                REQUIRE(bitset.all());
+                REQUIRE(check_consistency(bitset));
+            }
+
+            SECTION("reset")
+            {
+                bitset.reset();
+
+                // check bits
+                REQUIRE(bitset.none());
+                REQUIRE(check_consistency(bitset));
+            }
+
+            SECTION("flip")
+            {
+                const sul::dynamic_bitset<TestType> bitset_copy = bitset;
+                bitset.flip();
+
+                // check bits
+                for(size_t i = 0; i < bitset.size(); ++i)
+                {
+                    CAPTURE(i);
+                    REQUIRE(bitset[i] != bitset_copy[i]);
+                }
+                REQUIRE(check_consistency(bitset));
+            }
         }
     }
 }

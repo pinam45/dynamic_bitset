@@ -2510,11 +2510,12 @@ namespace sul
     constexpr dynamic_bitset<Block, Allocator>&
     dynamic_bitset<Block, Allocator>::set(size_type pos, size_type len, bool value)
     {
-        assert(pos < size());
         if(len == 0)
         {
+            assert(pos <= size());
             return *this;
         }
+        assert(pos < size());
         assert(pos + len - 1 < size());
 
         const size_type first_block = block_index(pos);
@@ -2600,11 +2601,12 @@ namespace sul
     template<typename Block, typename Allocator>
     constexpr dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::flip(size_type pos, size_type len)
     {
-        assert(pos < size());
         if(len == 0)
         {
+            assert(pos <= size());
             return *this;
         }
+        assert(pos < size());
         assert(pos + len - 1 < size());
 
         const size_type first_block = block_index(pos);
