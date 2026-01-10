@@ -3,6 +3,7 @@ name: Coverage
 on:
   - push
   - pull_request
+  - workflow_dispatch
 
 env:
   CMAKE_VERSION: 3.30.3
@@ -81,12 +82,13 @@ jobs:
         lcov --extract "${{github.workspace}}/coverage.info" "*/dynamic_bitset.hpp" --output-file "${{github.workspace}}/coverage.info"
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         fail_ci_if_error: true
-        file: ${{github.workspace}}/coverage.info
+        files: ${{github.workspace}}/coverage.info
+        working-directory: ${{github.workspace}}/dynamic_bitset
+        disable_search: true
         root_dir: ${{github.workspace}}/dynamic_bitset
         token: ${{ secrets.CODECOV_TOKEN }}
-        plugin: noop
         plugins: noop
         verbose: true
