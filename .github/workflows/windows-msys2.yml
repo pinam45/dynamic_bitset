@@ -13,8 +13,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2019, windows-2022]
-        sys: [mingw64, mingw32, clang64, clang32, ucrt64]
+        os: [windows-2019, windows-2022, windows-2025]
+        sys: [mingw64, mingw32, clang64, ucrt64]
         build_type: [Debug, Release]
     name: ${{matrix.os}} - ${{matrix.sys}} - ${{matrix.build_type}}
     runs-on: ${{matrix.os}}

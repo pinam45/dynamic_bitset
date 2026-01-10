@@ -16,7 +16,9 @@ jobs:
           {os: windows-2019, generator: "Visual Studio 16 2019", generator_short: VS2019, toolset: v142},
           {os: windows-2019, generator: "Visual Studio 16 2019", generator_short: VS2019, toolset: ClangCL},
           {os: windows-2022, generator: "Visual Studio 17 2022", generator_short: VS2022, toolset: v143},
-          {os: windows-2022, generator: "Visual Studio 17 2022", generator_short: VS2022, toolset: ClangCL}
+          {os: windows-2022, generator: "Visual Studio 17 2022", generator_short: VS2022, toolset: ClangCL},
+          {os: windows-2025, generator: "Visual Studio 17 2022", generator_short: VS2022, toolset: v143},
+          {os: windows-2025, generator: "Visual Studio 17 2022", generator_short: VS2022, toolset: ClangCL},
         ]
         architecture: [Win32, x64]
         build_type: [Debug, Release]

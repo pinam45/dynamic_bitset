@@ -14,10 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         config: [
-          {os: ubuntu-20.04, compiler_name: gcc-10, c_compiler: gcc-10, cxx_compiler: g++-10},
-          {os: ubuntu-20.04, compiler_name: clang-10, c_compiler: clang-10, cxx_compiler: clang++-10},
-          {os: ubuntu-20.04, compiler_name: clang-11, c_compiler: clang-11, cxx_compiler: clang++-11},
-          {os: ubuntu-20.04, compiler_name: clang-12, c_compiler: clang-12, cxx_compiler: clang++-12},
           {os: ubuntu-22.04, compiler_name: gcc-10, c_compiler: gcc-10, cxx_compiler: g++-10},
           {os: ubuntu-22.04, compiler_name: gcc-11, c_compiler: gcc-11, cxx_compiler: g++-11},
           {os: ubuntu-22.04, compiler_name: gcc-12, c_compiler: gcc-12, cxx_compiler: g++-12},
