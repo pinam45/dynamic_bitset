@@ -26,7 +26,7 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: sudo apt install -y libclang1-${{inputs.doxygen_libclang_version}} libclang-cpp${{inputs.doxygen_libclang_version}}
+      run: sudo apt install -y graphviz libclang1-${{inputs.doxygen_libclang_version}} libclang-cpp${{inputs.doxygen_libclang_version}}
 
     - name: Download Doxygen
       id: download
