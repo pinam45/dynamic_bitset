@@ -1,9 +1,9 @@
 name: Coverage
 
 on:
-  - push
-  - pull_request
-  - workflow_dispatch
+  push:
+  pull_request:
+  workflow_dispatch:
 
 env:
   CMAKE_VERSION: 3.31.10
