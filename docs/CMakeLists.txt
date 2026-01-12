@@ -49,8 +49,9 @@ set(DOXYGEN_HTML_EXTRA_STYLESHEET
 # Set files and generate target
 set(DOXYGEN_USE_MDFILE_AS_MAINPAGE README.md)
 doxygen_add_docs(dynamic_bitset_docs
-  "${CMAKE_CURRENT_SOURCE_DIR}/../include/sul/dynamic_bitset.hpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/../README.md"
+  "include/sul/dynamic_bitset.hpp"
+  "README.md"
+  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../"
   COMMENT "Generate dynamic_bitset docs"
 )
 
