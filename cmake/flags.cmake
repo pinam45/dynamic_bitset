@@ -213,8 +213,8 @@ set(GCC_DEBUG_FLAGS
   -Wsubobject-linkage
   -Wdelete-incomplete
   # Suggest
-  -Weffc++
-  -Wsuggest-override
+  #-Weffc++
+  #-Wsuggest-override
   #-Wsuggest-final-types
   #-Wsuggest-final-methods
   #-Wsuggest-attribute=pure
