@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.14) # For ARCH_INDEPENDENT in write_basic_packa
 # Project declaration
 project(
   dynamic_bitset
-  VERSION 1.3.2
+  VERSION 1.3.3
   DESCRIPTION "Simple Useful Libraries: C++17/20 header-only dynamic bitset"
   HOMEPAGE_URL "https://github.com/pinam45/dynamic_bitset"
   LANGUAGES CXX
