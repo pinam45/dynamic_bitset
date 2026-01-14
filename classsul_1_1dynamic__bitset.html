@@ -1505,7 +1505,7 @@ template&lt;typename Block, typename Allocator&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the <a class="el" href="classsul_1_1dynamic__bitset.html" title="sul::dynamic_bitset">sul::dynamic_bitset</a> *this</dd></dl>
-<dl class="section pre"><dt>Precondition</dt><dd><div class="fragment"><div class="line">(pos &lt; <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>()) &amp;&amp; ((len == 0) || (pos + len - 1 &lt; <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>()))</div>
+<dl class="section pre"><dt>Precondition</dt><dd><div class="fragment"><div class="line">(len == 0 &amp;&amp; pos &lt;= <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>()) || (pos &lt; <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>() &amp;&amp; pos + len - 1 &lt; <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>())</div>
 </div><!-- fragment --></dd></dl>
 <dl class="section user"><dt>Complexity</dt><dd>Linear in <code class="param">len</code>.</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>1.0.0 </dd></dl>
@@ -2511,7 +2511,7 @@ template&lt;typename Block, typename Allocator&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the <a class="el" href="classsul_1_1dynamic__bitset.html" title="sul::dynamic_bitset">sul::dynamic_bitset</a> *this</dd></dl>
-<dl class="section pre"><dt>Precondition</dt><dd><div class="fragment"><div class="line">(pos &lt; <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>()) &amp;&amp; ((len == 0) || (pos + len - 1 &lt; <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>()))</div>
+<dl class="section pre"><dt>Precondition</dt><dd><div class="fragment"><div class="line">(len == 0 &amp;&amp; pos &lt;= <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>()) || (pos &lt; <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>() &amp;&amp; pos + len - 1 &lt; <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>())</div>
 </div><!-- fragment --></dd></dl>
 <dl class="section user"><dt>Complexity</dt><dd>Linear in <code class="param">len</code>.</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>1.0.0 </dd></dl>
@@ -2683,7 +2683,7 @@ template&lt;typename Block, typename Allocator&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the <a class="el" href="classsul_1_1dynamic__bitset.html" title="sul::dynamic_bitset">sul::dynamic_bitset</a> *this</dd></dl>
-<dl class="section pre"><dt>Precondition</dt><dd><div class="fragment"><div class="line">(pos &lt; <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>()) &amp;&amp; ((len == 0) || (pos + len - 1 &lt; <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>()))</div>
+<dl class="section pre"><dt>Precondition</dt><dd><div class="fragment"><div class="line">(len == 0 &amp;&amp; pos &lt;= <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>()) || (pos &lt; <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>() &amp;&amp; pos + len - 1 &lt; <a class="code hl_function" href="#a0b58f8123f5b249fc4b5ab021d162ba6">size</a>())</div>
 </div><!-- fragment --></dd></dl>
 <dl class="section user"><dt>Complexity</dt><dd>Linear in <code class="param">len</code>.</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>1.0.0 </dd></dl>
