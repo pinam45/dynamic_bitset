@@ -905,7 +905,7 @@ namespace sul
          * @return     A reference to the @ref sul::dynamic_bitset *this
          *
          * @pre        @code
-         *             (pos < size()) && ((len == 0) || (pos + len - 1 < size()))
+         *             (len == 0 && pos <= size()) || (pos < size() && pos + len - 1 < size())
          *             @endcode
          *
          * @complexity Linear in @p len.
@@ -952,7 +952,7 @@ namespace sul
          * @return     A reference to the @ref sul::dynamic_bitset *this
          *
          * @pre        @code
-         *             (pos < size()) && ((len == 0) || (pos + len - 1 < size()))
+         *             (len == 0 && pos <= size()) || (pos < size() && pos + len - 1 < size())
          *             @endcode
          *
          * @complexity Linear in @p len.
@@ -998,7 +998,7 @@ namespace sul
          * @return     A reference to the @ref sul::dynamic_bitset *this
          *
          * @pre        @code
-         *             (pos < size()) && ((len == 0) || (pos + len - 1 < size()))
+         *             (len == 0 && pos <= size()) || (pos < size() && pos + len - 1 < size())
          *             @endcode
          *
          * @complexity Linear in @p len.
