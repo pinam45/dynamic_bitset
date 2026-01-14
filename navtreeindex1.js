@@ -1,18 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"index.html#autotoc_md9":[6],
-"namespacemembers.html":[8,1,0],
-"namespacemembers_func.html":[8,1,1],
-"namespaces.html":[8,0],
-"namespacesul.html":[8,0,0],
-"namespacesul.html#a27857d83e7a8a65ffceb43026ee55d44":[8,0,0,16],
-"namespacesul.html#a282ebf2b89b2674404fd47fca4552698":[8,0,0,11],
-"namespacesul.html#a29d9254be055e7d41d45d784b54af5ab":[8,0,0,7],
-"namespacesul.html#a29e4b0810d4d9474106141180f0af9a5":[8,0,0,14],
-"namespacesul.html#a2bca018d9ac2f75e6923429e9aaf234d":[8,0,0,18],
-"namespacesul.html#a674acfc31c3b6294f73cd926719c9bcf":[8,0,0,22],
-"namespacesul.html#a724248cb7b68c989b01dc4b1d436200f":[8,0,0,4],
-"namespacesul.html#a9abf55427e76fb3c6581f5297c0df99b":[8,0,0,6],
 "namespacesul.html#a9dd880b73dd0efb4d94aeaf17d27ad77":[8,0,0,20],
 "namespacesul.html#aa60cc8803d96c61359eb54e2cea18c5a":[8,0,0,9],
 "namespacesul.html#ac1b32213fae0f7cba4bb5a3c441219fb":[8,0,0,12],

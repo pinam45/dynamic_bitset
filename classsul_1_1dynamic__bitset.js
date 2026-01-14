@@ -1,10 +1,10 @@
 var classsul_1_1dynamic__bitset =
 [
     [ "reference", "classsul_1_1dynamic__bitset_1_1reference.html", "classsul_1_1dynamic__bitset_1_1reference" ],
-    [ "allocator_type", "classsul_1_1dynamic__bitset.html#adc7dd506ce1464defa1ca1c7af04a174", null ],
-    [ "block_type", "classsul_1_1dynamic__bitset.html#a2937986c7923caa15c1578a4e18f26fd", null ],
-    [ "const_reference", "classsul_1_1dynamic__bitset.html#a9e36e87f1337b606cdc7b4454fc93f4f", null ],
-    [ "size_type", "classsul_1_1dynamic__bitset.html#a7e6892d032e1c00dda6091173d4639c7", null ],
+    [ "allocator_type", "classsul_1_1dynamic__bitset.html#a6566a8c2aceaab46d48e7abf2230111d", null ],
+    [ "block_type", "classsul_1_1dynamic__bitset.html#a36722ee70729db138fd825f0f2d12a52", null ],
+    [ "const_reference", "classsul_1_1dynamic__bitset.html#adeacbcc42a523260c431462c190c74ba", null ],
+    [ "size_type", "classsul_1_1dynamic__bitset.html#a5959b3611fa6890de62e45acb30de65e", null ],
     [ "dynamic_bitset", "classsul_1_1dynamic__bitset.html#a918cd9596247438bc2726456ef16e704", null ],
     [ "dynamic_bitset", "classsul_1_1dynamic__bitset.html#a7619a5398b7ca8d5e159b85312b74e29", null ],
     [ "dynamic_bitset", "classsul_1_1dynamic__bitset.html#afb793e3c88667e7aa9223990ecc0c62b", null ],
