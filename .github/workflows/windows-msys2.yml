@@ -14,20 +14,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: windows-2025
-            sys: mingw64
-          - os: windows-2025
-            sys: mingw32
-          - os: windows-2025
-            sys: clang64
-          - os: windows-2025
-            sys: ucrt64
-          - os: windows-11-arm
-            sys: clangarm64
+        config: [
+          {os: windows-2025, sys: mingw64},
+          {os: windows-2025, sys: mingw32},
+          {os: windows-2025, sys: clang64},
+          {os: windows-2025, sys: ucrt64},
+          {os: windows-11-arm, sys: clangarm64},
+        ]
         build_type: [Debug, Release]
-    name: ${{matrix.os}} - ${{matrix.sys}} - ${{matrix.build_type}}
-    runs-on: ${{matrix.os}}
+    name: ${{matrix.config.os}} - ${{matrix.config.sys}} - ${{matrix.build_type}}
+    runs-on: ${{matrix.config.os}}
     defaults:
       run:
         shell: msys2 {0}
@@ -42,7 +38,7 @@ jobs:
     - name: Setup build environment
       uses: msys2/setup-msys2@v2
       with:
-        msystem: ${{matrix.sys}}
+        msystem: ${{matrix.config.sys}}
         update: true
         pacboy: >-
           toolchain:p
@@ -53,15 +49,15 @@ jobs:
       uses: ./dynamic_bitset/.github/actions/setup_cmake
       with:
         cmake_version: ${{env.CMAKE_VERSION}}
-        used_env: ${{matrix.os}}
+        used_env: ${{matrix.config.os}}
 
     - name: Setup ccache
       id: ccache
       uses: ./dynamic_bitset/.github/actions/setup_ccache
       with:
         ccache_version: ${{env.CCACHE_VERSION}}
-        used_env: ${{matrix.os}}
-        cache_id: ${{matrix.os}}-${{matrix.sys}}-${{matrix.build_type}}
+        used_env: ${{matrix.config.os}}
+        cache_id: ${{matrix.config.os}}-${{matrix.config.sys}}-${{matrix.build_type}}
 
     - name: CMake version
       run: ${{steps.cmake.outputs.cmake_binary}} --version
