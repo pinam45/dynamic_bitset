@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  CMAKE_VERSION: 3.31.10
+  CMAKE_VERSION: 4.4.3
 
 jobs:
   build:
