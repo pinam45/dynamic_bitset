@@ -15,13 +15,13 @@ jobs:
       fail-fast: false
       matrix:
         config: [
-          {os: windows-2025, sys: mingw64},
-          {os: windows-2025, sys: mingw32},
-          {os: windows-2025, sys: clang64},
-          {os: windows-2025, sys: ucrt64},
-          {os: windows-11-arm, sys: clangarm64},
+          { os: windows-2025, sys: mingw64 },
+          { os: windows-2025, sys: mingw32 },
+          { os: windows-2025, sys: clang64 },
+          { os: windows-2025, sys: ucrt64 },
+          { os: windows-11-arm, sys: clangarm64 },
         ]
-        build_type: [Debug, Release]
+        build_type: [ Debug, Release ]
     name: ${{matrix.config.os}} - ${{matrix.config.sys}} - ${{matrix.build_type}}
     runs-on: ${{matrix.config.os}}
     defaults:
@@ -29,79 +29,79 @@ jobs:
         shell: msys2 {0}
 
     steps:
-    - name: Checkout dynamic_bitset
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        path: dynamic_bitset
+      - name: Checkout dynamic_bitset
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          path: dynamic_bitset
 
-    - name: Setup build environment
-      uses: msys2/setup-msys2@v2
-      with:
-        msystem: ${{matrix.config.sys}}
-        update: true
-        pacboy: >-
-          toolchain:p
-          ninja:p
+      - name: Setup build environment
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{matrix.config.sys}}
+          update: true
+          pacboy: >-
+            toolchain:p
+            ninja:p
 
-    - name: Setup CMake
-      id: cmake
-      uses: ./dynamic_bitset/.github/actions/setup_cmake
-      with:
-        cmake_version: ${{env.CMAKE_VERSION}}
-        used_env: ${{matrix.config.os}}
+      - name: Setup CMake
+        id: cmake
+        uses: ./dynamic_bitset/.github/actions/setup_cmake
+        with:
+          cmake_version: ${{env.CMAKE_VERSION}}
+          used_env: ${{matrix.config.os}}
 
-    - name: Setup ccache
-      id: ccache
-      uses: ./dynamic_bitset/.github/actions/setup_ccache
-      with:
-        ccache_version: ${{env.CCACHE_VERSION}}
-        used_env: ${{matrix.config.os}}
-        cache_id: ${{matrix.config.os}}-${{matrix.config.sys}}-${{matrix.build_type}}
+      - name: Setup ccache
+        id: ccache
+        uses: ./dynamic_bitset/.github/actions/setup_ccache
+        with:
+          ccache_version: ${{env.CCACHE_VERSION}}
+          used_env: ${{matrix.config.os}}
+          cache_id: ${{matrix.config.os}}-${{matrix.config.sys}}-${{matrix.build_type}}
 
-    - name: CMake version
-      run: ${{steps.cmake.outputs.cmake_binary}} --version
+      - name: CMake version
+        run: ${{steps.cmake.outputs.cmake_binary}} --version
 
-    - name: CTest version
-      run: ${{steps.cmake.outputs.ctest_binary}} --version
+      - name: CTest version
+        run: ${{steps.cmake.outputs.ctest_binary}} --version
 
-    - name: Ccache version
-      run: ${{steps.ccache.outputs.ccache_binary}} --version
+      - name: Ccache version
+        run: ${{steps.ccache.outputs.ccache_binary}} --version
 
-    - name: Ninja version
-      run: ninja --version
+      - name: Ninja version
+        run: ninja --version
 
-    - name: C compiler version
-      run: cc --version
+      - name: C compiler version
+        run: cc --version
 
-    - name: C++ compiler version
-      run: c++ --version
+      - name: C++ compiler version
+        run: c++ --version
 
-    - name: Configure
-      run: >-
-        ${{steps.cmake.outputs.cmake_binary}}
-        -S "${{github.workspace}}/dynamic_bitset"
-        -B "${{github.workspace}}/dynamic_bitset/build"
-        -G Ninja
-        -D CMAKE_CONFIGURATION_TYPES=${{matrix.build_type}}
-        -D CMAKE_BUILD_TYPE=${{matrix.build_type}}
-        -D CMAKE_C_COMPILER_LAUNCHER=${{steps.ccache.outputs.ccache_binary}}
-        -D CMAKE_CXX_COMPILER_LAUNCHER=${{steps.ccache.outputs.ccache_binary}}
+      - name: Configure
+        run: >-
+          ${{steps.cmake.outputs.cmake_binary}}
+          -S "${{github.workspace}}/dynamic_bitset"
+          -B "${{github.workspace}}/dynamic_bitset/build"
+          -G Ninja
+          -D CMAKE_CONFIGURATION_TYPES=${{matrix.build_type}}
+          -D CMAKE_BUILD_TYPE=${{matrix.build_type}}
+          -D CMAKE_C_COMPILER_LAUNCHER=${{steps.ccache.outputs.ccache_binary}}
+          -D CMAKE_CXX_COMPILER_LAUNCHER=${{steps.ccache.outputs.ccache_binary}}
 
-    - name: Build
-      run: >-
-        ${{steps.cmake.outputs.cmake_binary}}
-        --build "${{github.workspace}}/dynamic_bitset/build"
-        --config ${{matrix.build_type}}
-        --parallel $(nproc)
+      - name: Build
+        run: >-
+          ${{steps.cmake.outputs.cmake_binary}}
+          --build "${{github.workspace}}/dynamic_bitset/build"
+          --config ${{matrix.build_type}}
+          --parallel $(nproc)
 
-    - name: Ccache stats
-      run: >-
-        ${{steps.ccache.outputs.ccache_binary}} --show-stats
+      - name: Ccache stats
+        run: >-
+          ${{steps.ccache.outputs.ccache_binary}} --show-stats
 
-    - name: Run tests
-      run: >-
-        ${{steps.cmake.outputs.ctest_binary}}
-        --test-dir "${{github.workspace}}/dynamic_bitset/build"
-        --output-on-failure
-        --parallel $(nproc)
+      - name: Run tests
+        run: >-
+          ${{steps.cmake.outputs.ctest_binary}}
+          --test-dir "${{github.workspace}}/dynamic_bitset/build"
+          --output-on-failure
+          --parallel $(nproc)

@@ -3,7 +3,7 @@ name: Documentation
 on:
   push:
     branches:
-    - master
+      - master
   workflow_dispatch:
 
 env:
@@ -16,62 +16,62 @@ jobs:
     name: ubuntu-24.04 - documentation
     runs-on: ubuntu-24.04
     steps:
-    - name: Checkout dynamic_bitset
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        path: dynamic_bitset
+      - name: Checkout dynamic_bitset
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          path: dynamic_bitset
 
-    - name: Setup CMake
-      id: cmake
-      uses: ./dynamic_bitset/.github/actions/setup_cmake
-      with:
-        cmake_version: ${{env.CMAKE_VERSION}}
-        used_env: ubuntu-24.04
+      - name: Setup CMake
+        id: cmake
+        uses: ./dynamic_bitset/.github/actions/setup_cmake
+        with:
+          cmake_version: ${{env.CMAKE_VERSION}}
+          used_env: ubuntu-24.04
 
-    - name: Setup Doxygen
-      id: doxygen
-      uses: ./dynamic_bitset/.github/actions/setup_doxygen
-      with:
-        doxygen_version: ${{env.DOXYGEN_VERSION}}
-        doxygen_libclang_version: ${{env.DOXYGEN_LIBCLANG_VERSION}}
-        used_env: ubuntu-24.04
+      - name: Setup Doxygen
+        id: doxygen
+        uses: ./dynamic_bitset/.github/actions/setup_doxygen
+        with:
+          doxygen_version: ${{env.DOXYGEN_VERSION}}
+          doxygen_libclang_version: ${{env.DOXYGEN_LIBCLANG_VERSION}}
+          used_env: ubuntu-24.04
 
-    - name: CMake version
-      run: ${{steps.cmake.outputs.cmake_binary}} --version
+      - name: CMake version
+        run: ${{steps.cmake.outputs.cmake_binary}} --version
 
-    - name: Configure
-      run: >-
-        ${{steps.cmake.outputs.cmake_binary}}
-        -S "${{github.workspace}}/dynamic_bitset"
-        -B "${{github.workspace}}/dynamic_bitset/build"
-        -D Doxygen_ROOT=${{steps.doxygen.outputs.doxygen_install}}
-        -D CMAKE_POLICY_DEFAULT_CMP0074=NEW
+      - name: Configure
+        run: >-
+          ${{steps.cmake.outputs.cmake_binary}}
+          -S "${{github.workspace}}/dynamic_bitset"
+          -B "${{github.workspace}}/dynamic_bitset/build"
+          -D Doxygen_ROOT=${{steps.doxygen.outputs.doxygen_install}}
+          -D CMAKE_POLICY_DEFAULT_CMP0074=NEW
 
-    - name: Build
-      run: >-
-        ${{steps.cmake.outputs.cmake_binary}}
-        --build "${{github.workspace}}/dynamic_bitset/build"
-        --target dynamic_bitset_docs
+      - name: Build
+        run: >-
+          ${{steps.cmake.outputs.cmake_binary}}
+          --build "${{github.workspace}}/dynamic_bitset/build"
+          --target dynamic_bitset_docs
 
-    - name: Deploy
-      id: deploy
-      run: |
-        set -eu
-        mkdir tmp-git
-        cd tmp-git
-        git init
-        git config user.name "${GITHUB_ACTOR}"
-        git config user.email "${GITHUB_ACTOR}@bots.github.com"
-        git remote add origin "https://x-access-token:${{secrets.GITHUB_TOKEN}}@github.com/${GITHUB_REPOSITORY}.git"
-        git fetch origin
-        git checkout -t origin/gh-pages
-        rm -rf ./*
-        cp -r "${{github.workspace}}/dynamic_bitset/build/docs/html/." .
-        git add -A .
-        if git commit -m "Update"; then
-            git push
-            echo "documentation updated"
-        else
-            echo "no changes to commit"
-        fi
+      - name: Deploy
+        id: deploy
+        run: |
+          set -eu
+          mkdir tmp-git
+          cd tmp-git
+          git init
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@bots.github.com"
+          git remote add origin "https://x-access-token:${{secrets.GITHUB_TOKEN}}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch origin
+          git checkout -t origin/gh-pages
+          rm -rf ./*
+          cp -r "${{github.workspace}}/dynamic_bitset/build/docs/html/." .
+          git add -A .
+          if git commit -m "Update"; then
+              git push
+              echo "documentation updated"
+          else
+              echo "no changes to commit"
+          fi

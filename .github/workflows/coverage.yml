@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         config: [
-          {os: ubuntu-24.04, compiler_name: gcc, c_compiler: gcc-13, cxx_compiler: g++-13}
+          { os: ubuntu-24.04, compiler_name: gcc, c_compiler: gcc-13, cxx_compiler: g++-13 }
         ]
     name: ${{matrix.config.os}} - ${{matrix.config.compiler_name}} - coverage
     runs-on: ${{matrix.config.os}}
@@ -24,82 +24,82 @@ jobs:
       CXX: ${{matrix.config.cxx_compiler}}
 
     steps:
-    - name: Checkout dynamic_bitset
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-        path: dynamic_bitset
+      - name: Checkout dynamic_bitset
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          path: dynamic_bitset
 
-    - name: Setup CMake
-      id: cmake
-      uses: ./dynamic_bitset/.github/actions/setup_cmake
-      with:
-        cmake_version: ${{env.CMAKE_VERSION}}
-        used_env: ${{matrix.config.os}}
+      - name: Setup CMake
+        id: cmake
+        uses: ./dynamic_bitset/.github/actions/setup_cmake
+        with:
+          cmake_version: ${{env.CMAKE_VERSION}}
+          used_env: ${{matrix.config.os}}
 
-    - name: CMake version
-      run: ${{steps.cmake.outputs.cmake_binary}} --version
+      - name: CMake version
+        run: ${{steps.cmake.outputs.cmake_binary}} --version
 
-    - name: CTest version
-      run: ${{steps.cmake.outputs.ctest_binary}} --version
+      - name: CTest version
+        run: ${{steps.cmake.outputs.ctest_binary}} --version
 
-    - name: Make version
-      run: make --version
+      - name: Make version
+        run: make --version
 
-    - name: C compiler version
-      run: ${CC} --version
+      - name: C compiler version
+        run: ${CC} --version
 
-    - name: C++ compiler version
-      run: ${CXX} --version
+      - name: C++ compiler version
+        run: ${CXX} --version
 
-    - name: Configure
-      run: >-
-        ${{steps.cmake.outputs.cmake_binary}}
-        -S "${{github.workspace}}/dynamic_bitset"
-        -B "${{github.workspace}}/dynamic_bitset/build"
-        -D CMAKE_BUILD_TYPE=Release
-        -D DYNAMICBITSET_NO_NAMESPACE=OFF
-        -D DYNAMICBITSET_USE_LIBPOPCNT=ON
-        -D DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE=ON
-        -D DYNAMICBITSET_USE_STD_BITOPS=ON
-        -D DYNAMICBITSET_USE_COMPILER_BUILTIN=ON
-        -D DYNAMICBITSET_BUILD_EXAMPLE=OFF
-        -D DYNAMICBITSET_BUILD_TESTS=ON
-        -D DYNAMICBITSET_BUILD_DOCS=OFF
-        -D DYNAMICBITSET_FORMAT_TARGET=OFF
-        -D DYNAMICBITSET_HEADERS_TARGET_IDE=OFF
-        -D DYNAMICBITSET_INSTALL=OFF
-        -D DYNAMICBITSET_INSTALL_LIBPOPCNT_SUBMODULE=OFF
-        -D DYNAMICBITSET_ENABLE_COVERAGE=ON
+      - name: Configure
+        run: >-
+          ${{steps.cmake.outputs.cmake_binary}}
+          -S "${{github.workspace}}/dynamic_bitset"
+          -B "${{github.workspace}}/dynamic_bitset/build"
+          -D CMAKE_BUILD_TYPE=Release
+          -D DYNAMICBITSET_NO_NAMESPACE=OFF
+          -D DYNAMICBITSET_USE_LIBPOPCNT=ON
+          -D DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE=ON
+          -D DYNAMICBITSET_USE_STD_BITOPS=ON
+          -D DYNAMICBITSET_USE_COMPILER_BUILTIN=ON
+          -D DYNAMICBITSET_BUILD_EXAMPLE=OFF
+          -D DYNAMICBITSET_BUILD_TESTS=ON
+          -D DYNAMICBITSET_BUILD_DOCS=OFF
+          -D DYNAMICBITSET_FORMAT_TARGET=OFF
+          -D DYNAMICBITSET_HEADERS_TARGET_IDE=OFF
+          -D DYNAMICBITSET_INSTALL=OFF
+          -D DYNAMICBITSET_INSTALL_LIBPOPCNT_SUBMODULE=OFF
+          -D DYNAMICBITSET_ENABLE_COVERAGE=ON
 
-    - name: Build
-      run: >-
-        ${{steps.cmake.outputs.cmake_binary}}
-        --build "${{github.workspace}}/dynamic_bitset/build"
-        --config Release
-        --parallel $(nproc)
+      - name: Build
+        run: >-
+          ${{steps.cmake.outputs.cmake_binary}}
+          --build "${{github.workspace}}/dynamic_bitset/build"
+          --config Release
+          --parallel $(nproc)
 
-    - name: Run tests
-      run: >-
-        ${{steps.cmake.outputs.ctest_binary}}
-        --test-dir "${{github.workspace}}/dynamic_bitset/build"
-        --output-on-failure
-        --parallel $(nproc)
+      - name: Run tests
+        run: >-
+          ${{steps.cmake.outputs.ctest_binary}}
+          --test-dir "${{github.workspace}}/dynamic_bitset/build"
+          --output-on-failure
+          --parallel $(nproc)
 
-    - name: Generate coverage report
-      run: |
-        sudo apt install lcov
-        lcov --ignore-errors mismatch --directory "${{github.workspace}}/dynamic_bitset/build" --capture --output-file "${{github.workspace}}/coverage.info"
-        lcov --extract "${{github.workspace}}/coverage.info" "*/dynamic_bitset.hpp" --output-file "${{github.workspace}}/coverage.info"
+      - name: Generate coverage report
+        run: |
+          sudo apt install lcov
+          lcov --ignore-errors mismatch --directory "${{github.workspace}}/dynamic_bitset/build" --capture --output-file "${{github.workspace}}/coverage.info"
+          lcov --extract "${{github.workspace}}/coverage.info" "*/dynamic_bitset.hpp" --output-file "${{github.workspace}}/coverage.info"
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        fail_ci_if_error: true
-        files: ${{github.workspace}}/coverage.info
-        working-directory: ${{github.workspace}}/dynamic_bitset
-        disable_search: true
-        root_dir: ${{github.workspace}}/dynamic_bitset
-        token: ${{ secrets.CODECOV_TOKEN }}
-        plugins: noop
-        verbose: true
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          fail_ci_if_error: true
+          files: ${{github.workspace}}/coverage.info
+          working-directory: ${{github.workspace}}/dynamic_bitset
+          disable_search: true
+          root_dir: ${{github.workspace}}/dynamic_bitset
+          token: ${{ secrets.CODECOV_TOKEN }}
+          plugins: noop
+          verbose: true
