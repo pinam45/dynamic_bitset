@@ -14,10 +14,9 @@ jobs:
       fail-fast: false
       matrix:
         config: [
-          {os: macos-14, xcode: 15.4},
-          {os: macos-14, xcode: 16.2},
           {os: macos-15, xcode: 16.4},
-          {os: macos-26, xcode: 26.2},
+          {os: macos-15, xcode: 26.3},
+          {os: macos-26, xcode: 26.6},
         ]
         build_type: [Debug, Release, Sanitize]
     name: ${{matrix.config.os}} - Xcode ${{matrix.config.xcode}} - ${{matrix.build_type}}

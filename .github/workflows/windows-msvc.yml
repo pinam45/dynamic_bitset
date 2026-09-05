@@ -14,12 +14,10 @@ jobs:
       fail-fast: false
       matrix:
         config: [
-          {os: windows-2019, generator: "Visual Studio 16 2019", generator_short: VS2019, toolset: v142},
-          {os: windows-2019, generator: "Visual Studio 16 2019", generator_short: VS2019, toolset: ClangCL},
-          {os: windows-2022, generator: "Visual Studio 17 2022", generator_short: VS2022, toolset: v143},
-          {os: windows-2022, generator: "Visual Studio 17 2022", generator_short: VS2022, toolset: ClangCL},
-          {os: windows-2025, generator: "Visual Studio 17 2022", generator_short: VS2022, toolset: v143},
-          {os: windows-2025, generator: "Visual Studio 17 2022", generator_short: VS2022, toolset: ClangCL},
+          {os: windows-2025-vs2026, generator: "Visual Studio 18 2026", generator_short: VS2026, toolset: v145},
+          {os: windows-2025-vs2026, generator: "Visual Studio 18 2026", generator_short: VS2026, toolset: ClangCL},
+          {os: windows-11-vs2026-arm, generator: "Visual Studio 18 2026", generator_short: VS2026, toolset: v145},
+          {os: windows-11-vs2026-arm, generator: "Visual Studio 18 2026", generator_short: VS2026, toolset: ClangCL},
         ]
         architecture: [Win32, x64]
         build_type: [Debug, Release]
