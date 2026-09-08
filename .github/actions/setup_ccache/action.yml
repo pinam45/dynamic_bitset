@@ -46,6 +46,7 @@ runs:
             -D ZSTD_FROM_INTERNET=ON
             -D REDIS_STORAGE_BACKEND=OFF
             -D ENABLE_TESTING=OFF
+            -D CCACHE_DEV_MODE=OFF
           RESULT_VARIABLE result
         )
         if(NOT result EQUAL 0)
