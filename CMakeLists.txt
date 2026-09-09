@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14) # For ARCH_INDEPENDENT in write_basic_package_version_file
+cmake_minimum_required(VERSION 3.21)
 
 # Project declaration
 project(

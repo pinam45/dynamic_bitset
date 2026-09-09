@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18) # For target_link_options
+cmake_minimum_required(VERSION 3.21)
 
 # Options
 option(DYNAMICBITSET_ENABLE_COVERAGE "Enable coverage information generation" OFF)
