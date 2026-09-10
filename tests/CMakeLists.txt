@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.21...4.4.3)
 
 # Options
 option(DYNAMICBITSET_ENABLE_COVERAGE "Enable coverage information generation" OFF)

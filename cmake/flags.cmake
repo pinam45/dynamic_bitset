@@ -5,7 +5,7 @@
 # See accompanying file LICENSE or copy at
 # https://opensource.org/licenses/MIT
 #
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.21...4.4.3)
 
 message(CHECK_START "Compiler flags configuration")
 list(APPEND CMAKE_MESSAGE_INDENT "  ")
