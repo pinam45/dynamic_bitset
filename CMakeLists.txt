@@ -11,11 +11,6 @@ project(
 
 # Check if dynamic_bitset is being used directly or via add_subdirectory
 get_directory_property(HAS_PARENT PARENT_DIRECTORY)
-if(HAS_PARENT)
-    set(DYNAMICBITSET_TOPLEVEL_PROJECT OFF)
-else()
-    set(DYNAMICBITSET_TOPLEVEL_PROJECT ON)
-endif()
 
 # Options
 include(CMakeDependentOption)
@@ -49,37 +44,37 @@ option(
 option(
   DYNAMICBITSET_BUILD_EXAMPLE
   "Enable building example for dynamic_bitset"
-  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+  ${PROJECT_IS_TOP_LEVEL}
 )
 option(
   DYNAMICBITSET_BUILD_TESTS
   "Enable building tests for dynamic_bitset"
-  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+  ${PROJECT_IS_TOP_LEVEL}
 )
 option(
   DYNAMICBITSET_BUILD_DOCS
   "Enable building documentation for dynamic_bitset"
-  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+  ${PROJECT_IS_TOP_LEVEL}
 )
 option(
   DYNAMICBITSET_FORMAT_TARGET
   "Enable generating a code formating target for dynamic_bitset"
-  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+  ${PROJECT_IS_TOP_LEVEL}
 )
 option(
   DYNAMICBITSET_HEADERS_TARGET_IDE
   "Enable generating a target with headers for ide for dynamic_bitset"
-  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+  ${PROJECT_IS_TOP_LEVEL}
 )
 option(
   DYNAMICBITSET_INSTALL
   "Enable installation for dynamic_bitset"
-  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+  ${PROJECT_IS_TOP_LEVEL}
 )
 cmake_dependent_option(
   DYNAMICBITSET_INSTALL_LIBPOPCNT_SUBMODULE
   "When installing dynamic_bitset, also install libpopcnt from submodule (if available)"
-  ${DYNAMICBITSET_TOPLEVEL_PROJECT}
+  ${PROJECT_IS_TOP_LEVEL}
   "DYNAMICBITSET_INSTALL;DYNAMICBITSET_USE_LIBPOPCNT;DYNAMICBITSET_USE_LIBPOPCNT_SUBMODULE"
   OFF
 )
@@ -90,7 +85,7 @@ add_library(sul::dynamic_bitset ALIAS dynamic_bitset)
 
 # If used via add_subdirectory, disable warnings on headers
 set(MAYBE_SYSTEM)
-if(NOT DYNAMICBITSET_TOPLEVEL_PROJECT)
+if(NOT PROJECT_IS_TOP_LEVEL)
     set(MAYBE_SYSTEM SYSTEM)
 endif()
 
@@ -151,7 +146,7 @@ else()
 endif()
 
 # Global config if top level project
-if(DYNAMICBITSET_TOPLEVEL_PROJECT)
+if(PROJECT_IS_TOP_LEVEL)
     # Disable sources modifications
     set(CMAKE_DISABLE_SOURCE_CHANGES ON)
     set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
