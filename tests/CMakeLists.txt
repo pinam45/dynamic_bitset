@@ -126,11 +126,9 @@ target_compile_definitions(
 
 # Generate format target?
 if(DYNAMICBITSET_FORMAT_TARGET)
-    add_custom_target(
+    sul_generate_format_target_from_files(
       format-dynamic_bitset_tests
-      COMMAND "${CLANG_FORMAT}" -style=file -i ${includes} ${sources}
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-      VERBATIM
+      BASE_TARGETS_FOLDER "dynamic_bitset"
+      FILES ${includes} ${sources}
     )
-    set_target_properties(format-dynamic_bitset_tests PROPERTIES FOLDER "dynamic_bitset/format")
 endif()

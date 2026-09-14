@@ -23,11 +23,8 @@ endif()
 
 # Generate format target?
 if(DYNAMICBITSET_FORMAT_TARGET)
-    add_custom_target(
-      format-dynamic_bitset_example
-      COMMAND "${CLANG_FORMAT}" -style=file -i "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-      VERBATIM
+    sul_generate_format_target_from_target(
+      dynamic_bitset_example
+      BASE_TARGETS_FOLDER "dynamic_bitset"
     )
-    set_target_properties(format-dynamic_bitset_example PROPERTIES FOLDER "dynamic_bitset/format")
 endif()

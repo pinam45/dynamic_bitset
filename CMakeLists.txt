@@ -89,11 +89,18 @@ if(NOT PROJECT_IS_TOP_LEVEL)
     set(MAYBE_SYSTEM SYSTEM)
 endif()
 
+# Get includes
+file(GLOB_RECURSE includes "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp")
+
 # Add includes
 target_include_directories(
   dynamic_bitset ${MAYBE_SYSTEM} INTERFACE
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:include>"
+)
+set_target_properties(
+  dynamic_bitset PROPERTIES
+  PUBLIC_HEADER "${includes}"
 )
 
 # Put the dynamic_bitset class in the global namespace?
@@ -159,7 +166,13 @@ if(PROJECT_IS_TOP_LEVEL)
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
     set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")
 
-    # Flags
+    # Set CMake modules path
+    list(APPEND
+      CMAKE_MODULE_PATH
+      "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules"
+    )
+
+    # TODO: rework
     include(cmake/flags.cmake)
 endif()
 
@@ -172,20 +185,12 @@ endif()
 
 # Generate format target?
 if(DYNAMICBITSET_FORMAT_TARGET)
-    find_program(CLANG_FORMAT clang-format)
-    if(${CLANG_FORMAT} STREQUAL CLANG_FORMAT-NOTFOUND)
-        message(WARNING "clang-format not found, format targets not generated")
-        set(DYNAMICBITSET_FORMAT_TARGET OFF)
-    else()
-        message(STATUS "clang-format found: ${CLANG_FORMAT}")
-        add_custom_target(
-          format-dynamic_bitset
-          COMMAND "${CLANG_FORMAT}" -style=file -i "${CMAKE_CURRENT_SOURCE_DIR}/include/sul/dynamic_bitset.hpp"
-          WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-          VERBATIM
-        )
-        set_target_properties(format-dynamic_bitset PROPERTIES FOLDER "dynamic_bitset/format")
-    endif()
+    include(sul-format)
+    sul_generate_format_target_from_files(
+      format-dynamic_bitset
+      BASE_TARGETS_FOLDER "dynamic_bitset"
+      FILES ${includes}
+    )
 endif()
 
 # Build example?
