@@ -126,9 +126,6 @@ target_compile_definitions(
 
 # Generate format target?
 if(DYNAMICBITSET_FORMAT_TARGET)
-    sul_generate_format_target_from_files(
-      format-dynamic_bitset_tests
-      BASE_TARGETS_FOLDER "dynamic_bitset"
-      FILES ${includes} ${sources}
-    )
+    sul_generate_format_target_from_files(format-dynamic_bitset_tests FILES ${includes} ${sources})
+    set_target_properties(format-dynamic_bitset_tests PROPERTIES FOLDER "dynamic_bitset/format")
 endif()

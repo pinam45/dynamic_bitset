@@ -23,8 +23,6 @@ endif()
 
 # Generate format target?
 if(DYNAMICBITSET_FORMAT_TARGET)
-    sul_generate_format_target_from_target(
-      dynamic_bitset_example
-      BASE_TARGETS_FOLDER "dynamic_bitset"
-    )
+    sul_generate_format_target_from_target(dynamic_bitset_example)
+    set_target_properties(format-dynamic_bitset_example PROPERTIES FOLDER "dynamic_bitset/format")
 endif()

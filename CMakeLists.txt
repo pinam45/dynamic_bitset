@@ -186,11 +186,9 @@ endif()
 # Generate format target?
 if(DYNAMICBITSET_FORMAT_TARGET)
     include(sul-format)
-    sul_generate_format_target_from_files(
-      format-dynamic_bitset
-      BASE_TARGETS_FOLDER "dynamic_bitset"
-      FILES ${includes}
-    )
+    sul_generate_format_target_from_files(format-dynamic_bitset FILES ${includes})
+    set_target_properties(format-all PROPERTIES FOLDER "dynamic_bitset/format")
+    set_target_properties(format-dynamic_bitset PROPERTIES FOLDER "dynamic_bitset/format")
 endif()
 
 # Build example?
